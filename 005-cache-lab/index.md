@@ -1,6 +1,6 @@
 ---
 title: Laboratório de Cache e Localidade
-slug: 005-cache-e-localidade
+slug: 005-cache-lab
 summary: Construa um simulador de cache. Compare sequências de acesso à memória. Explique os resultados com tabelas e arquivos de entrada.
 question: Como a sequência de endereços muda os acertos de uma cache?
 draft: false
