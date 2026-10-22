@@ -76,7 +76,6 @@ Você precisa conhecer operadores bit a bit, estruturas e leitura de arquivos em
 Use GCC ou Clang com suporte a C11 e ao tipo `uint64_t`.
 Use Python 3 para executar as verificações públicas.
 As instruções usam um terminal Linux.
-Este laboratório não exige medições de uma CPU real.
 
 1. Baixe o pacote de materiais.
 2. Extraia o pacote.
@@ -206,9 +205,6 @@ Explique por que os percursos têm os mesmos contadores quando toda a matriz cab
 Escolha dois endereços de blocos diferentes que usam a mesma linha da cache.
 Mostre os índices e as tags desses endereços.
 
-Esses resultados descrevem apenas o simulador.
-**Eles não medem o tempo de execução nem os misses de uma CPU real.**
-
 ### 4. Explicar os resultados
 
 Explique como a validade, a tag, a capacidade e a ordem de acesso afetam os resultados.
@@ -280,5 +276,3 @@ Avise quando sua mensagem mostrar resultados que outras pessoas ainda precisam p
 - [CS:APP — Cache Lab](https://csapp.cs.cmu.edu/3e/cachelab.pdf): outro laboratório sobre cache.
 - [Biblioteca do clube](/biblioteca): materiais para estudar os conceitos usados aqui.
 - [Catálogo de desafios](/desafios/): atividades com objetivos definidos.
-
-O Oxide Club criou o modelo, os traces e o roteiro deste laboratório.
