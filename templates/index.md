@@ -1,8 +1,8 @@
 ---
 title: Laboratório de Tema
 slug: 000-tema
-summary: Descreva a evidência principal da entrega.
-question: Qual mecanismo vamos investigar?
+summary: Descreva o resultado que o participante deve produzir.
+question: Qual pergunta vamos investigar?
 draft: true
 topics: [Tema]
 prerequisites: [Conhecimento necessário]
@@ -13,32 +13,32 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Descreva esta parte da investigação.
+Escreva a pergunta central. Descreva o resultado esperado.
 
 ## Antes de começar
 
-Descreva esta parte da investigação.
+Liste os conhecimentos e as ferramentas necessários. Explique como preparar o ambiente.
 
 ## Materiais
 
-Descreva esta parte da investigação.
+Liste os arquivos disponíveis. Explique a função de cada arquivo.
 
 ## Etapas da investigação
 
-Descreva esta parte da investigação.
+Escreva uma ação por passo. Indique o que prever, executar, registrar, explicar e verificar.
 
 ## Critérios de conclusão
 
-Descreva esta parte da investigação.
+Liste os resultados que demonstram a conclusão das etapas obrigatórias.
 
 ## Extensões opcionais
 
-Descreva esta parte da investigação.
+Descreva as atividades de aprofundamento. Informe que elas são opcionais.
 
 ## Participação no clube
 
-Descreva esta parte da investigação.
+Explique como compartilhar uma tentativa, fazer uma pergunta ou propor uma melhoria.
 
 ## Referências e atividades relacionadas
 
-Descreva esta parte da investigação.
+Inclua leituras e atividades que ajudam a continuar o estudo.

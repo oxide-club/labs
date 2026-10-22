@@ -1,8 +1,9 @@
 # Laboratórios do Oxide Club
 
-Investigações em que a entrega reúne evidências, explicação e código.
+Cada laboratório propõe uma investigação. A entrega inclui código, resultados observados e uma explicação.
 Cada diretório numerado contém um roteiro em `index.md`, materiais e verificações.
-O site consome esta fonte; não edite o checkout gerado `.content/labs`.
+O site lê os arquivos deste repositório.
+Não edite a cópia gerada em `.content/labs`.
 
 ## Catálogo
 
@@ -16,12 +17,14 @@ O site consome esta fonte; não edite o checkout gerado `.content/labs`.
 - 004 — Laboratório de Alocação de Memória
 - 006 — Laboratório de Processos e Pipes
 
-Os números são identificadores, não uma sequência obrigatória.
+Os números identificam os laboratórios. Você pode escolher a ordem de estudo.
 
 ## Verificação editorial
 
-Execute `python3 -m unittest discover -s tests` e
-`python3 scripts/verify-cache-model.py`. O modelo independente é uma ferramenta
-de revisão dos vetores, não parte do pacote inicial do participante.
+1. Execute `python3 -m unittest discover -s tests`.
+2. Execute `python3 scripts/verify-cache-model.py`.
+
+O modelo independente verifica os resultados esperados dos experimentos.
+O pacote do participante não inclui esse modelo.
 
 Consulte [contribuição](CONTRIBUTING.md) e [licenças](LICENSING.md).

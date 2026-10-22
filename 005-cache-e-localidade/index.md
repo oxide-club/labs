@@ -1,54 +1,87 @@
 ---
 title: Laboratório de Cache e Localidade
 slug: 005-cache-e-localidade
-summary: Construa um simulador e reúna rastros, tabelas e uma explicação de como a ordem dos acessos afeta os acertos de uma cache.
+summary: Construa um simulador de cache. Compare sequências de acesso à memória. Explique os resultados com tabelas e arquivos de entrada.
 question: Como a sequência de endereços muda os acertos de uma cache?
 draft: false
 publishedAt: 2026-10-21
+updatedAt: 2026-10-22
 topics: [Cache, Localidade, Mapeamento direto]
 prerequisites: [Operadores bit a bit, Estruturas em C, Leitura de arquivos]
 tools: [GCC ou Clang, Python 3]
-environment: C11 com uint64_t; terminal Linux como referência
+environment: C11 com uint64_t e terminal Linux
 difficulty: intermediate
 ---
 
 ## O que vamos investigar
 
-Como a sequência de endereços muda os acertos de uma cache? Vamos construir um
-simulador, prever seus resultados e comparar dois percursos da mesma matriz.
-Ao concluir, você terá um programa verificável e evidências para explicar
-localidade, conflitos de mapeamento e capacidade.
+Como a sequência de endereços muda os acertos de uma cache?
+Você vai construir um simulador de cache. Depois, vai comparar dois percursos da mesma matriz.
+A entrega inclui o código, os resultados dos experimentos e uma explicação.
 
-O modelo tem **quatro linhas de 16 bytes**, mapeamento direto e 64 bytes de dados.
-Cada linha guarda uma tag e um indicador de validade. Toda execução começa com
-as linhas inválidas e os contadores zerados.
+### Termos usados neste laboratório
 
-Cada linha de entrada é `L 0xENDERECO`: uma leitura de um byte em um endereço de
-64 bits sem sinal, com até 16 dígitos hexadecimais. As entradas fornecidas são
-válidas. São números do modelo: **nunca converta os endereços em ponteiros**.
+- **Bloco:** grupo de 16 bytes consecutivos. O primeiro endereço de cada bloco é um múltiplo de 16.
+- **Linha da cache:** posição que guarda um bloco.
+- **Mapeamento direto:** cada bloco só pode ocupar uma linha específica da cache.
+- **Tag:** valor que identifica qual bloco ocupa uma linha.
+- **Hit:** acesso a um bloco que já está na cache.
+- **Miss:** acesso a um bloco que não está na cache.
+- **Eviction:** substituição de um bloco que ocupa uma linha válida.
+- **Trace:** arquivo que registra uma sequência de acessos.
+- **Localidade:** uso repetido dos mesmos endereços ou de endereços próximos.
 
-Para um endereço `a`:
+### Modelo da cache
 
-- `offset = a & 0xF`;
-- `index = (a >> 4) & 0x3`;
-- `tag = a >> 6`.
+A cache tem **quatro linhas de 16 bytes**, com mapeamento direto.
+A capacidade total é de 64 bytes de dados.
+Cada linha guarda uma tag e um indicador de validade.
+No início de cada execução, todas as linhas estão inválidas e todos os contadores estão em zero.
 
-Há um hit quando a linha está válida e sua tag coincide. Caso contrário, conte
-um miss e instale a nova tag. Se a linha já estava válida, conte também uma
-eviction. Um miss carrega conceitualmente o bloco inteiro, sem armazenar seus
-bytes no simulador. Cada acesso é de um byte e não atravessa blocos.
+Cada linha do trace tem o formato `L 0xENDERECO`.
+Ela representa a leitura de um byte.
+O endereço é um inteiro de 64 bits sem sinal, com até 16 dígitos hexadecimais.
+Os traces fornecidos contêm apenas entradas válidas.
+Os endereços pertencem ao modelo. **Não converta esses endereços em ponteiros.**
 
-A saída contém uma linha `hits=N misses=N evictions=N`. Exija status zero em
-execuções bem-sucedidas. As invariantes são `hits + misses == leituras` e
-`evictions <= misses`. Tag zero não significa que uma linha é válida.
+Para um endereço `a`, calcule:
+
+- `offset = a & 0xF`: posição do byte dentro do bloco;
+- `index = (a >> 4) & 0x3`: índice da linha da cache;
+- `tag = a >> 6`: identificação do bloco nessa linha.
+
+Se a linha estiver válida e sua tag for igual à tag calculada, conte um hit.
+Caso contrário, conte um miss.
+Em um miss, grave a nova tag na linha.
+Marque essa linha como válida.
+Se a linha já estava válida antes do miss, conte também uma eviction.
+
+No modelo, um miss carrega o bloco inteiro.
+O simulador não precisa guardar os bytes desse bloco.
+Cada acesso lê apenas um byte. Portanto, nenhum acesso atravessa dois blocos.
+
+Ao terminar, escreva uma linha no formato `hits=N misses=N evictions=N`.
+Em uma execução bem-sucedida, retorne o código de saída zero.
+Os contadores devem sempre atender a estas condições:
+
+- `hits + misses == leituras`;
+- `evictions <= misses`.
+
+Uma tag com valor zero não indica que a linha está válida.
+Use o indicador de validade para verificar essa condição.
 
 ## Antes de começar
 
-Você precisa conhecer operadores bit a bit, estruturas e leitura de arquivos em
-C. Use GCC ou Clang, biblioteca padrão com `uint64_t` e Python 3 para executar os
-checks públicos. Linux é o ambiente de referência; não precisamos medir hardware.
+Você precisa conhecer operadores bit a bit, estruturas e leitura de arquivos em C.
+Use GCC ou Clang com suporte a C11 e ao tipo `uint64_t`.
+Use Python 3 para executar as verificações públicas.
+As instruções usam um terminal Linux.
+Este laboratório não exige medições de uma CPU real.
 
-Baixe e extraia o pacote. Na raiz do laboratório, execute:
+1. Baixe o pacote de materiais.
+2. Extraia o pacote.
+3. Abra um terminal no diretório do laboratório extraído.
+4. Execute os comandos abaixo.
 
 ```sh
 cc --version
@@ -56,40 +89,50 @@ python3 --version
 cc -std=c11 -Wall -Wextra -Wpedantic -O2 materials/starter/cache.c -o cache
 ```
 
-O esqueleto compila, mas ainda não simula a cache. Registre versões e opções no
-relato. Depois de implementar, use `./cache < materials/inputs/trace-a.txt`.
+O código inicial compila, mas ainda não simula a cache.
+Registre as versões das ferramentas no relato.
+Registre também as opções de compilação.
+Depois de implementar o simulador, execute `./cache < materials/inputs/trace-a.txt`.
 
 ## Materiais
 
-- [Guia dos materiais](materials/README.md): organização e comandos.
-- [Código inicial em C](materials/starter/cache.c): esqueleto a implementar.
-- [Trace A](materials/inputs/trace-a.txt): oito acessos para previsão manual.
-- [Trace B](materials/inputs/trace-b.txt): dezesseis acessos para conferência.
-- [Verificações públicas](checks/check.py): casos conhecidos e limites.
-- [Modelo de relato](report-template.md): previsão, evidência e conclusão.
+- [Guia dos materiais](materials/README.md): descrição dos arquivos e comandos de uso.
+- [Código inicial em C](materials/starter/cache.c): arquivo para implementar o simulador.
+- [Trace A](materials/inputs/trace-a.txt): oito acessos para prever os resultados à mão.
+- [Trace B](materials/inputs/trace-b.txt): dezesseis acessos para verificar substituições.
+- [Verificações públicas](checks/check.py): testes com resultados conhecidos e casos de limite.
+- [Modelo de relato](report-template.md): instruções para registrar sua investigação.
 
-O gerador de percursos de matriz faz parte da sua implementação. Os resultados
-de conferência abaixo não substituem sua tabela de previsão.
+Você também deve criar o gerador de percursos da matriz.
+Antes de consultar os resultados de conferência, registre sua previsão.
 
 ## Etapas da investigação
 
 ### 1. Prever os acessos
 
-Antes de implementar, leia o trace A e preencha uma tabela com endereço, offset,
-índice, tag, validade anterior e resultado esperado. Explique quais acessos podem
-reaproveitar o bloco carregado por uma leitura anterior.
+1. Leia o trace A antes de implementar o simulador.
+2. Preencha uma tabela com os campos abaixo.
+3. Explique quais acessos podem usar um bloco carregado por uma leitura anterior.
 
 ```text
 Endereço | Offset | Índice | Tag | Válida antes? | Hit/miss | Substituição?
 ```
 
-Guarde essa primeira tabela, inclusive os erros: ela é a previsão do experimento.
+Guarde a tabela original, mesmo que sua previsão esteja errada.
+Você vai comparar essa previsão com os resultados do simulador.
 
 ### 2. Implementar, observar e verificar
 
-Implemente o simulador em `materials/starter/cache.c` ou em um arquivo seu.
-Leia endereços sem perder os bits altos. Execute os traces A e B em processos
-separados para que cada execução comece vazia. Registre saída e status.
+1. Implemente o simulador em `materials/starter/cache.c` ou em um arquivo seu.
+2. Preserve os 64 bits de cada endereço durante a leitura.
+3. Compile o simulador.
+4. Execute o trace A em um novo processo.
+5. Execute o trace B em outro processo.
+6. Registre a saída de cada execução.
+7. Registre também o código de saída de cada execução.
+8. Execute as verificações públicas.
+
+Os comandos abaixo usam `materials/starter/cache.c` como arquivo da implementação.
 
 ```sh
 cc -std=c11 -Wall -Wextra -Wpedantic -O2 materials/starter/cache.c -o cache
@@ -106,28 +149,46 @@ python3 checks/check.py ./cache
 | A | 3 | 5 | 3 |
 | B | 4 | 12 | 8 |
 
-No trace A, `0x0F`, `0x4F` e `0x1F` são hits. Os acessos `0x40`, `0x00`
-(segunda ocorrência) e `0x50` substituem blocos válidos.
+No trace A, os acessos `0x0F`, `0x4F` e `0x1F` são hits.
+Os acessos `0x40`, `0x00` (segunda ocorrência) e `0x50` substituem blocos de linhas válidas.
 
 </details>
 
-Compare com a previsão e explique uma divergência, se houver. Ao corrigir o
-simulador, registre a causa e repita os checks. Verifique entrada vazia, uma
-leitura, duas leituras iguais e endereços próximos do limite de 64 bits.
+Compare os resultados com sua previsão.
+Se houver uma diferença, explique a causa.
+Se você corrigir o simulador, registre a correção.
+Depois, execute novamente as verificações públicas.
+
+Verifique também estes casos:
+
+- entrada vazia;
+- uma leitura;
+- duas leituras do mesmo endereço;
+- endereços próximos do maior valor de 64 bits sem sinal.
 
 ### 3. Investigar a localidade
 
-Esta etapa faz parte do núcleo. Modele uma matriz de bytes `A[N][N]`, armazenada
-por linhas, com endereço sintético inicial zero. Escreva um gerador que emita
-somente as leituras da matriz no formato de trace.
+Esta etapa é obrigatória para concluir o laboratório.
+A matriz `A[N][N]` contém bytes e ocupa endereços consecutivos, em ordem de linhas.
+O endereço inicial da matriz no modelo é zero.
 
-- Por linhas: para cada `i`, percorra `j` e emita `N*i+j`.
-- Por colunas: para cada `j`, percorra `i` e emita `N*i+j`.
+Crie um gerador que escreva as leituras da matriz no formato de trace.
+O gerador deve produzir dois percursos:
 
-Antes de executar, preveja qual percurso terá mais hits para `N=16` e para `N=8`.
-Gere os quatro arquivos, rode cada um em uma execução nova do simulador e guarde
-os comandos, traces e contadores. A linguagem do gerador é livre; documente como
-executá-lo. Confira que cada trace tem exatamente `N*N` leituras.
+- **Por linhas:** para cada `i`, percorra `j`. Escreva o endereço `N*i+j`.
+- **Por colunas:** para cada `j`, percorra `i`. Escreva o endereço `N*i+j`.
+
+Em ambos os percursos, os índices variam de zero até `N-1`.
+Use a linguagem de sua preferência para o gerador.
+Documente o comando que executa o gerador.
+
+1. Antes de executar, preveja qual percurso terá mais hits para `N=16`.
+2. Faça outra previsão para `N=8`.
+3. Gere os quatro traces: dois percursos para cada tamanho de matriz.
+4. Confira se cada trace tem exatamente `N*N` leituras.
+5. Execute cada trace em um novo processo do simulador.
+6. Guarde os comandos usados.
+7. Guarde os traces e os contadores obtidos.
 
 <details>
 <summary>Conferir resultados de localidade</summary>
@@ -141,57 +202,83 @@ executá-lo. Confira que cada trace tem exatamente `N*N` leituras.
 
 </details>
 
-Explique por que a diferença desaparece quando toda a matriz cabe nesta cache.
-Escolha dois endereços que disputam uma linha e mostre seus índices e tags.
-Esses resultados descrevem o simulador; **não são tempos nem contadores de uma
-CPU real**.
+Explique por que os percursos têm os mesmos contadores quando toda a matriz cabe na cache.
+Escolha dois endereços de blocos diferentes que usam a mesma linha da cache.
+Mostre os índices e as tags desses endereços.
 
-### 4. Explicar e consolidar
+Esses resultados descrevem apenas o simulador.
+**Eles não medem o tempo de execução nem os misses de uma CPU real.**
 
-Relacione suas observações com validade, tag, capacidade e ordem de acesso.
-Justifique por que capacidade total, sozinha, não elimina conflitos. Inclua a
-previsão original, uma tabela conferida e as verificações após a implementação.
+### 4. Explicar os resultados
+
+Explique como a validade, a tag, a capacidade e a ordem de acesso afetam os resultados.
+Explique por que blocos diferentes podem disputar a mesma linha, mesmo que a cache tenha outras linhas livres.
+Inclua a previsão original no relato.
+Acrescente uma tabela com os resultados conferidos.
+Acrescente os resultados das verificações da implementação.
 
 ## Critérios de conclusão
 
-- O simulador atende ao contrato e aos traces A/B e casos de limite.
-- Cada execução começa vazia; as invariantes dos contadores são respeitadas.
-- O gerador produz os quatro percursos de matriz e acompanha a entrega.
-- O relato reúne previsão, comandos, ambiente, traces e resultados observados.
-- A explicação relaciona resultados a localidade e conflitos e distingue o modelo
-  de uma medição de hardware.
-- Outra pessoa consegue compilar e reproduzir os experimentos com suas instruções.
+O laboratório está concluído quando a entrega atende a todos estes critérios:
 
-Entregue código, gerador, traces e relato. Passar nos checks não substitui a
-explicação. Não é necessário concluir as extensões.
+- O simulador segue o modelo descrito e produz os resultados esperados para os traces A e B.
+- O simulador passa nas verificações dos casos de limite.
+- Cada execução começa com linhas inválidas e contadores em zero.
+- Os contadores atendem às duas condições descritas no modelo.
+- A entrega inclui o gerador e os quatro traces da matriz.
+- O relato contém a previsão, os comandos, o ambiente e os resultados observados.
+- A explicação relaciona os resultados à localidade e à disputa por linhas da cache.
+- A explicação distingue a simulação de uma medição de CPU real.
+- Suas instruções permitem que outra pessoa compile o código e repita os experimentos.
+
+Entregue o código do simulador, o gerador, os traces e o relato.
+As verificações públicas avaliam o programa. O relato deve explicar os resultados.
+As extensões abaixo são opcionais.
 
 ## Extensões opcionais
 
-Generalize para `S` conjuntos, `E` vias e blocos de `B` bytes. Exija `S` e `B`
-potências de dois e `E` positivo. Valide tamanhos antes de alocar. Use
-`bloco=a/B`, `conjunto=(a/B)%S` e `tag=(a/B)/S`.
+Amplie o modelo para usar `S` conjuntos, `E` vias por conjunto e blocos de `B` bytes.
+Uma via é uma posição para um bloco dentro de um conjunto.
 
-Implemente LRU atualizando recência em cada acesso. Prefira vias inválidas;
-caso todas estejam válidas, substitua a menos recente. Em empate, use a menor via.
-Com `S=1`, `E=2`, `B=16`, o trace `0x00, 0x10, 0x00, 0x20, 0x10` deve resultar
-em `hits=1 misses=4 evictions=2`. Registre separadamente estas alterações.
+1. Verifique se `S` e `B` são potências de dois.
+2. Verifique se `E` é positivo.
+3. Verifique os tamanhos e os limites antes de alocar memória.
+
+Use estas fórmulas:
+
+- `bloco=a/B`;
+- `conjunto=(a/B)%S`;
+- `tag=(a/B)/S`.
+
+Implemente a política LRU: substitua o bloco usado há mais tempo.
+Atualize o registro de uso em cada acesso.
+Em um miss, escolha uma via inválida, se houver.
+Se todas as vias estiverem válidas, substitua o bloco usado há mais tempo.
+Em caso de empate, escolha a via com o menor número.
+
+Com `S=1`, `E=2` e `B=16`, execute o trace `0x00, 0x10, 0x00, 0x20, 0x10`.
+O resultado esperado é `hits=1 misses=4 evictions=2`.
+Registre as alterações desta extensão separadamente das etapas obrigatórias.
 
 ## Participação no clube
 
-Compartilhe uma tentativa, mesmo incompleta, com sua previsão e o que observou.
-Para perguntar, inclua trace mínimo, saída, comando e dúvida específica. Consulte
-[como participar](/como-participar/) para acessar a conversa do clube.
+Compartilhe sua previsão e o que você observou.
+Você pode compartilhar uma tentativa incompleta.
 
-Para propor uma melhoria ou compartilhar uma solução acompanhada de evidências,
-siga o [guia de contribuição](https://github.com/oxide-club/labs/blob/main/CONTRIBUTING.md).
-Mantenha a solução separada do material inicial e sinalize resultados que revelam
-as conferências antes que outra pessoa faça a previsão.
+Se tiver uma dúvida, inclua o menor trace que mostra o problema.
+Inclua também o comando, a saída e sua pergunta.
+Consulte [como participar](/como-participar/) para acessar a conversa do clube.
+
+Para propor uma melhoria, siga o [guia de contribuição](https://github.com/oxide-club/labs/blob/main/CONTRIBUTING.md).
+Use o mesmo guia para compartilhar uma solução com evidências.
+Mantenha sua solução separada do código inicial.
+Avise quando sua mensagem mostrar resultados que outras pessoas ainda precisam prever.
 
 ## Referências e atividades relacionadas
 
-- [CS:APP — Lab Assignments](https://csapp.cs.cmu.edu/3e/labs.html): inspiração temática.
-- [CS:APP — Cache Lab](https://csapp.cs.cmu.edu/3e/cachelab.pdf): leitura relacionada.
-- [Biblioteca do clube](/biblioteca): preparação e aprofundamento.
-- [Catálogo de desafios](/desafios/): atividades com contratos delimitados.
+- [CS:APP — Lab Assignments](https://csapp.cs.cmu.edu/3e/labs.html): laboratórios que inspiraram os temas do clube.
+- [CS:APP — Cache Lab](https://csapp.cs.cmu.edu/3e/cachelab.pdf): outro laboratório sobre cache.
+- [Biblioteca do clube](/biblioteca): materiais para estudar os conceitos usados aqui.
+- [Catálogo de desafios](/desafios/): atividades com objetivos definidos.
 
-O modelo, os traces e o roteiro deste laboratório são autorais do Oxide Club.
+O Oxide Club criou o modelo, os traces e o roteiro deste laboratório.
