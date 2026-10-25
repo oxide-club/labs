@@ -28,3 +28,32 @@ Entregue código, saída dos checks, CSV bruto, resumo por variante, versões e 
 
 Documentação original: CC BY 4.0. Código original: MIT. Dados originais: CC0 1.0.
 Os avisos completos constam no pacote e no repositório; fontes OpenBLAS são somente links.
+
+## Interface Make
+
+Execute da raiz deste laboratório, com GNU Make e Python 3.10+:
+
+```sh
+make help                 # Comandos, requisitos e seletores
+make setup                # Verifica as ferramentas; não instala globalmente
+make build                # Compila sem executar o exercício
+make test                 # Checks da solução; o starter pode falhar
+make run                  # Experimento padrão
+make verify-preparation   # Verifica a preparação do starter original
+make clean                # Limpa artefatos conhecidos; preserva resultados
+```
+
+`make` sem argumentos mostra ajuda. Veja os seletores `VARIANT`, `MODE` e
+`EXPERIMENT` disponíveis em `make help`. Cada pacote funciona independentemente.
+A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
+Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
+Após modificar o starter, use `test`: `verify-preparation` compara a preparação
+original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` executa primeiro os checks de correção e só então o benchmark
+31 × 47 × 29, com bloco 8, seed 42, dois aquecimentos e sete repetições.
+O starter retorna `MATRIX_TODO`, portanto a medição é recusada até a implementação.
+Para medir uma solução, configure `MATRIX_COMPILER`, `MATRIX_FLAGS` e
+`MATRIX_HARDWARE` com os dados reais, conforme [experiments/README.md](experiments/README.md).

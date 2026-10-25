@@ -1,0 +1,133 @@
+{
+  "name": "005-cache-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "materials/starter/cache.c",
+          "-o",
+          "{work}/cache"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "{work}/cache"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          {
+            "argv": [
+              "{work}/cache"
+            ],
+            "stdin": "materials/inputs/trace-a.txt"
+          }
+        ]
+      },
+      "artifacts": [
+        "build/cache"
+      ],
+      "preparation": [
+        {
+          "name": "compilar starter",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/starter/cache.c",
+            "-o",
+            "{work}/cache"
+          ]
+        },
+        {
+          "name": "checks rejeitam starter",
+          "argv": [
+            "python3",
+            "checks/check.py",
+            "{work}/cache"
+          ],
+          "status": 1,
+          "contains": "FALHOU"
+        }
+      ]
+    },
+    "rust": {
+      "tools": [
+        "rustc",
+        "python3"
+      ],
+      "build": [
+        [
+          "rustc",
+          "--edition=2021",
+          "-D",
+          "warnings",
+          "materials/starter/rust/cache.rs",
+          "-o",
+          "{work}/cache-rust"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "{work}/cache-rust"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          {
+            "argv": [
+              "{work}/cache-rust"
+            ],
+            "stdin": "materials/inputs/trace-a.txt"
+          }
+        ]
+      },
+      "artifacts": [
+        "build/cache-rust"
+      ],
+      "preparation": [
+        {
+          "name": "compilar starter Rust",
+          "argv": [
+            "rustc",
+            "--edition=2021",
+            "-D",
+            "warnings",
+            "materials/starter/rust/cache.rs",
+            "-o",
+            "{work}/cache"
+          ]
+        },
+        {
+          "name": "mesmos checks rejeitam starter Rust",
+          "argv": [
+            "python3",
+            "checks/check.py",
+            "{work}/cache"
+          ],
+          "status": 1,
+          "contains": "FALHOU"
+        }
+      ]
+    }
+  }
+}

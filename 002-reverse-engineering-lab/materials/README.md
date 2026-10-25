@@ -144,3 +144,6 @@ Build e rejeição esperada do starter verificam a preparação, não a conclus�
 ## Licenças
 
 Código original: MIT; documentação: CC BY 4.0; dados de teste originais: CC0 1.0.
+
+Na interface Make, `CC=clang` seleciona Clang. A receita da VM usa essa seleção;
+os scripts de preparação mantêm GCC como padrão quando CC não está definido.

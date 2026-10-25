@@ -1,0 +1,148 @@
+{
+  "name": "004-arena-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "-Imaterials/starter",
+          "materials/starter/arena.c",
+          "materials/checks/tests.c",
+          "-o",
+          "{work}/arena-tests"
+        ],
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "-Imaterials/starter",
+          "materials/starter/arena.c",
+          "materials/checks/fail_malloc.c",
+          "-Wl,--wrap=malloc",
+          "-o",
+          "{work}/fail-malloc"
+        ],
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "materials/experiments/layout.c",
+          "-o",
+          "{work}/layout"
+        ]
+      ],
+      "test": [
+        [
+          "{work}/arena-tests"
+        ],
+        [
+          "{work}/fail-malloc"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "{work}/layout"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/arena-tests",
+        "build/fail-malloc",
+        "build/layout"
+      ],
+      "preparation": [
+        {
+          "name": "compilar starter e checks",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/arena.c",
+            "materials/checks/tests.c",
+            "-o",
+            "{work}/arena-tests"
+          ]
+        },
+        {
+          "name": "checks rejeitam starter",
+          "argv": [
+            "{work}/arena-tests"
+          ],
+          "status": 1,
+          "contains": "falhas"
+        },
+        {
+          "name": "compilar falha malloc",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/arena.c",
+            "materials/checks/fail_malloc.c",
+            "-Wl,--wrap=malloc",
+            "-o",
+            "{work}/fail-malloc"
+          ]
+        },
+        {
+          "name": "falha malloc preserva estado zerado",
+          "argv": [
+            "{work}/fail-malloc"
+          ],
+          "contains": "estado zerado"
+        },
+        {
+          "name": "compilar observação alinhamento",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/experiments/layout.c",
+            "-o",
+            "{work}/layout"
+          ]
+        },
+        {
+          "name": "observar alinhamento do ambiente",
+          "argv": [
+            "{work}/layout"
+          ],
+          "contains": "long double:"
+        }
+      ]
+    }
+  }
+}

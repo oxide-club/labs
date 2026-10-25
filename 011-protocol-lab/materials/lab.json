@@ -1,0 +1,113 @@
+{
+  "name": "011-protocol-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3"
+      ],
+      "build": [],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/trace.py"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "preparation": [
+        {
+          "name": "checks rejeitam parser incompleto",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "FAIL: NotImplementedError: implemente validação e encoder"
+        },
+        {
+          "name": "experimento depende do parser",
+          "argv": [
+            "python3",
+            "experiments/trace.py"
+          ],
+          "status": 1,
+          "contains": "FAIL: NotImplementedError: implemente parser incremental"
+        }
+      ]
+    },
+    "go": {
+      "tools": [
+        "go",
+        "python3"
+      ],
+      "build": [
+        [
+          "python3",
+          "checks/go.py",
+          "--compile-only"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/go.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "checks/go.py",
+            "--fixture-only"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "note": "run observa os vetores independentes; test verifica o parser Go.",
+      "preparation": [
+        {
+          "name": "compilar harness Go",
+          "argv": [
+            "python3",
+            "checks/go.py",
+            "--compile-only"
+          ],
+          "contains": "Preparação:",
+          "timeout": 150
+        },
+        {
+          "name": "conferir vetores compartilhados",
+          "argv": [
+            "python3",
+            "checks/go.py",
+            "--fixture-only"
+          ],
+          "contains": "1/1 grupos Go passaram",
+          "timeout": 150
+        },
+        {
+          "name": "checks rejeitam parser Go",
+          "argv": [
+            "python3",
+            "checks/go.py"
+          ],
+          "status": 1,
+          "contains": "1/5 grupos Go passaram",
+          "forbid": [
+            "timeout",
+            "build failed",
+            "Traceback"
+          ],
+          "timeout": 150
+        }
+      ]
+    }
+  }
+}

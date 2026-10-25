@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Compile O0; --optimized acrescenta O2 apenas na extensão."""
 import argparse
+import os
+import shlex
 from pathlib import Path
 import shutil
 import subprocess
@@ -21,7 +23,7 @@ def main():
         shutil.copyfile(source, target_source)
     for level in (("O0", "O2") if args.optimized else ("O0",)):
         name = "gate-" + level
-        command = ["gcc", "-std=c11", "-Wall", "-Wextra", "-Wpedantic",
+        command = shlex.split(os.environ.get("CC", "gcc")) + ["-std=c11", "-Wall", "-Wextra", "-Wpedantic",
                    "-" + level, "-g", "-fno-omit-frame-pointer",
                    "source-archive/gate.c", "-o", name]
         print(" ".join(command), flush=True)

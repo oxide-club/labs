@@ -1,0 +1,74 @@
+{
+  "name": "007-compilation-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "make",
+        "python3",
+        "objdump",
+        "readelf",
+        "nm",
+        "strace"
+      ],
+      "build": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "all"
+        ]
+      ],
+      "test": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "check"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "observe"
+          ]
+        ]
+      },
+      "artifacts": [
+        "materials/build/main.i",
+        "materials/build/main.s",
+        "materials/build/main.o",
+        "materials/build/operations.i",
+        "materials/build/operations.s",
+        "materials/build/operations.o",
+        "materials/build/program"
+      ],
+      "note": "Materiais completos; test deve passar. run coleta as etapas de compilação.",
+      "evidence": [
+        "materials/build/symbols.txt",
+        "materials/build/object.txt",
+        "materials/build/elf.txt",
+        "materials/build/disassembly.txt",
+        "materials/build/maps.txt",
+        "materials/build/strace.txt",
+        "materials/build/strace-status.txt"
+      ],
+      "preparation": [
+        {
+          "name": "compilar e verificar toolchain",
+          "argv": [
+            "make",
+            "-C",
+            "materials",
+            "check",
+            "BUILD={work}"
+          ],
+          "contains": "OK"
+        }
+      ]
+    }
+  }
+}

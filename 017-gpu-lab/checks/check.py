@@ -49,6 +49,9 @@ def cpu():
     print('CPU: 17 casos e 6 rejeições passaram; nenhuma execução GPU.')
 
 def gpu():
+    api = run([ROOT/'materials/build/gpu-api'])
+    assert api.returncode == 0, api.stderr
+    print(api.stdout.strip())
     for block in [64, 128, 256, 512]:
         for n, seed in CASES:
             result = run([ROOT/'materials/build/gpu', n, block, seed])

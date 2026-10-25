@@ -1,0 +1,130 @@
+{
+  "name": "001-binary-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "-Imaterials/starter",
+          "materials/starter/packet.c",
+          "materials/checks/tests.c",
+          "-o",
+          "{work}/packet-tests"
+        ],
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "-Imaterials/starter",
+          "materials/starter/packet.c",
+          "materials/experiments/observe.c",
+          "-o",
+          "{work}/observe"
+        ]
+      ],
+      "test": [
+        [
+          "{work}/packet-tests"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "{work}/observe"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/packet-tests",
+        "build/observe"
+      ],
+      "preparation": [
+        {
+          "name": "compilar instrumento completo de representação",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/experiments/representation.c",
+            "-o",
+            "{work}/representation"
+          ]
+        },
+        {
+          "name": "comparar representações e layouts",
+          "argv": [
+            "{work}/representation"
+          ],
+          "contains": "logical_equal=1 external_equal=1"
+        },
+        {
+          "name": "extensão histórica: compilar starter e checks",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/packet.c",
+            "materials/checks/tests.c",
+            "-o",
+            "{work}/packet-tests"
+          ]
+        },
+        {
+          "name": "extensão histórica: checks rejeitam starter",
+          "argv": [
+            "{work}/packet-tests"
+          ],
+          "status": 1,
+          "contains": "falhas"
+        },
+        {
+          "name": "extensão histórica: compilar observação",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/packet.c",
+            "materials/experiments/observe.c",
+            "-o",
+            "{work}/observe"
+          ]
+        },
+        {
+          "name": "extensão histórica: observar representação",
+          "argv": [
+            "{work}/observe"
+          ],
+          "contains": "word: 0x22500102"
+        }
+      ]
+    }
+  }
+}

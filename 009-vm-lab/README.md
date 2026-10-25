@@ -20,3 +20,41 @@ Siga [o experimento](experiments/trace.md) e registre os resultados no [modelo d
 O modelo é gerado a partir do modelo central, sem manutenção manual de cópias.
 Documentação original: CC BY 4.0. Código original: MIT. Fixtures originais: CC0 1.0.
 As referências externas mantêm suas próprias licenças.
+
+## Interface Make
+
+Execute da raiz deste laboratório, com GNU Make e Python 3.10+:
+
+```sh
+make help                 # Comandos, requisitos e seletores
+make setup                # Verifica as ferramentas; não instala globalmente
+make build                # Compila sem executar o exercício
+make test                 # Checks da solução; o starter pode falhar
+make run                  # Experimento padrão
+make verify-preparation   # Verifica a preparação do starter original
+make clean                # Limpa artefatos conhecidos; preserva resultados
+```
+
+`make` sem argumentos mostra ajuda. Veja os seletores `VARIANT`, `MODE` e
+`EXPERIMENT` disponíveis em `make help`. Cada pacote funciona independentemente.
+A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
+Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
+Após modificar o starter, use `test`: `verify-preparation` compara a preparação
+original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` acompanha a expressão em `materials/expression.txt`. O starter
+incompleto falha; `make test` verifica os contratos da VM.
+
+A referência é Python, sem compilação. Para a variante Rust:
+
+```sh
+make setup VARIANT=rust
+make build VARIANT=rust
+make test VARIANT=rust
+make run VARIANT=rust
+```
+
+Nessa variante, `run` fornece a mesma expressão ao executável com limite de
+1.000 passos.

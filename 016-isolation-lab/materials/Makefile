@@ -13,7 +13,8 @@ $(BUILD)/supervisor: supervisor.c vm_guard.h | $(BUILD)
 	$(CC) $(CFLAGS) supervisor.c -o $@
 
 $(BUILD)/probe: probe.c vm_guard.h | $(BUILD)
-	$(CC) $(CFLAGS) probe.c -o $@
+	# A fixture precisa observar a allocation real, mesmo com otimização.
+	$(CC) $(CFLAGS) -fno-builtin-malloc probe.c -o $@
 
 static-check:
 	$(CC) $(CFLAGS) -fsyntax-only supervisor.c probe.c

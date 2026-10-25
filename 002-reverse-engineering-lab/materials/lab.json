@@ -1,0 +1,88 @@
+{
+  "name": "002-reverse-engineering-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3",
+        "objdump"
+      ],
+      "build": [
+        [
+          "python3",
+          "materials/experiments/prepare.py",
+          "{work}"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "materials/checks/check.py",
+          "{work}/gate-O0"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "objdump",
+            "-d",
+            "{work}/gate-O0"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/gate-O0",
+        "build/gate-O0.txt",
+        "build/source-after-analysis/gate.c"
+      ],
+      "x86_64": true,
+      "note": "Alvo completo; checks devem passar. run mostra disassembly O0.",
+      "preparation": [
+        {
+          "name": "preparar somente O0",
+          "argv": [
+            "python3",
+            "materials/experiments/prepare.py",
+            "{work}"
+          ]
+        },
+        {
+          "name": "checks O0",
+          "argv": [
+            "python3",
+            "materials/checks/check.py",
+            "{work}/gate-O0"
+          ],
+          "contains": "6 casos públicos: OK"
+        },
+        {
+          "name": "preparar O2 na extensão explícita",
+          "argv": [
+            "python3",
+            "materials/experiments/prepare.py",
+            "{work}",
+            "--optimized"
+          ]
+        },
+        {
+          "name": "checks O2",
+          "argv": [
+            "python3",
+            "materials/checks/check.py",
+            "{work}/gate-O2"
+          ],
+          "contains": "6 casos públicos: OK"
+        },
+        {
+          "name": "diagnósticos não expõem candidato",
+          "argv": [
+            "python3",
+            "materials/checks/test_check.py"
+          ],
+          "contains": "OK"
+        }
+      ]
+    }
+  },
+  "isolated": true
+}

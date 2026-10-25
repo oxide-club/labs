@@ -1,0 +1,110 @@
+{
+  "name": "003-memory-safety-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-O0",
+          "-g",
+          "-fsanitize=address",
+          "-fno-omit-frame-pointer",
+          "materials/starter/lifetime.c",
+          "-o",
+          "{work}/lifetime"
+        ],
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-O0",
+          "-g",
+          "-fsanitize=address",
+          "-fno-omit-frame-pointer",
+          "materials/starter/variation.c",
+          "-o",
+          "{work}/variation"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "materials/checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "materials/experiments/observe.py",
+            "{result}/observation"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/lifetime",
+        "build/variation"
+      ],
+      "x86_64": true,
+      "note": "run observa o defeito original; test verifica a correção com ASan/LSan.",
+      "preparation": [
+        {
+          "name": "comparar lifetime e validade lógica",
+          "argv": [
+            "python3",
+            "materials/experiments/compare.py",
+            "{work}/comparison"
+          ],
+          "contains": "4 cenários; 0 falhas de preparação.",
+          "timeout": 60
+        },
+        {
+          "name": "extensão histórica: observar UAF original",
+          "argv": [
+            "python3",
+            "materials/experiments/observe.py",
+            "{work}/observation"
+          ],
+          "contains": "Use-after-free observado"
+        },
+        {
+          "name": "extensão histórica: compilar variação incompleta",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/starter/variation.c",
+            "-o",
+            "{work}/variation"
+          ]
+        },
+        {
+          "name": "extensão histórica: variação continua incompleta",
+          "argv": [
+            "{work}/variation",
+            "6"
+          ],
+          "status": 2,
+          "contains": "Variação ainda não implementada."
+        }
+      ]
+    }
+  },
+  "isolated": true
+}
