@@ -4,9 +4,9 @@
 
 **Goal:** Deliver the approved independent Make interface and reproducible VM environments.
 
-**Architecture:** Local Makefiles delegate existing builds and local Python helpers. Canonical templates and declarative preparation data generate checked-in independent copies. QEMU environments use verified images, disposable overlays, a nonprivileged guest account and explicit guest confirmation.
+**Architecture:** Local Makefiles delegate existing builds and local Python helpers. Canonical templates and declarative preparation data generate checked-in independent copies. QEMU environments use a verified Alpine ISO and APKs, a diskless disposable root, a nonprivileged guest account and explicit guest confirmation.
 
-**Tech Stack:** GNU Make, Python 3.10+, existing C/Rust/Go toolchains, QEMU, SSH.
+**Tech Stack:** GNU Make, Python 3.10+, existing C/Rust/Go toolchains, QEMU, libarchive bsdtar.
 
 **Spec:** `docs/superpowers/specs/2026-10-25-local-makefiles-design.md`
 

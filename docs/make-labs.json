@@ -1,0 +1,1051 @@
+{
+  "001-binary-lab": {
+    "name": "001-binary-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/packet.c",
+            "materials/checks/tests.c",
+            "-o",
+            "{work}/packet-tests"
+          ],
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/packet.c",
+            "materials/experiments/observe.c",
+            "-o",
+            "{work}/observe"
+          ]
+        ],
+        "test": [
+          [
+            "{work}/packet-tests"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "{work}/observe"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/packet-tests",
+          "build/observe"
+        ]
+      }
+    }
+  },
+  "002-reverse-engineering-lab": {
+    "name": "002-reverse-engineering-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3",
+          "objdump"
+        ],
+        "build": [
+          [
+            "python3",
+            "materials/experiments/prepare.py",
+            "{work}"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "materials/checks/check.py",
+            "{work}/gate-O0"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "objdump",
+              "-d",
+              "{work}/gate-O0"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/gate-O0",
+          "build/gate-O0.txt",
+          "build/source-after-analysis/gate.c"
+        ],
+        "x86_64": true,
+        "note": "Alvo completo; checks devem passar. run mostra disassembly O0."
+      }
+    },
+    "isolated": true
+  },
+  "003-memory-safety-lab": {
+    "name": "003-memory-safety-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-O0",
+            "-g",
+            "-fsanitize=address",
+            "-fno-omit-frame-pointer",
+            "materials/starter/lifetime.c",
+            "-o",
+            "{work}/lifetime"
+          ],
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-O0",
+            "-g",
+            "-fsanitize=address",
+            "-fno-omit-frame-pointer",
+            "materials/starter/variation.c",
+            "-o",
+            "{work}/variation"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "materials/checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "materials/experiments/observe.py",
+              "{result}/observation"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/lifetime",
+          "build/variation"
+        ],
+        "x86_64": true,
+        "note": "run observa o defeito original; test verifica a correção com ASan/LSan."
+      }
+    },
+    "isolated": true
+  },
+  "004-arena-lab": {
+    "name": "004-arena-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/arena.c",
+            "materials/checks/tests.c",
+            "-o",
+            "{work}/arena-tests"
+          ],
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/arena.c",
+            "materials/checks/fail_malloc.c",
+            "-Wl,--wrap=malloc",
+            "-o",
+            "{work}/fail-malloc"
+          ],
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/experiments/layout.c",
+            "-o",
+            "{work}/layout"
+          ]
+        ],
+        "test": [
+          [
+            "{work}/arena-tests"
+          ],
+          [
+            "{work}/fail-malloc"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "{work}/layout"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/arena-tests",
+          "build/fail-malloc",
+          "build/layout"
+        ]
+      }
+    }
+  },
+  "005-cache-lab": {
+    "name": "005-cache-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/starter/cache.c",
+            "-o",
+            "{work}/cache"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "{work}/cache"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            {
+              "argv": [
+                "{work}/cache"
+              ],
+              "stdin": "materials/inputs/trace-a.txt"
+            }
+          ]
+        },
+        "artifacts": [
+          "build/cache"
+        ]
+      },
+      "rust": {
+        "tools": [
+          "rustc",
+          "python3"
+        ],
+        "build": [
+          [
+            "rustc",
+            "--edition=2021",
+            "-D",
+            "warnings",
+            "materials/starter/rust/cache.rs",
+            "-o",
+            "{work}/cache-rust"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "{work}/cache-rust"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            {
+              "argv": [
+                "{work}/cache-rust"
+              ],
+              "stdin": "materials/inputs/trace-a.txt"
+            }
+          ]
+        },
+        "artifacts": [
+          "build/cache-rust"
+        ],
+        "preparation_variant": "cache-rust"
+      }
+    }
+  },
+  "006-processes-lab": {
+    "name": "006-processes-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "make",
+          "python3",
+          "printf",
+          "wc"
+        ],
+        "build": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "all"
+          ]
+        ],
+        "test": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "check"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "materials/build/oxrun",
+              "pipe",
+              "--",
+              "printf",
+              "abc\n",
+              ":::",
+              "wc",
+              "-c"
+            ]
+          ]
+        },
+        "artifacts": [
+          "materials/build/oxrun",
+          "materials/build/probe"
+        ]
+      }
+    }
+  },
+  "007-compilation-lab": {
+    "name": "007-compilation-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "make",
+          "python3",
+          "objdump",
+          "readelf",
+          "nm",
+          "strace"
+        ],
+        "build": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "all"
+          ]
+        ],
+        "test": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "check"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "make",
+              "-C",
+              "materials",
+              "observe"
+            ]
+          ]
+        },
+        "artifacts": [
+          "materials/build/main.i",
+          "materials/build/main.s",
+          "materials/build/main.o",
+          "materials/build/operations.i",
+          "materials/build/operations.s",
+          "materials/build/operations.o",
+          "materials/build/program"
+        ],
+        "note": "Materiais completos; test deve passar. run coleta as etapas de compilação.",
+        "evidence": [
+          "materials/build/symbols.txt",
+          "materials/build/object.txt",
+          "materials/build/elf.txt",
+          "materials/build/disassembly.txt",
+          "materials/build/maps.txt",
+          "materials/build/strace.txt",
+          "materials/build/strace-status.txt"
+        ]
+      }
+    }
+  },
+  "008-matrix-lab": {
+    "name": "008-matrix-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Imaterials/starter",
+            "-Ichecks",
+            "experiments/benchmark.c",
+            "materials/starter/matrix.c",
+            "-lm",
+            "-o",
+            "{work}/benchmark"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "checks/check.py"
+            ],
+            [
+              "{work}/benchmark",
+              "31",
+              "47",
+              "29",
+              "8",
+              "42",
+              "2",
+              "7"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/benchmark"
+        ],
+        "note": "run exige MATRIX_COMPILER, MATRIX_FLAGS e MATRIX_HARDWARE reais; consulte experiments/README.md."
+      }
+    }
+  },
+  "009-vm-lab": {
+    "name": "009-vm-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3"
+        ],
+        "build": [],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/trace.py",
+              "materials/expression.txt"
+            ]
+          ]
+        },
+        "artifacts": []
+      },
+      "rust": {
+        "tools": [
+          "rustc",
+          "python3"
+        ],
+        "build": [
+          [
+            "rustc",
+            "--edition=2021",
+            "-D",
+            "warnings",
+            "materials/starter/rust/main.rs",
+            "-o",
+            "{work}/vm"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "{work}/vm"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            {
+              "argv": [
+                "{work}/vm",
+                "1000"
+              ],
+              "stdin": "materials/expression.txt"
+            }
+          ]
+        },
+        "artifacts": [
+          "build/vm"
+        ],
+        "preparation_variant": "vm-rust"
+      }
+    }
+  },
+  "010-concurrency-lab": {
+    "name": "010-concurrency-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-pthread",
+            "-Imaterials/starter",
+            "checks/check.c",
+            "materials/starter/counter.c",
+            "materials/starter/queue.c",
+            "-o",
+            "{work}/concurrency"
+          ],
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-pthread",
+            "experiments/deadlock.c",
+            "-o",
+            "{work}/deadlock"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/run.py"
+            ]
+          ],
+          "model": [
+            [
+              "python3",
+              "experiments/interleavings.py"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/concurrency",
+          "build/deadlock"
+        ]
+      },
+      "rust": {
+        "tools": [
+          "rustc",
+          "python3"
+        ],
+        "build": [
+          [
+            "python3",
+            "checks/rust/check.py",
+            "--compile-only"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/rust/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/interleavings.py"
+            ]
+          ]
+        },
+        "artifacts": [],
+        "preparation_variant": "concurrency-rust",
+        "note": "run demonstra o modelo independente de interleavings; test verifica a implementação Rust."
+      }
+    }
+  },
+  "011-protocol-lab": {
+    "name": "011-protocol-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3"
+        ],
+        "build": [],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/trace.py"
+            ]
+          ]
+        },
+        "artifacts": []
+      },
+      "go": {
+        "tools": [
+          "go",
+          "python3"
+        ],
+        "build": [
+          [
+            "python3",
+            "checks/go.py",
+            "--compile-only"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/go.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "checks/go.py",
+              "--fixture-only"
+            ]
+          ]
+        },
+        "artifacts": [],
+        "preparation_variant": "protocol-go",
+        "note": "run observa os vetores independentes; test verifica o parser Go."
+      }
+    }
+  },
+  "012-abi-lab": {
+    "name": "012-abi-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "python3",
+          "objdump"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-O2",
+            "-Imaterials",
+            "checks/check.c",
+            "checks/probe.S",
+            "materials/calls.c",
+            "materials/arithmetic.S",
+            "-o",
+            "{work}/abi"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "objdump",
+              "-d",
+              "{work}/abi"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/abi"
+        ],
+        "x86_64": true
+      }
+    }
+  },
+  "013-syscalls-lab": {
+    "name": "013-syscalls-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "make",
+          "python3",
+          "strace",
+          "objdump"
+        ],
+        "build": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "all"
+          ]
+        ],
+        "test": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "check"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "strace",
+              "-o",
+              "{result}/libc.trace",
+              "-e",
+              "trace=write",
+              "materials/build/write_libc"
+            ]
+          ]
+        },
+        "artifacts": [
+          "materials/build/write_libc",
+          "materials/build/write_syscall",
+          "materials/build/contract_libc",
+          "materials/build/contract_syscall"
+        ]
+      }
+    }
+  },
+  "014-dynamic-linking-lab": {
+    "name": "014-dynamic-linking-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "make",
+          "ar",
+          "python3"
+        ],
+        "build": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "all"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "materials/build/dynamic",
+              "./materials/build/liboxide.so",
+              "oxide_add",
+              "now",
+              "call"
+            ]
+          ]
+        },
+        "artifacts": [
+          "materials/build/archive-client",
+          "materials/build/shared-client",
+          "materials/build/dynamic",
+          "materials/build/broken.so",
+          "materials/build/renamed.so",
+          "materials/build/lifetime.so",
+          "materials/build/dynamic-lifetime",
+          "materials/build/library.o",
+          "materials/build/liboxide.a",
+          "materials/build/liboxide.so"
+        ]
+      }
+    }
+  },
+  "015-async-lab": {
+    "name": "015-async-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "rustc",
+          "python3"
+        ],
+        "build": [
+          [
+            "python3",
+            "checks/check.py",
+            "--compile-only"
+          ],
+          [
+            "python3",
+            "experiments/trace.py",
+            "--compile-only"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/trace.py"
+            ]
+          ]
+        },
+        "artifacts": [],
+        "preparation_variant": "async-rust"
+      }
+    }
+  },
+  "016-isolation-lab": {
+    "name": "016-isolation-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "cc",
+          "make",
+          "python3"
+        ],
+        "build": [
+          [
+            "make",
+            "-C",
+            "materials",
+            "all"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "--confirm-disposable-vm"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/observe.py",
+              "--confirm-disposable-vm"
+            ]
+          ]
+        },
+        "artifacts": [
+          "materials/build/supervisor",
+          "materials/build/probe"
+        ],
+        "preparation_note": "Compilação e sintaxe verificadas; checks dinâmicos do isolamento não foram aprovados por este alvo."
+      }
+    },
+    "isolated": true
+  },
+  "017-gpu-lab": {
+    "name": "017-gpu-lab",
+    "variants": {
+      "reference": {
+        "modes": {
+          "gpu": {
+            "tools": [
+              "nvcc",
+              "make",
+              "python3"
+            ],
+            "build": [
+              [
+                "make",
+                "-C",
+                "materials",
+                "gpu"
+              ]
+            ],
+            "test": [
+              [
+                "python3",
+                "checks/check.py",
+                "--gpu"
+              ]
+            ],
+            "experiments": {
+              "default": [
+                {
+                  "argv": [
+                    "python3",
+                    "experiments/measure.py"
+                  ],
+                  "timeout": 1800
+                }
+              ]
+            },
+            "artifacts": [
+              "materials/build/gpu",
+              "materials/build/probe"
+            ],
+            "preparation_variant": "gpu-cuda",
+            "preparation_note": "Somente compilação CUDA verificada; kernels não aprovados."
+          },
+          "cpu": {
+            "tools": [
+              "cc",
+              "make",
+              "python3"
+            ],
+            "build": [
+              [
+                "make",
+                "-C",
+                "materials",
+                "cpu"
+              ]
+            ],
+            "test": [
+              [
+                "python3",
+                "checks/check.py"
+              ]
+            ],
+            "experiments": {
+              "default": [
+                [
+                  "materials/build/cpu",
+                  "1024",
+                  "42"
+                ]
+              ]
+            },
+            "artifacts": [
+              "materials/build/cpu",
+              "materials/build/oracle-check"
+            ],
+            "note": "CPU é suporte comparativo. Sucesso não aprova kernels CUDA."
+          }
+        }
+      }
+    }
+  },
+  "018-attention-lab": {
+    "name": "018-attention-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3"
+        ],
+        "build": [],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/memory.py",
+              "--theory"
+            ]
+          ],
+          "measure": [
+            [
+              "python3",
+              "experiments/memory.py",
+              "--measure"
+            ]
+          ]
+        },
+        "artifacts": [],
+        "note": "run demonstra o modelo teórico; EXPERIMENT=measure mede somente após os checks."
+      }
+    }
+  }
+}

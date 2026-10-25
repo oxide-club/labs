@@ -1,0 +1,63 @@
+{
+  "name": "012-abi-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3",
+        "objdump"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-Imaterials",
+          "checks/check.c",
+          "checks/probe.S",
+          "materials/calls.c",
+          "materials/arithmetic.S",
+          "-o",
+          "{work}/abi"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "objdump",
+            "-d",
+            "{work}/abi"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/abi"
+      ],
+      "x86_64": true,
+      "preparation": [
+        {
+          "name": "checks rejeitam assembly incompleto",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "Falha: resultado=",
+          "forbid": [
+            "Traceback",
+            "error:"
+          ]
+        }
+      ]
+    }
+  }
+}

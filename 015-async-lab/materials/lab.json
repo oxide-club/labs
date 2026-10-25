@@ -1,0 +1,90 @@
+{
+  "name": "015-async-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "rustc",
+        "python3"
+      ],
+      "build": [
+        [
+          "python3",
+          "checks/check.py",
+          "--compile-only"
+        ],
+        [
+          "python3",
+          "experiments/trace.py",
+          "--compile-only"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/trace.py"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "preparation": [
+        {
+          "name": "compilar checks e starters Rust",
+          "argv": [
+            "python3",
+            "checks/check.py",
+            "--compile-only"
+          ],
+          "contains": "Preparação:"
+        },
+        {
+          "name": "fixture independente",
+          "argv": [
+            "python3",
+            "checks/check.py",
+            "--fixture-only"
+          ],
+          "contains": "1/1 checks passaram"
+        },
+        {
+          "name": "checks rejeitam executor incompleto",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "1/10 checks passaram",
+          "forbid": [
+            "timeout de",
+            "error:",
+            "Traceback"
+          ]
+        },
+        {
+          "name": "compilar experimento Rust",
+          "argv": [
+            "python3",
+            "experiments/trace.py",
+            "--compile-only"
+          ],
+          "contains": "Preparação:"
+        },
+        {
+          "name": "trace depende do executor",
+          "argv": [
+            "python3",
+            "experiments/trace.py"
+          ],
+          "status": 101,
+          "contains": "not yet implemented"
+        }
+      ]
+    }
+  }
+}

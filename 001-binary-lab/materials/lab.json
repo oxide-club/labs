@@ -1,0 +1,108 @@
+{
+  "name": "001-binary-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "-Imaterials/starter",
+          "materials/starter/packet.c",
+          "materials/checks/tests.c",
+          "-o",
+          "{work}/packet-tests"
+        ],
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Werror",
+          "-O2",
+          "-Imaterials/starter",
+          "materials/starter/packet.c",
+          "materials/experiments/observe.c",
+          "-o",
+          "{work}/observe"
+        ]
+      ],
+      "test": [
+        [
+          "{work}/packet-tests"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "{work}/observe"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/packet-tests",
+        "build/observe"
+      ],
+      "preparation": [
+        {
+          "name": "compilar starter e checks",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/packet.c",
+            "materials/checks/tests.c",
+            "-o",
+            "{work}/packet-tests"
+          ]
+        },
+        {
+          "name": "checks rejeitam starter",
+          "argv": [
+            "{work}/packet-tests"
+          ],
+          "status": 1,
+          "contains": "falhas"
+        },
+        {
+          "name": "compilar observação",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "-Imaterials/starter",
+            "materials/starter/packet.c",
+            "materials/experiments/observe.c",
+            "-o",
+            "{work}/observe"
+          ]
+        },
+        {
+          "name": "observar representação",
+          "argv": [
+            "{work}/observe"
+          ],
+          "contains": "word: 0x22500102"
+        }
+      ]
+    }
+  }
+}

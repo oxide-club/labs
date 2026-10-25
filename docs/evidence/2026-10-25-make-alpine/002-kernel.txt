@@ -1,0 +1,1 @@
+Linux localhost 6.12.114-0-virt #1-Alpine SMP PREEMPT_DYNAMIC 2026-10-21 13:44:51 x86_64 Linux

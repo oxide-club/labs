@@ -1,0 +1,8 @@
+Ferramentas disponíveis: cc, python3, objdump
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ /usr/bin/python3 materials/experiments/prepare.py /home/lab/work/build
+clang -std=c11 -Wall -Wextra -Wpedantic -O0 -g -fno-omit-frame-pointer source-archive/gate.c -o gate-O0
+Artefatos em /home/lab/work/build
++ /usr/bin/python3 materials/checks/check.py /home/lab/work/build/gate-O0
+6 casos públicos: OK
+Status 0: pendente da entrada deduzida pelo participante

@@ -1,0 +1,159 @@
+{
+  "name": "010-concurrency-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-pthread",
+          "-Imaterials/starter",
+          "checks/check.c",
+          "materials/starter/counter.c",
+          "materials/starter/queue.c",
+          "-o",
+          "{work}/concurrency"
+        ],
+        [
+          "cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-O2",
+          "-pthread",
+          "experiments/deadlock.c",
+          "-o",
+          "{work}/deadlock"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/run.py"
+          ]
+        ],
+        "model": [
+          [
+            "python3",
+            "experiments/interleavings.py"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/concurrency",
+        "build/deadlock"
+      ],
+      "preparation": [
+        {
+          "name": "modelo de interleavings",
+          "argv": [
+            "python3",
+            "experiments/interleavings.py"
+          ]
+        },
+        {
+          "name": "checks rejeitam sincronização incompleta",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "Falhas: 16",
+          "timeout": 60,
+          "forbid": [
+            "FAIL counter-startup",
+            "FAIL deadlock bad",
+            "error:",
+            "Traceback"
+          ]
+        },
+        {
+          "name": "autotestes de rollback da fila",
+          "argv": [
+            "python3",
+            "checks/test_queue_startup.py"
+          ],
+          "contains": "OK"
+        },
+        {
+          "name": "limpeza da árvore do compilador",
+          "argv": [
+            "python3",
+            "checks/test_support.py"
+          ],
+          "contains": "OK"
+        }
+      ]
+    },
+    "rust": {
+      "tools": [
+        "rustc",
+        "python3"
+      ],
+      "build": [
+        [
+          "python3",
+          "checks/rust/check.py",
+          "--compile-only"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/rust/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/interleavings.py"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "note": "run demonstra o modelo independente de interleavings; test verifica a implementação Rust.",
+      "preparation": [
+        {
+          "name": "compilar harness Rust",
+          "argv": [
+            "python3",
+            "checks/rust/check.py",
+            "--compile-only"
+          ],
+          "contains": "Preparação:"
+        },
+        {
+          "name": "checks rejeitam mecanismos incompletos",
+          "argv": [
+            "python3",
+            "checks/rust/check.py"
+          ],
+          "status": 1,
+          "contains": "0/15 checks Rust passaram",
+          "forbid": [
+            "timeout",
+            "error:",
+            "Traceback"
+          ]
+        }
+      ]
+    }
+  }
+}

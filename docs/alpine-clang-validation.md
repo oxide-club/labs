@@ -2,7 +2,7 @@
 
 Alpine com Clang executou os checks avaliados de engenharia reversa, segurança de
 memória e isolamento. Isso valida a escolha da toolchain para estes materiais;
-a integração automática dos ambientes nos Makefiles continua pendente.
+a integração automática foi validada posteriormente, conforme a seção abaixo.
 
 ## Ambiente observado
 
@@ -17,8 +17,8 @@ a integração automática dos ambientes nos Makefiles continua pendente.
 
 A lista completa de versões está em
 [evidências do ambiente](evidence/2026-10-25-alpine-clang/environment.txt).
-Esta investigação usou os pacotes disponíveis durante a execução. Não demonstra
-que a receita automatizada e fixada do ambiente já esteja implementada.
+Esta investigação inicial usou os pacotes disponíveis durante a execução.
+A validação da receita automatizada e fixada está registrada separadamente abaixo.
 
 ## Resultados
 
@@ -74,3 +74,31 @@ Clang e inspeciona os símbolos. Ele falhou antes da correção e passou depois.
 Não houve desativação de sanitizers nem execução dos binários de isolamento no
 host. Os resultados não comprovam suporte a outras versões, arquiteturas ou
 código adversarial arbitrário.
+
+## Integração com Make
+
+A receita final inicia Alpine diskless com 48 APKs fixados por versão e SHA256,
+instalados offline com verificação de assinatura. QEMU não recebe placa de rede.
+A entrada é somente leitura e apenas a pasta de resultados é compartilhada para
+escrita. A confirmação ocorre no console; o exercício roda como usuário `lab`.
+
+Foram exportados pacotes independentes pela mesma seleção de arquivos do site,
+em caminhos com espaços, fora do repositório. `make env-setup` verificou a imagem
+e todos os pacotes a partir de `ENV_ASSETS`. Em VMs novas, usando TCG:
+
+| Comando | Resultado observado no host |
+| --- | --- |
+| 002: `make test` | Status 0; seis casos públicos passaram |
+| 003: `make run` | Status 0; ASan observou o use-after-free esperado |
+| 016: `make test` | Status 2 do Make; checker recusou o supervisor incompleto |
+| 003: `make env-shell`, depois `make verify-preparation` | Shell não privilegiado; três verificações passaram, status 0 |
+
+Logs, versões e status estão em [evidências da integração](evidence/2026-10-25-make-alpine/).
+A falha do starter de isolamento é esperada e não foi convertida em sucesso.
+Nenhum binário do laboratório 016 foi executado no host.
+
+A suíte local passou com 44 testes, incluindo integridade dos insumos, ausência
+de rede na configuração QEMU, confirmação, exclusão de arquivos privados,
+concorrência, limpeza e preservação de evidências em falhas e timeout. A validação
+estrutural inspecionou 18 laboratórios sem erros; os dois testes de distribuição
+do site passaram. CUDA não foi executado nesta validação.

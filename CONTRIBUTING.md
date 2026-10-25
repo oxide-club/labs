@@ -146,3 +146,18 @@ Percursos de estudo podem atravessar áreas e não definem a classificação.
 Não renumere atividades ao mudar sua área. Atualize o registro para criar áreas.
 
 Consulte a distribuição atual no [README](README.md#áreas-de-interesse).
+
+## Interface de execução
+
+Novas atividades devem oferecer Makefile local com `help` (padrão), `setup`,
+`build`, `test`, `run`, `clean` e `verify-preparation`. Configure a atividade em
+`docs/make-labs.json` e gere os arquivos com `python3 scripts/prepare-make.py`.
+Preserve a autonomia do pacote: nenhuma referência a arquivos do diretório pai.
+Não edite manualmente `materials/lab.py`, `lab.json` ou `preparation.py` gerados.
+
+Não converta a rejeição de um starter em sucesso de `test`. `clean` remove somente
+arquivos gerados conhecidos e preserva `results/`, relatos e arquivos próprios.
+Alvos que executam código devem preservar timeouts e guardas do roteiro.
+Distribua o Makefile da raiz e os auxiliares textuais; exclua imagens, pacotes
+baixados, ambiente preparado, resultados e binários. Verifique o empacotador do
+website além do validador local antes de publicar alterações da distribuição.

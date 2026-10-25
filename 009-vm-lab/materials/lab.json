@@ -1,0 +1,118 @@
+{
+  "name": "009-vm-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3"
+      ],
+      "build": [],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/trace.py",
+            "materials/expression.txt"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "preparation": [
+        {
+          "name": "checks rejeitam VM incompleta",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "NotImplementedError"
+        }
+      ]
+    },
+    "rust": {
+      "tools": [
+        "rustc",
+        "python3"
+      ],
+      "build": [
+        [
+          "rustc",
+          "--edition=2021",
+          "-D",
+          "warnings",
+          "materials/starter/rust/main.rs",
+          "-o",
+          "{work}/vm"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "{work}/vm"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          {
+            "argv": [
+              "{work}/vm",
+              "1000"
+            ],
+            "stdin": "materials/expression.txt"
+          }
+        ]
+      },
+      "artifacts": [
+        "build/vm"
+      ],
+      "preparation": [
+        {
+          "name": "compilar VM Rust",
+          "argv": [
+            "rustc",
+            "--edition=2021",
+            "-D",
+            "warnings",
+            "materials/starter/rust/main.rs",
+            "-o",
+            "{work}/vm"
+          ]
+        },
+        {
+          "name": "compilar teste de transporte",
+          "argv": [
+            "rustc",
+            "--edition=2021",
+            "--test",
+            "materials/starter/rust/main.rs",
+            "-o",
+            "{work}/transport"
+          ]
+        },
+        {
+          "name": "verificar transporte",
+          "argv": [
+            "{work}/transport"
+          ],
+          "contains": "1 passed"
+        },
+        {
+          "name": "mesmos checks rejeitam VM Rust",
+          "argv": [
+            "python3",
+            "checks/check.py",
+            "{work}/vm"
+          ],
+          "status": 1,
+          "contains": "not yet implemented: implemente validação, dispatch e transições da VM"
+        }
+      ]
+    }
+  }
+}

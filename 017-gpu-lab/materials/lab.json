@@ -1,0 +1,114 @@
+{
+  "name": "017-gpu-lab",
+  "variants": {
+    "reference": {
+      "modes": {
+        "gpu": {
+          "tools": [
+            "nvcc",
+            "make",
+            "python3"
+          ],
+          "build": [
+            [
+              "make",
+              "-C",
+              "materials",
+              "gpu"
+            ]
+          ],
+          "test": [
+            [
+              "python3",
+              "checks/check.py",
+              "--gpu"
+            ]
+          ],
+          "experiments": {
+            "default": [
+              {
+                "argv": [
+                  "python3",
+                  "experiments/measure.py"
+                ],
+                "timeout": 1800
+              }
+            ]
+          },
+          "artifacts": [
+            "materials/build/gpu",
+            "materials/build/probe"
+          ],
+          "preparation_note": "Somente compilação CUDA verificada; kernels não aprovados.",
+          "preparation": [
+            {
+              "name": "compilar runner e probe CUDA (não executa kernels)",
+              "argv": [
+                "make",
+                "-C",
+                "materials",
+                "gpu"
+              ],
+              "timeout": 120
+            }
+          ]
+        },
+        "cpu": {
+          "tools": [
+            "cc",
+            "make",
+            "python3"
+          ],
+          "build": [
+            [
+              "make",
+              "-C",
+              "materials",
+              "cpu"
+            ]
+          ],
+          "test": [
+            [
+              "python3",
+              "checks/check.py"
+            ]
+          ],
+          "experiments": {
+            "default": [
+              [
+                "materials/build/cpu",
+                "1024",
+                "42"
+              ]
+            ]
+          },
+          "artifacts": [
+            "materials/build/cpu",
+            "materials/build/oracle-check"
+          ],
+          "note": "CPU é suporte comparativo. Sucesso não aprova kernels CUDA.",
+          "preparation": [
+            {
+              "name": "compilar suporte CPU",
+              "argv": [
+                "make",
+                "-C",
+                "materials",
+                "cpu"
+              ]
+            },
+            {
+              "name": "oráculos CPU independentes; não verifica CUDA",
+              "argv": [
+                "python3",
+                "checks/check.py"
+              ],
+              "contains": "CPU: 17 casos e 6 rejeições passaram; nenhuma execução GPU.",
+              "timeout": 120
+            }
+          ]
+        }
+      }
+    }
+  }
+}

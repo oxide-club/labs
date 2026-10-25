@@ -1,0 +1,81 @@
+{
+  "name": "018-attention-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3"
+      ],
+      "build": [],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/memory.py",
+            "--theory"
+          ]
+        ],
+        "measure": [
+          [
+            "python3",
+            "experiments/memory.py",
+            "--measure"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "note": "run demonstra o modelo teórico; EXPERIMENT=measure mede somente após os checks.",
+      "preparation": [
+        {
+          "name": "fixtures independentes com Decimal",
+          "argv": [
+            "python3",
+            "checks/verify_fixtures.py"
+          ],
+          "contains": "OK"
+        },
+        {
+          "name": "suporte de medição",
+          "argv": [
+            "python3",
+            "checks/test_support.py"
+          ],
+          "contains": "OK"
+        },
+        {
+          "name": "checks rejeitam attention incompleta",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "NotImplementedError"
+        },
+        {
+          "name": "modelo teórico explícito",
+          "argv": [
+            "python3",
+            "experiments/memory.py",
+            "--theory"
+          ],
+          "contains": "theory"
+        },
+        {
+          "name": "medição recusa starter",
+          "argv": [
+            "python3",
+            "experiments/memory.py",
+            "--measure"
+          ],
+          "status": 1,
+          "contains": "checks reprovaram a implementação; não houve medição."
+        }
+      ]
+    }
+  }
+}

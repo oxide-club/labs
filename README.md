@@ -116,3 +116,21 @@ Não renumere atividades ao mudar sua área. Atualize o registro para criar áre
 | Sistemas operacionais e processos | Interfaces do kernel, processos, recursos e isolamento. | 006, 013, 016 |
 | Concorrência e paralelismo | Progresso de tarefas, sincronização e distribuição de trabalho. | 010, 015, 017 |
 | Computação numérica | Operações matemáticas, custo computacional, memória e precisão. | 008, 018 |
+
+## Comandos locais padronizados
+
+Cada pacote tem um Makefile independente. Comece com `make help` na raiz do
+laboratório. Use `setup`, `build`, `test`, `run`, `clean` e `verify-preparation`.
+Os starters incompletos continuam falhando em `test`. Evidências de `run` ficam
+em `results/`, preservado por `clean`. GNU Make, Python 3.10+ e Linux são requisitos
+da interface; toolchains e hardware dependem da atividade e variante.
+
+Os laboratórios 002, 003 e 016 executam em VM descartável preparada por
+`make env-setup`; `make env-shell` permite inspeção e confirmação no guest.
+A imagem Alpine e cada pacote têm hash fixado; os experimentos rodam sem rede.
+
+Mantenedores: edite `docs/make-labs.json` e `templates/make/`; execute
+`python3 scripts/prepare-make.py` e confira `python3 scripts/prepare-make.py --check`.
+A preparação local reutiliza cópias geradas do verificador e dos manifests
+editoriais. Após mudanças intencionais nos manifests distribuídos, atualize seus
+hashes com `python3 scripts/validate.py --update-fixtures`.

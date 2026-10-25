@@ -1,0 +1,63 @@
+{
+  "name": "016-isolation-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "make",
+        "python3"
+      ],
+      "build": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "all"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "--confirm-disposable-vm"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/observe.py",
+            "--confirm-disposable-vm"
+          ]
+        ]
+      },
+      "artifacts": [
+        "materials/build/supervisor",
+        "materials/build/probe"
+      ],
+      "preparation_note": "Compilação e sintaxe verificadas; checks dinâmicos do isolamento não foram aprovados por este alvo.",
+      "preparation": [
+        {
+          "name": "compilar sem executar isolamento",
+          "argv": [
+            "make",
+            "-C",
+            "materials",
+            "all",
+            "BUILD={work}"
+          ]
+        },
+        {
+          "name": "analisar sintaxe Python sem executar",
+          "argv": [
+            "python3",
+            "-c",
+            "import ast; from pathlib import Path; [ast.parse(p.read_text()) for folder in (\"checks\", \"experiments\") for p in Path(folder).glob(\"*.py\")]; print(\"Sintaxe OK; execução em VM pendente\")"
+          ],
+          "contains": "Sintaxe OK; execução em VM pendente"
+        }
+      ]
+    }
+  },
+  "isolated": true
+}

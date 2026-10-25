@@ -1,0 +1,108 @@
+{
+  "name": "006-processes-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "make",
+        "python3",
+        "printf",
+        "wc"
+      ],
+      "build": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "all"
+        ]
+      ],
+      "test": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "check"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "materials/build/oxrun",
+            "pipe",
+            "--",
+            "printf",
+            "abc\n",
+            ":::",
+            "wc",
+            "-c"
+          ]
+        ]
+      },
+      "artifacts": [
+        "materials/build/oxrun",
+        "materials/build/probe"
+      ],
+      "preparation": [
+        {
+          "name": "compilar executor incompleto",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/starter/oxrun.c",
+            "-o",
+            "{work}/oxrun"
+          ]
+        },
+        {
+          "name": "compilar probe original",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/starter/probe.c",
+            "-o",
+            "{work}/probe"
+          ]
+        },
+        {
+          "name": "probe termina com7",
+          "argv": [
+            "{work}/probe"
+          ],
+          "status": 7
+        },
+        {
+          "name": "probe termina por SIGTERM",
+          "argv": [
+            "{work}/probe",
+            "signal"
+          ],
+          "status": -15
+        },
+        {
+          "name": "checks rejeitam starter",
+          "argv": [
+            "python3",
+            "materials/tests/check.py",
+            "--oxrun",
+            "{work}/oxrun",
+            "--probe",
+            "{work}/probe"
+          ],
+          "status": 1,
+          "contains": "FAILED"
+        }
+      ]
+    }
+  }
+}
