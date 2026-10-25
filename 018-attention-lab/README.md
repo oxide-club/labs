@@ -59,3 +59,15 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` exibe o modelo teórico de memória, sem exigir que a solução esteja
+pronta. A medição real é um experimento separado:
+
+```sh
+make run EXPERIMENT=measure
+```
+
+A medição exige aprovação dos checks; o starter incompleto é recusado.
+`make test` verifica a implementação de atenção, não apenas o modelo teórico.

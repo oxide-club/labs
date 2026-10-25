@@ -31,3 +31,9 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` solicita a carga de `liboxide.so`, resolve `oxide_add` com o modo
+`now` e solicita a chamada. O loader incompleto falha; `make test` verifica
+os contratos públicos de linking.

@@ -29,39 +29,43 @@
 ### Task 1: Local interface and pilot labs
 
 **Files:** `templates/make/lab.py`, `scripts/prepare-make.py`, `docs/make-labs.json`, `tests/test_make.py`; generated `Makefile`, `materials/lab.py`, `materials/lab.json` in each pilot.
-**Interfaces:** `python3 materials/lab.py ACTION --variant NAME --mode NAME`; JSON action argv lists, tool requirements, known generated files. Generator `--check` verifies local copies.
+**Interfaces:** `VARIANT=NAME MODE=NAME python3 materials/lab.py ACTION`; JSON action argv lists, tool requirements, known generated files. Generator `--check` verifies local copies.
 
-- [ ] Add behavioral tests for help, unknown selectors, build/test distinction, missing tools and conservative clean in temporary package copies; run and observe failures.
-- [ ] Implement local dispatcher with bounded subprocess execution, existing Make delegation, argv execution without shell interpolation and selected preparation checks.
-- [ ] Generate pilots 007, 003, 016; test setup/build and refusal of dynamic VM-only commands without an environment.
-- [ ] Run `python3 -m unittest discover -s tests`; commit the interface.
+- [x] Add behavioral tests for help, unknown selectors, build/test distinction, missing tools and conservative clean in temporary package copies; run and observe failures.
+- [x] Implement local dispatcher with bounded subprocess execution, existing Make delegation, argv execution without shell interpolation and selected preparation checks.
+- [x] Generate pilots 007, 003, 016; test setup/build and refusal of dynamic VM-only commands without an environment.
+- [x] Run `python3 -m unittest discover -s tests`; commit the interface.
 
 ### Task 2: All labs and distribution
 
 **Files:** `docs/make-labs.json`, all local Makefiles/helpers, README files, `templates/README.md`, `CONTRIBUTING.md`, `scripts/validate.py`, `tests/test_make.py`, sibling website `src/lib/lab-files.mjs`, `tests/lab-files.test.mjs`.
 **Interfaces:** Same local dispatcher and generated manifests; variant preparation data from existing manifests.
 
-- [ ] Add failing tests for all 18 interfaces, isolated distributed copies, variant selection and root Makefile inclusion.
-- [ ] Map existing reference builds/checks/experiments and maintained variants; provide compile-only steps when checks currently build internally.
-- [ ] Update local and website distribution allowlists with exact names; exclude generated evidence/environment state.
-- [ ] Run interface tests, full Python suite, generator check, structural validation and website distribution tests; commit.
+- [x] Add failing tests for all 18 interfaces, isolated distributed copies, variant selection and root Makefile inclusion.
+- [x] Map existing reference builds/checks/experiments and maintained variants; provide compile-only steps when checks currently build internally.
+- [x] Update local and website distribution allowlists with exact names; exclude generated evidence/environment state.
+- [x] Run interface tests, full Python suite, generator check, structural validation and website distribution tests; commit.
 
 ### Task 3: Disposable environments
 
 **Files:** `templates/make/environment.py`, `templates/make/environment.json`, `tests/test_environment.py`, generated copies in 002/003/016, local environment docs.
 **Interfaces:** `python3 materials/environment.py setup|shell|clean|exec [ACTION]`; generated Make env-* targets. env exec transfers only distributed source and writes exported evidence under results/.
 
-- [ ] Add failing tests for download digest verification, guest argv, unconfirmed execution, source selection, network-off execution and cleanup containment.
-- [ ] Verify official image/toolchain sources; pin immutable image checksums and installed package inputs. Implement QEMU disposable sessions, bounded boot/commands, nonprivileged execution and guest confirmation.
-- [ ] Integrate dynamic test/run/verify-preparation dispatch for 002/003/016; preserve manual VM path and existing 016 guards.
-- [ ] Exercise real boot/setup, ASan/LSan, 016 guard and evidence export; report exact infrastructure limitations if unavailable.
-- [ ] Run tests and generator check; commit.
+- [x] Add failing tests for download digest verification, guest argv, unconfirmed execution, source selection, network-off execution and cleanup containment.
+- [x] Verify official image/toolchain sources; pin immutable image checksums and installed package inputs. Implement QEMU disposable sessions, bounded boot/commands, nonprivileged execution and guest confirmation.
+- [x] Integrate dynamic test/run/verify-preparation dispatch for 002/003/016; preserve manual VM path and existing 016 guards.
+- [x] Exercise real boot/setup, ASan/LSan, 016 guard and evidence export; report exact infrastructure limitations if unavailable.
+- [x] Run tests and generator check; commit.
 
 ### Task 4: Final verification and review
 
 **Files:** documentation and fixes identified during validation.
 **Interfaces:** Existing editorial verification and local Make commands.
 
-- [ ] Run full Python suite, cache model, report check, validate, selected preparation and variant checks. Distinguish expected starter failures from environment errors.
-- [ ] Run fresh-context whole-branch review; fix material findings with regression tests.
-- [ ] Document tested configurations and limitations, update this checklist, commit and leave the branch ready for review without publishing.
+- [x] Run full Python suite, cache model, report check, validate, selected preparation and variant checks. Distinguish expected starter failures from environment errors.
+- [x] Run fresh-context whole-branch review; fix material findings with regression tests.
+- [x] Document tested configurations and limitations, update this checklist, commit and leave the branch ready for review without publishing.
+
+Continuation: validated all remaining labs in 19 configurations (133 commands),
+documented local experiments/selectors, and fixed GPU setup to check resources
+using the existing non-starter CUDA probe. See `docs/make-validation.md`.

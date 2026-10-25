@@ -174,6 +174,8 @@ def main():
         return subprocess.call([sys.executable, str(helper), 'exec', action], cwd=ROOT)
     setup(config)
     if action == 'setup':
+        local_path('materials/build')
+        steps(config.get('setup', []), local_path('build'), ROOT / 'results')
         return 0
     work = local_path('build')
     local_path('materials/build')

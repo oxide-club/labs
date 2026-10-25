@@ -40,6 +40,17 @@
             "materials/build/probe"
           ],
           "preparation_note": "Somente compilação CUDA verificada; kernels não aprovados.",
+          "setup": [
+            [
+              "make",
+              "-C",
+              "materials",
+              "build/probe"
+            ],
+            [
+              "materials/build/probe"
+            ]
+          ],
           "preparation": [
             {
               "name": "compilar runner e probe CUDA (não executa kernels)",

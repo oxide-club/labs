@@ -37,3 +37,20 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` acompanha a expressão em `materials/expression.txt`. O starter
+incompleto falha; `make test` verifica os contratos da VM.
+
+A referência é Python, sem compilação. Para a variante Rust:
+
+```sh
+make setup VARIANT=rust
+make build VARIANT=rust
+make test VARIANT=rust
+make run VARIANT=rust
+```
+
+Nessa variante, `run` fornece a mesma expressão ao executável com limite de
+1.000 passos.

@@ -30,3 +30,9 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` solicita ao launcher o pipeline `printf "abc\n" | wc -c`.
+O launcher incompleto é rejeitado; `make test` executa os checks públicos de
+processos. Ambos mantêm as falhas do starter.

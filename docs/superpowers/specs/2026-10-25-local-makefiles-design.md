@@ -1,6 +1,6 @@
 # Interface local de execução dos laboratórios
 
-Estado: proposta para aprovação. Data: 2026-10-25.
+Estado: aprovado pelo responsável nesta conversa. Data: 2026-10-25.
 
 ## Intenção e decisões
 

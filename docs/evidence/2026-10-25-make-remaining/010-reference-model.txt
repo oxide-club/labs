@@ -1,0 +1,27 @@
+Ferramentas disponíveis: cc, python3
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ cc -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -Imaterials/starter checks/check.c materials/starter/counter.c materials/starter/queue.c -o '/tmp/oxide remaining packages/010-concurrency-lab/build/concurrency'
++ cc -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread experiments/deadlock.c -o '/tmp/oxide remaining packages/010-concurrency-lab/build/deadlock'
+Evidências desta execução: /tmp/oxide remaining packages/010-concurrency-lab/results/20261025-164348-6asb0dh6
++ /usr/bin/python3 experiments/interleavings.py
+AAABBB 2
+AABABB 1
+AABBAB 1
+AABBBA 1
+ABAABB 1
+ABABAB 1
+ABABBA 1
+ABBAAB 1
+ABBABA 1
+ABBBAA 1
+BAAABB 1
+BAABAB 1
+BAABBA 1
+BABAAB 1
+BABABA 1
+BABBAA 1
+BBAAAB 1
+BBAABA 1
+BBABAA 1
+BBBAAA 2
+Modelo: 20 intercalações; resultados 1 e 2. C com data race tem UB.

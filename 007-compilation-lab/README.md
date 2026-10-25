@@ -37,3 +37,9 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` coleta símbolos, ELF, disassembly, mapas e chamadas de sistema.
+O host precisa permitir `strace`; uma recusa é erro, com os registros parciais
+preservados em `results/`. Os materiais completos devem passar em `make test`.

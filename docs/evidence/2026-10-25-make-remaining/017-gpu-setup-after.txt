@@ -1,0 +1,11 @@
+Ferramentas disponíveis: nvcc, make, python3
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ make -C materials build/probe BUILD=build CC=cc
+make[1]: Entering directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
+mkdir -p build
+nvcc -O2 -std=c++14 probe.cu -o build/probe
+make[1]: Leaving directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
++ materials/build/probe
+no CUDA-capable device is detected
+ERRO: Command '['materials/build/probe']' returned non-zero exit status 1.
+make: *** [Makefile:11: setup] Error 1

@@ -80,3 +80,25 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` observa a corrida do contador e o deadlock controlado. Um timeout
+previsto pelo observador demonstra o deadlock; não aprova a implementação.
+Para explorar somente o modelo de interleavings:
+
+```sh
+make run EXPERIMENT=model
+```
+
+A variante Rust usa seus próprios checks:
+
+```sh
+make setup VARIANT=rust
+make build VARIANT=rust
+make test VARIANT=rust
+make run VARIANT=rust
+```
+
+Na variante Rust, `run` demonstra o modelo de interleavings independente do
+starter; `test` continua rejeitando a implementação incompleta.

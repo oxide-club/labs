@@ -36,3 +36,18 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` observa o parser de referência com os vetores do roteiro; o starter
+Python incompleto pode falhar. Para usar a variante Go:
+
+```sh
+make setup VARIANT=go
+make build VARIANT=go
+make test VARIANT=go
+make run VARIANT=go
+```
+
+Na variante Go, `run` valida os vetores independentes do parser; seu sucesso
+não aprova a solução. `test` verifica o parser e rejeita o starter incompleto.

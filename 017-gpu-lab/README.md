@@ -49,3 +49,20 @@ original e não comprova a correção da sua solução.
 
 O padrão é `MODE=gpu`, com CUDA e dispositivo compatível. Use `MODE=cpu`
 para suporte auxiliar; seu sucesso não valida kernels nem conclui a atividade.
+
+### Experimento e seletores deste laboratório
+
+```sh
+make setup MODE=cpu
+make test MODE=cpu
+make run MODE=cpu
+```
+
+O experimento CPU usa 1.024 elementos e seed 42. Para a atividade CUDA, use
+`make setup`, `make build`, `make test` e `make run` com o padrão `MODE=gpu`.
+`run` usa o medidor de GPU do roteiro; ausência de CUDA ou dispositivo é erro,
+sem substituição automática pelo modo CPU.
+
+No modo GPU, `setup` compila e executa somente `materials/probe.cu`: verifica
+dispositivo, runtime, alocação e cópias. Não executa os kernels do participante.
+`build` permanece uma operação apenas de compilação, mesmo sem GPU disponível.

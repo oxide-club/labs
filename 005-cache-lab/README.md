@@ -53,3 +53,19 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` alimenta o simulador com `materials/inputs/trace-a.txt`. O starter
+incompleto pode falhar tanto nesse experimento quanto nos checks.
+
+A variante Rust usa os mesmos contratos públicos e exige `rustc`:
+
+```sh
+make setup VARIANT=rust
+make build VARIANT=rust
+make test VARIANT=rust
+make run VARIANT=rust
+```
+
+Sem o seletor, a implementação de referência em C é usada.

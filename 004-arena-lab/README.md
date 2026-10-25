@@ -31,3 +31,8 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` demonstra alinhamento e layout de memória. `make test` verifica a
+arena, incluindo falha de alocação; o starter incompleto continua sendo rejeitado.

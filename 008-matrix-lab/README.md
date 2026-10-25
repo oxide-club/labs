@@ -49,3 +49,11 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` executa primeiro os checks de correção e só então o benchmark
+31 × 47 × 29, com bloco 8, seed 42, dois aquecimentos e sete repetições.
+O starter retorna `MATRIX_TODO`, portanto a medição é recusada até a implementação.
+Para medir uma solução, configure `MATRIX_COMPILER`, `MATRIX_FLAGS` e
+`MATRIX_HARDWARE` com os dados reais, conforme [experiments/README.md](experiments/README.md).

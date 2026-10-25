@@ -35,3 +35,9 @@ A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
 Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
 Após modificar o starter, use `test`: `verify-preparation` compara a preparação
 original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` rastreia `write_libc` com `strace` e salva `libc.trace` em
+`results/`. O host precisa permitir rastreamento. `make test` cobre os dois
+backends e continua rejeitando a implementação incompleta de syscall.
