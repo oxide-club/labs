@@ -15,12 +15,37 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Uma chamada de sistema (syscall) transfere o controle do programa para o kernel.
-Uma função de biblioteca pode preparar essa transição. Você vai comparar duas
-interfaces C para a mesma operação e explicar o que o registro de execução
-(trace) permite observar.
+### O que você vai implementar e comparar
 
-### Contrato técnico
+Você vai **completar uma função que escreve todos os bytes pedidos, mesmo quando
+uma chamada escreve apenas parte deles**, e comparar duas formas de solicitar
+a escrita ao Linux.
+
+A variante que usa `write` da libc está pronta. Complete `write_all` em
+`materials/starter/write_syscall.c`, usando `syscall(SYS_write, ...)`.
+
+```text
+pedido: escrever "oxide\n" (6 bytes)
+primeira chamada confirma 2 → faltam 4 → continuar a partir do terceiro byte
+```
+
+Esse exemplo descreve um cenário possível de retorno parcial, não uma divisão
+que toda execução precisa apresentar. Os checks simulam retornos parciais e
+interrupções para verificar sua lógica. O `strace` mostra o que ocorreu em uma
+execução real.
+
+Entregue as duas variantes funcionais, os resultados dos checks e traces de
+sucesso e de file descriptor inválido. Explique o caminho programa → libc → kernel,
+incluindo o retorno e `errno`. Nesta tarefa, `syscall()` ainda é uma função da
+libc; escrever o ponto de entrada do programa em assembly é opcional.
+
+### Conceitos para a investigação
+
+Uma syscall transfere o controle do programa para o kernel.
+Uma função de biblioteca pode preparar essa transição. Você vai comparar duas
+interfaces C para a mesma operação e explicar o que o trace permite observar.
+
+#### Contrato técnico
 
 Ambiente obrigatório: Linux x86-64, C11 e libc. Cada fonte exporta
 `int write_all(int fd, const void *buf, size_t length)`; compile uma variante por vez.
@@ -56,7 +81,7 @@ necessárias para outras linguagens.
 
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
 
-Conheça ponteiros, errno, file descriptors e valores de retorno em C.
+Conheça pointers, errno, file descriptors e valores de retorno em C.
 Instale compilador C, GNU binutils, GNU coreutils (timeout), make, Python 3 e strace. Registre versões e `uname -m`.
 Execute comandos na raiz deste pacote. Não são necessárias permissões administrativas.
 Se ptrace estiver bloqueado, registre a restrição e realize a observação em um Linux que permita strace.

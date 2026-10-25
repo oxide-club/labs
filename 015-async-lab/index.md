@@ -15,14 +15,40 @@ difficulty: advanced
 
 ## O que vamos investigar
 
+### O que você vai construir
+
+Você vai **implementar um executor Rust que alterna tarefas em uma única thread**
+e um evento que permite acordar uma tarefa pendente. Há dois arquivos a completar:
+
+| Arquivo | Responsabilidade |
+| --- | --- |
+| `materials/executor.rs` | Guardar futures, manter a fila pronta, executar polls e esperar notificações. |
+| `materials/event.rs` | Guardar um sinal persistente e notificar a future que espera por ele. |
+
+```text
+spawn → tarefa pronta → poll → Ready: concluir e fazer dealocação
+                          └→ Pending: aguardar nova oportunidade
+                             wake → tarefa pronta novamente
+```
+
+Por exemplo, uma tarefa pode consultar um evento ainda não sinalizado e retornar
+`Pending`. Quando outra thread sinaliza o evento, seu Waker recoloca a tarefa
+na fila; a thread do executor faz o próximo poll. O sinal não executa a future
+por conta própria.
+
+Entregue executor, evento e um trace explicado de polls e notificações. Você deve
+mostrar tanto a ordem de execução quanto a espera sem consumir CPU em um loop
+contínuo. Não há I/O ou timer a implementar no núcleo.
+
+### Conceitos para a investigação
+
 Uma future representa uma computação que pode estar pendente. O executor chama
 `Future::poll` com um `Context`; o resultado é `Poll::Pending` ou `Poll::Ready(())`.
 O `Waker` guardado pela tarefa solicita outra oportunidade de execução.
 Notificar não significa chamar `poll` imediatamente nem concluir a tarefa.
-Você vai construir um executor com uma única thread, usando apenas a biblioteca
-padrão de Rust (std), sem runtime externo.
+Você vai construir um executor com uma única thread, usando apenas a biblioteca padrão de Rust (std), sem runtime externo.
 
-### Contrato técnico
+#### Contrato técnico
 
 Implemente estas interfaces em `materials/executor.rs`:
 
@@ -43,7 +69,7 @@ impl Executor {
 `spawn` guarda a future sem executar `poll`, atribui IDs consecutivos desde zero
 e coloca a tarefa no fim da fila pronta. IDs nunca são reutilizados.
 O domínio do exercício tem menos de `usize::MAX` tarefas por executor e memória
-suficiente; esgotamento de IDs ou allocation fica fora do contrato.
+suficiente; esgotamento de IDs ou alocação fica fora do contrato.
 Futures não precisam implementar `Send` ou `Unpin`: mantenha-as locais e fixadas
 com `Pin`, por exemplo `Pin<Box<dyn Future<Output = ()>>>`.
 
@@ -51,7 +77,7 @@ com `Pin`, por exemplo `Pin<Box<dyn Future<Output = ()>>>`.
 Retorna `Polled` com o ID e `ready` igual ao resultado desse poll. Sem tarefa pronta,
 retorna `Idle` se ainda há tarefas pendentes, ou `Complete` se todas terminaram.
 `active` conta tarefas que ainda não retornaram `Ready`, inclusive as prontas.
-`Ready` remove e libera a future antes de `step` retornar; nunca volte a consultá-la.
+`Ready` remove a future e faz sua dealocação antes de `step` retornar; nunca volte a consultá-la.
 
 Uma notificação de tarefa viva coloca seu ID no fim da fila. Notificações repetidas
 antes de retirar esse ID para o próximo poll devem se fundir em uma entrada.
@@ -66,7 +92,7 @@ permitir mover o executor entre threads.
 
 `run` aplica a mesma ordem FIFO até `active() == 0`. Quando há tarefas pendentes e
 a fila está vazia, deve esperar uma notificação com uma operação bloqueante, sem
-espera ocupada (busy-loop), consultas periódicas (polling) ou `sleep` como política
+busy-loop, polling ou `sleep` como política
 de agendamento.
 Não retorne por a fila estar momentaneamente vazia nem espere que todos os clones
 de Waker sejam destruídos para terminar. Se ninguém notificar uma tarefa pendente,
@@ -143,9 +169,9 @@ Use [o modelo de relato](report-template.md), gerado do modelo compartilhado.
 - Todos os checks passam, inclusive wake durante poll, duplicação, wake tardio,
   notificação por thread, duas tarefas cooperativas e futures sem `Send`.
 - O trace identifica tarefa, resultado e evento; previsão e observação permanecem separadas.
-- O código usa espera blocking sem polling periódico. A revisão explica por que
+- O código usa espera bloqueante sem polling periódico. A revisão explica por que
   não há perda de sinal na transição entre observar a fila vazia e esperar.
-- O relato justifica agrupamento de notificações repetidas (coalescing), liberação ao concluir, ausência de ciclos de
+- O relato justifica coalescing, dealocação ao concluir, ausência de ciclos de
   referências que mantenham futures vivas e limites de progresso cooperativo.
 - A explicação reconhece que testes finitos não provam ausência de todas as races.
 
@@ -167,4 +193,4 @@ Consulte [as leituras orientadas](references.md) depois de formular os invariant
 Máquinas virtuais e concorrência ajudam a entender estados e sincronização.
 O número 015 identifica este pacote; a atividade corresponde à seção curricular 13.
 
-Na verificação Linux, execute também o check de CPU/esperas de `checks/check.py`; registre o resultado e explique a primitiva blocking e o predicado usados em `run`. Esse diagnóstico tem limites documentados no guia.
+Na verificação Linux, execute também o check de CPU/esperas de `checks/check.py`; registre o resultado e explique a primitiva bloqueante e o predicado usados em `run`. Esse diagnóstico tem limites documentados no guia.

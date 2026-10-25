@@ -15,15 +15,40 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
+### O que você vai construir e corrigir
+
+Este laboratório tem **três partes obrigatórias**. Você vai implementar
+sincronização de dados e explicar por que as threads conseguem terminar.
+
+| Parte | Trabalho esperado |
+| --- | --- |
+| Contador | Completar as variantes com mutex e com operações atômicas em `materials/starter/counter.c`. |
+| Fila limitada | Implementar inicialização, inserção, retirada, fechamento e destruição em `materials/starter/queue.c`. |
+| Deadlock | Completar o modo `ordered` em `experiments/deadlock.c`, fazendo ambas as threads adquirirem os locks na mesma ordem. |
+
+Por exemplo, duas threads que executam 100 incrementos cada devem produzir 200
+nas variantes corretas. Já uma fila de capacidade 1 fica cheia após uma inserção:
+um segundo produtor precisa esperar até que haja espaço ou a fila seja fechada.
+Fechar a fila deve despertar quem espera, permitindo consumir os itens restantes.
+
+Os cenários `unsafe` e `bad` já fornecidos servem para diagnóstico. Registre suas
+previsões antes de observá-los pelos scripts com timeout.
+
+Entregue as implementações e uma tabela que indique quais dados cada lock protege,
+quando uma thread espera e qual evento permite que ela continue. Os checks e a
+análise do ciclo de espera complementam essa explicação.
+
+### Conceitos para a investigação
+
 Na concorrência, tarefas podem progredir intercalando suas operações (interleavings).
 No paralelismo, elas executam simultaneamente.
 Uma data race ocorre quando há acessos conflitantes ao mesmo objeto sem a
 sincronização exigida pela linguagem, e pelo menos um desses acessos é uma escrita.
-Em C, uma data race produz comportamento indefinido (UB). Não há garantia de um valor específico nem de um intervalo de resultados para o contador defeituoso.
+Em C, uma data race produz undefined behavior (UB). Não há garantia de um valor específico nem de um intervalo de resultados para o contador defeituoso.
 Uma race condition é um defeito que depende da ordem de eventos; pode existir mesmo sem data race.
 Um deadlock ocorre quando threads esperam indefinidamente por recursos que não podem obter.
 
-### Contrato técnico
+#### Contrato técnico
 
 Implemente as interfaces em [counter.h](materials/starter/counter.h) e [queue.h](materials/starter/queue.h), usando C11 e pthreads.
 O contador oferece modos `COUNTER_UNSAFE`, `COUNTER_MUTEX` e `COUNTER_ATOMIC`.
@@ -32,7 +57,7 @@ Os modos mutex e atomic devem retornar zero e gravar `threads * iterations` em `
 Use mutex na primeira variante e operações C11 sobre objeto atômico na segunda. Não substitua os incrementos pelo produto.
 O modo unsafe fornecido existe somente para diagnóstico; não se exige resultado numérico específico.
 
-Modo desconhecido, ponteiro out nulo ou limites inválidos retornam `EINVAL`, preservando saída não nula.
+Modo desconhecido, null pointer em out ou limites inválidos retornam `EINVAL`, preservando saída não nula.
 Falha de inicialização/criação retorna o código pthread, reúne threads já criadas e preserva a saída.
 Chamadas independentes não compartilham contadores. Não use `volatile` como sincronização.
 
@@ -60,16 +85,16 @@ A ordem de retornos ou de prints de consumidores não define a ordem de retirada
 Depois de close, consumidores devem drenar itens existentes e receber ENODATA. Nenhuma thread pode ficar presa por falta de notificação.
 Não há requisito de justiça entre threads. Pressupõe-se que threads executáveis recebam tempo de CPU.
 
-Use mutex e variáveis de condição na fila; espera ocupada e delays como sincronização não atendem ao contrato.
+Use mutex e variáveis de condição na fila; busy-loop e delays como sincronização não atendem ao contrato.
 Documente qual lock protege buffer, índices, quantidade e estado de fechamento.
-Explique os invariantes `0 <= count <= capacity`, os predicados de espera e o efeito das notificações e dos despertares espúrios (spurious wakeups).
+Explique os invariantes `0 <= count <= capacity`, os predicados de espera e o efeito das notificações e dos spurious wakeups.
 
 O coordenador deve reunir produtores antes de fechar a fila e reunir consumidores antes de destruí-la.
 Os checks também fecham com operações pendentes para investigar o protocolo de wakeup.
 
-O programa de deadlock possui modos `bad` e `ordered`. O primeiro fornece duas aquisições em ordem oposta e uma barrier que estabelece o ciclo.
+O programa de deadlock possui modos `bad` e `ordered`. O primeiro fornece duas aquisições em ordem oposta e uma barreira que estabelece o ciclo.
 Complete `ordered`: ambas as threads devem adquirir os dois locks na mesma ordem global, liberá-los e terminar com status 0 e `completed`.
-Não mantenha entre aquisições a barrier do cenário defeituoso: uma thread poderia esperar na barrier enquanto a outra espera seu lock.
+Não mantenha entre aquisições a barreira do cenário defeituoso: uma thread poderia esperar na barreira enquanto a outra espera seu lock.
 O modo incompleto retorna 77. Os scripts limitam cada processo e encerram somente o processo que criaram, executando seu reaping.
 
 ## Antes de começar
@@ -100,7 +125,7 @@ Use compilador C11, pthreads, linker com `--wrap` e Python 3.10+. ThreadSanitize
 1. **Prever:** decomponha dois incrementos em leituras/escritas num modelo de interleavings e desenhe o ciclo de espera entre locks. Esse modelo não especifica o comportamento C com UB.
 2. **Observar:** execute o modelo, o contador unsafe e o cenário bad pelos scripts com timeout. Registre comando, saída e diagnóstico sem exigir que o contador erre.
 3. **Explicar:** escreva uma tabela de campos protegidos, invariantes, predicados de espera e eventos de wakeup. Diferencie exclusão mútua de progresso.
-4. **Implementar:** complete contador mutex/atomic, fila e modo ordered. Justifique a ordem de memória escolhida para o contador.
+4. **Implementar:** complete contador mutex/atomic, fila e modo ordered. Justifique a memory ordering escolhida para o contador.
 5. **Verificar:** execute os checks. Compare IDs individualmente, explique fechamento com fila cheia/vazia e registre término das threads. Execute TSan se disponível.
 
 ## Critérios de conclusão
@@ -112,7 +137,7 @@ Repetições bem-sucedidas não provam ausência de deadlocks ou data races; jus
 ## Extensões opcionais
 
 Meça contenção somente após verificar correção. Registre repetições e use relógio monotônico.
-Investigue false sharing, ordens de memória ou starvation, distinguindo observação de garantia de justiça.
+Investigue false sharing, memory orderings ou starvation, distinguindo observação de garantia de justiça.
 Uma fila lock-free é um projeto separado, não um requisito para concluir este laboratório.
 
 ## Participação no clube

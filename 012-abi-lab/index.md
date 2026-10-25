@@ -2,12 +2,12 @@
 title: Laboratório de ABI e Calling Conventions
 area: compilation-execution
 slug: 012-abi-lab
-summary: Investigue argumentos, preservação de registradores e alinhamento entre C e assembly.
+summary: Investigue argumentos, preservação de registradores e alignment entre C e assembly.
 question: Como módulos compilados separadamente concordam sobre uma chamada?
 draft: false
 publishedAt: 2026-10-25
 topics: [ABI, Assembly, Calling conventions]
-prerequisites: [C, Ponteiros, Stack, Object files]
+prerequisites: [C, Pointers, Stack, Object files]
 tools: [GCC, Clang, GNU assembler, objdump, GDB, Python 3]
 environment: Linux x86-64 com System V AMD64 LP64 e GNU assembly
 difficulty: advanced
@@ -15,16 +15,40 @@ difficulty: advanced
 
 ## O que vamos investigar
 
-Uma interface binária de aplicação (ABI) define como módulos compilados se
+### O que você vai investigar e implementar
+
+Você vai **observar como C passa argumentos e escrever uma função assembly que
+respeita esse mesmo acordo**. As funções C `call1`, `call3`, `call6` e `call8`
+estão prontas para inspeção. Complete `arithmetic8` em `materials/arithmetic.S`.
+
+Sua função recebe oito inteiros e calcula `a1 + 2*a2 + ... + 8*a8`.
+Para oito argumentos iguais a 1, por exemplo, o resultado é 36.
+
+```text
+chamador C → arithmetic8 → alignment_probe → arithmetic8 → chamador
+```
+
+A chamada interna é parte obrigatória do exercício: `alignment_probe` pode
+sobrescrever registradores temporários. Você precisa preservar os dados usados
+no cálculo, garantir o alignment da stack antes de chamar e restaurar os registradores exigidos
+antes de retornar ao chamador.
+
+Entregue o assembly, uma tabela de argumentos e registradores e um desenho da
+stack antes e depois das chamadas. Os checks verificam tanto a soma quanto
+preservação de estado e alignment; acertar apenas o número final não basta.
+
+### Conceitos para a investigação
+
+Uma application binary interface (ABI) define como módulos compilados se
 comunicam: onde ficam os argumentos e resultados, quais registradores devem ser
-preservados em uma chamada e como alinhar a pilha (stack).
+preservados em uma chamada e como garantir o alignment da stack.
 Observe funções C com 1, 3, 6 e 8 argumentos e implemente uma função assembly que chama outra função.
 
-### Contrato técnico
+#### Contrato técnico
 
 Use Linux x86-64, modelo LP64, System V AMD64, C11 e GNU assembly em sintaxe AT&T.
 Todos os argumentos e resultados são `uint64_t`. A aritmética ocorre módulo 2^64;
-qualquer padrão de 64 bits é válido, sem overflow com sinal ou entrada a rejeitar.
+qualquer padrão de 64 bits é válido, sem signed overflow ou entrada a rejeitar.
 As assinaturas completas estão em [arithmetic.h](materials/arithmetic.h).
 `call1`, `call3`, `call6` e `call8` retornam a soma ponderada `a1 + 2*a2 + ... + n*an`.
 São referências completas em C para observação, sem efeitos externos.
@@ -33,7 +57,7 @@ Implemente `arithmetic8` em [arithmetic.S](materials/arithmetic.S), como object 
 com os mesmos oito argumentos e resultado de `call8`. Chame `alignment_probe(void)` exatamente
 uma vez por invocação, antes de retornar. Não substitua o cálculo por chamada à referência C.
 O probe não retorna dados úteis, pode destruir todos os registradores caller-saved e registra
-seu alinhamento de entrada. Preserve os argumentos necessários para o cálculo através dessa chamada.
+seu alignment de entrada. Preserve os argumentos necessários para o cálculo através dessa chamada.
 Não leia nem escreva os globais `probe_count` e `probe_alignment` na implementação.
 Eles pertencem exclusivamente à instrumentação dos checks. Fora do probe, não há efeitos externos.
 
@@ -53,7 +77,7 @@ Structs, vetores SIMD, varargs, Windows x64 e outras arquiteturas não fazem par
 ### Linguagens e ambiente
 
 A parte obrigatória usa **C e GNU assembly** em Linux x86-64, com a ABI System V AMD64 e o
-modelo LP64. Respeite o alinhamento e a preservação de registradores exigidos
+modelo LP64. Respeite o alignment e a preservação de registradores exigidos
 pela ABI. Os materiais fornecem código em C e GNU assembly.
 
 Rust é recomendado para uma extensão de interoperabilidade (FFI). Essa comparação
@@ -61,19 +85,19 @@ complementa a investigação obrigatória em C e assembly, mas não a substitui.
 
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
 
-Conheça funções e ponteiros em C, stack e leitura básica de assembly.
+Conheça funções e pointers em C, stack e leitura básica de assembly.
 Instale compilador C, GNU binutils, Python 3 e GDB. Leia [o guia local](README.md).
 Os checks exigem Linux x86-64 e encerram explicitamente em ambiente incompatível.
 
 ## Materiais
 
-[O guia dos materiais](materials/README.md) descreve fontes e [vetores independentes](materials/vectors.json).
+[O guia dos materiais](materials/README.md) descreve fontes e [test vectors independentes](materials/vectors.json).
 [Os checks](checks/check.py) compilam o starter e testam resultado e invariantes.
 [O experimento](experiments/calling.md) orienta a observação com GCC, Clang e GDB.
 
 ## Etapas da investigação
 
-1. **Prever:** desenhe a localização dos oito argumentos antes de abrir o disassembly. Calcule os resultados dos vetores ordered e stack8.
+1. **Prever:** desenhe a localização dos oito argumentos antes de abrir o disassembly. Calcule os resultados dos test vectors ordered e stack8.
 2. **Observar:** compile calls.c com O0 e inspecione as quatro funções. Registre trechos e uma captura dos argumentos na entrada de arithmetic8.
 3. **Explicar:** desenhe registradores e stack antes de call, na entrada e após ret. Separe endereço de retorno, argumentos e armazenamento local.
 4. **Implementar:** complete arithmetic8 e explique como preservou argumentos durante alignment_probe. Não altere o probe para obter aprovação.
@@ -83,9 +107,9 @@ Os checks exigem Linux x86-64 e encerram explicitamente em ambiente incompatíve
 
 Os checks devem terminar com status zero para os dois níveis de otimização.
 Entregue fonte assembly, comandos, tabela de registradores e diagrama de stack.
-Explique o alinhamento na chamada interna e a preservação de callee-saved.
+Explique o alignment na chamada interna e a preservação de callee-saved.
 Registre resultados dos dois compiladores ou a indisponibilidade de um deles.
-Os checks cobrem resultados, sentinels e alinhamento observado; revisão do código continua
+Os checks cobrem resultados, sentinels e alignment observado; revisão do código continua
 necessária para direction flag, acessos válidos à stack e todos os caminhos da função.
 
 ## Extensões opcionais
@@ -95,7 +119,7 @@ Consulte a classificação da ABI antes de prever o comportamento. Mantenha a in
 
 ## Participação no clube
 
-Compartilhe previsão, comando e menor vetor que divergiu. Use [o modelo de relato](report-template.md).
+Compartilhe previsão, comando e menor test vector que divergiu. Use [o modelo de relato](report-template.md).
 Inclua versões do compilador e flags, sem tratar um único disassembly como regra universal.
 
 ## Referências e atividades relacionadas

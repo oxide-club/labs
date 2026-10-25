@@ -2,12 +2,12 @@
 title: Laboratório de Computação Paralela em GPU
 area: concurrency-parallelism
 slug: 017-gpu-lab
-summary: Implemente soma vetorial e reduction em CUDA e separe cálculo de comunicação.
+summary: Implemente soma vetorial e redução em CUDA e separe cálculo de comunicação.
 question: Quando a distribuição de trabalho compensa o custo de transferir dados para a GPU?
 draft: false
 publishedAt: 2026-10-25
 topics: [GPU, Paralelismo, Memória, CUDA]
-prerequisites: [Arrays, Concorrência, Reductions, Medição]
+prerequisites: [Arrays, Concorrência, Reduções, Medição]
 tools: [CUDA, nvcc, C, Python 3]
 environment: Linux com GPU NVIDIA compatível e CUDA Toolkit; preparação CPU sem GPU
 difficulty: advanced
@@ -15,21 +15,47 @@ difficulty: advanced
 
 ## O que vamos investigar
 
+### O que você vai construir e medir
+
+Você vai **implementar duas operações na GPU** em `materials/kernels.cu`:
+soma de dois vetores e redução de um vetor a um único número.
+
+```text
+a = [1, 2, 3]   b = [4, 5, 6]
+soma vetorial:  [5, 7, 9]
+redução de a:   6
+```
+
+Na soma vetorial, distribua as posições entre threads. Na redução, combine
+resultados parciais até obter a soma final, inteiramente na GPU. Trate também
+o caso em que o número de elementos não preenche o último bloco.
+
+O suporte CPU e o runner já estão fornecidos para conferir resultados e medir.
+Primeiro faça os checks passarem; depois registre separadamente transferência
+CPU→GPU (H2D), execução dos kernels, transferência GPU→CPU (D2H) e tempo total.
+
+Entregue kernels, checks GPU, diagnósticos do compute-sanitizer, CSV de execuções
+reais e uma comparação com CPU. Sem dispositivo compatível, a referência CPU e
+a análise permitem uma entrega preparatória, mas a implementação e a medição
+na GPU continuam pendentes.
+
+### Conceitos para a investigação
+
 Na GPU, cada thread executa uma parte do trabalho. Um bloco agrupa threads que
-podem cooperar usando memória compartilhada e barreiras de sincronização (barriers).
-Você vai implementar soma vetorial e uma redução (reduction), que combina os
+podem cooperar usando memória compartilhada e barreiras de sincronização.
+Você vai implementar soma vetorial e uma redução, que combina os
 elementos de um vetor em uma soma escalar.
 Investigue como limites, acessos à memória global e sincronização afetam essas operações.
 
-### Contrato técnico
+#### Contrato técnico
 
 O [contrato completo](materials/contract.md) define interfaces e medições.
 Implemente somente os mecanismos centrais em `materials/kernels.cu`.
-A soma deve produzir `out[i] = a[i] + b[i]`. A reduction deve produzir a soma de `a`, inteiramente na GPU.
+A soma deve produzir `out[i] = a[i] + b[i]`. A redução deve produzir a soma de `a`, inteiramente na GPU.
 Use `long long` de 64 bits e comparação exata, sem tolerância.
 As entradas contêm de 0 a 4.194.305 valores em `[-1024,1024]`.
-Todos os intermediários da reduction ficam em `[-4294968320,4294968320]`: não há overflow nesse contrato.
-Os blocos têm 64, 128, 256 ou 512 threads; é obrigatório testar blocos finais incompletos, com elementos restantes (tail).
+Todos os intermediários da redução ficam em `[-4294968320,4294968320]`: não há overflow nesse contrato.
+Os blocos têm 64, 128, 256 ou 512 threads; é obrigatório testar tails.
 
 ## Antes de começar
 
@@ -51,7 +77,7 @@ para comparação e preparação; não substitui a execução em GPU.
 
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
 
-Leia o [guia local](README.md). Revise arrays, reductions associativas, barriers e concorrência.
+Leia o [guia local](README.md). Revise arrays, reduções associativas, barreiras e concorrência.
 Para a preparação CPU, use compilador C11, Make e Python 3.
 Para CUDA, use `nvcc`, runtime e GPU compatíveis entre si. Driver e `nvidia-smi` sozinhos não fornecem o compilador.
 Registre versões e modelo da GPU. Sem esse ambiente, conclua apenas a preparação CPU e a análise teórica; mantenha as medições pendentes.
@@ -60,7 +86,7 @@ Registre versões e modelo da GPU. Sem esse ambiente, conclua apenas a preparaç
 
 O [guia de materiais](materials/README.md) explica os comandos e o starter.
 O [verificador](checks/check.py) compara o suporte CPU com aritmética Python independente.
-O runner GPU compara cada elemento e a reduction com a referência CPU antes de publicar tempos.
+O runner GPU compara cada elemento e a redução com a referência CPU antes de publicar tempos.
 Os [dados](experiments/datasets.csv) definem tamanhos pequeno, médio e grande por geração determinística.
 Use o [roteiro de experiências](experiments/README.md) e o [modelo de relato](report-template.md).
 
@@ -68,8 +94,8 @@ Use o [roteiro de experiências](experiments/README.md) e o [modelo de relato](r
 
 1. **Prever:** desenhe a distribuição de 65 valores em dois blocos de 64 threads. No segundo bloco, identifique a thread com dado e as 63 threads sem dado e preveja o custo relativo das transferências.
 2. **Observar:** execute `make -C materials cpu` e `python3 checks/check.py`. Registre a confirmação CPU; ela não representa uma execução GPU.
-3. **Explicar:** descreva memória global, compartilhada e local à thread. Explique por que threads de um bloco parcial ainda precisam respeitar barriers coletivas.
-4. **Implementar:** escreva soma e reduction em `kernels.cu`. Inclua tails, sincronização e verificações de erros de cada kernel launch. Não use uma biblioteca que resolva a reduction.
+3. **Explicar:** descreva memória global, compartilhada e local à thread. Explique por que threads de um bloco parcial ainda precisam respeitar barreiras coletivas.
+4. **Implementar:** escreva soma e redução em `kernels.cu`. Inclua tails, sincronização e verificações de erros de cada kernel launch. Não use uma biblioteca que resolva a redução.
 5. **Verificar:** compile com `make -C materials gpu`. Execute `python3 checks/check.py --gpu`; o starter deve falhar com operação não suportada. Depois da implementação, todos os casos devem passar.
 6. **Medir:** execute o roteiro apenas após correção. Registre 10 amostras por combinação de tamanho e bloco, incluindo tempos de kernel, H2D, D2H e total.
 7. **Interpretar:** compare CPU e GPU, explicando o escopo de cada tempo. Identifique uma observação em que comunicação ou kernel launch tenha impacto relevante; não presuma que a GPU vence.
@@ -80,7 +106,7 @@ Entregue os kernels e os checks GPU aprovados nos tamanhos públicos, incluindo 
 Execute `compute-sanitizer --tool memcheck --error-exitcode 1 materials/build/gpu 65 64 3`
 e `compute-sanitizer --tool racecheck --error-exitcode 1 materials/build/gpu 513 256 9`.
 Ambos devem terminar sem erros nem hazards. O padding do runner não substitui esses diagnósticos.
-Explique o mapeamento de índices, a identidade da soma, as barriers e o avanço entre passagens.
+Explique o mapeamento de índices, a identidade da soma, as barreiras e o avanço entre passagens.
 Entregue CSV de execuções reais, ambiente, flags e uma interpretação limitada ao hardware usado.
 Se não houver CUDA funcional, entregue a referência CPU verificada e a análise, indicando execução GPU pendente.
 Essa entrega preparatória não conclui a implementação nem a medição GPU.
@@ -99,4 +125,4 @@ Informe se a execução ocorreu em CPU ou GPU. Ao pedir ajuda, inclua o primeiro
 ## Referências e atividades relacionadas
 
 Consulte as [leituras orientadas](references.md) depois de concluir a implementação exigida.
-Relacione as observações com multiplicação matricial, localidade e sincronização.
+Relacione as observações com multiplicação matricial, locality e sincronização.

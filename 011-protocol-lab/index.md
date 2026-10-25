@@ -15,24 +15,53 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
+### O que você vai construir
+
+Você vai **implementar um encoder de mensagens e um leitor que funciona mesmo
+quando os bytes chegam em pedaços**. Complete `encode`, `Decoder.feed` e
+`Decoder.finish` em `materials/protocol.py`.
+
+Por exemplo, uma mensagem com flags 0 e payload `b'Hi'` tem estes bytes:
+
+```text
+4f 43 | 01 | 00 | 00 00 00 02 | 48 69
+magic   versão flags tamanho=2  payload
+```
+
+Se `feed` receber primeiro os três bytes `4f 43 01`, deve retornar uma lista
+vazia e guardar esse fragmento. Ao receber os sete bytes restantes, deve retornar
+a mensagem completa. Se duas mensagens chegarem juntas, deve retornar ambas.
+A divisão entre chamadas não pode mudar as mensagens reconhecidas.
+
+| Operação | Responsabilidade |
+| --- | --- |
+| `encode` | Validar uma mensagem e produzir seus bytes. |
+| `feed` | Consumir um fragmento e devolver as mensagens já completas. |
+| `finish` | Declarar fim do fluxo e detectar uma mensagem incompleta. |
+
+Entregue a implementação, traces de três fragmentações e dois casos inválidos
+explicados. O exercício usa bytes em memória; não exige abrir sockets.
+
+### Conceitos para a investigação
+
 Um fluxo preserva a ordem dos bytes, mas cada leitura pode trazer parte de uma
 mensagem ou várias mensagens juntas. Framing é a identificação das fronteiras
-dessas mensagens. Você vai implementar um codificador (encoder) e um
-decodificador (decoder) incremental, sem usar um gerador de protocolo.
+dessas mensagens. Você vai implementar um encoder e um
+decoder incremental, sem usar um gerador de protocolo.
 
-### Contrato técnico
+#### Contrato técnico
 
-O formato externo tem um cabeçalho (header) fixo de oito bytes. Os offsets começam em zero.
+O formato externo tem um header fixo de oito bytes. Os offsets começam em zero.
 
 | Offset | Tamanho | Campo e valor |
 | --- | --- | --- |
 | 0 | 2 | magic: bytes hexadecimais `4f 43` |
 | 2 | 1 | version: exatamente 1 |
 | 3 | 1 | flags: somente 0 ou 1; bit 0 é marcador opaco, sem transformar payload |
-| 4 | 4 | length: inteiro sem sinal big-endian, de 0 a 4096 |
+| 4 | 4 | length: unsigned integer big-endian, de 0 a 4096 |
 | 8 | length | payload: bytes opacos, inclusive zero e bytes não UTF-8 |
 
-Não há padding, checksum, terminador ou alinhamento implícito. O comprimento exclui o header.
+Não há padding, checksum, terminador ou alignment implícito. O comprimento exclui o header.
 Bytes após uma mensagem iniciam o próximo header; não são descartados.
 
 Na versão Python, a API de `materials/protocol.py` usa `Message(flags, payload)`, dataclass frozen com campos nessa ordem.
@@ -85,7 +114,7 @@ Os checks funcionais não demonstram esses limites: revise o código e justifiqu
 
 A implementação de referência usa **Python**, mas você pode escolher outra
 linguagem, como C, Rust ou Go. Rust, Go e Python são opções recomendadas.
-Preserve o cabeçalho de oito bytes e o campo `length`: inteiro sem sinal de
+Preserve o header de oito bytes e o campo `length`: unsigned integer de
 32 bits, em big-endian, limitado a 4096. Implemente a análise incremental do fluxo.
 
 Há código inicial em Python e em Go (`materials/starter/go/`). Outras linguagens
@@ -98,13 +127,13 @@ Leia [o guia local](README.md). Os comandos partem deste diretório; não é nec
 
 ## Materiais
 
-[O guia de materiais](materials/README.md) descreve o starter e os [vetores](materials/vectors.json).
+[O guia de materiais](materials/README.md) descreve o starter e os [test vectors](materials/vectors.json).
 [Os checks](checks/check.py) usam bytes canônicos independentes do encoder.
 [O experimento](experiments/fragmentation.md) compara fragmentação e concatenação.
 
 ## Etapas da investigação
 
-1. **Prever:** marque os oito bytes de header nos vetores empty e binary. Preveja os retornos de chunks de um byte.
+1. **Prever:** marque os oito bytes de header nos test vectors empty e binary. Preveja os retornos de chunks de um byte.
 2. **Observar:** leia o trace normativo do experimento. Identifique quando length passa a estar disponível.
 3. **Explicar:** explique por que bytes disponíveis e mensagens completas são contagens diferentes. Relacione EOF ao estado pendente.
 4. **Implementar:** complete encode, feed e finish. Registre invariantes, precedência de erros e limites de memória.
@@ -113,8 +142,8 @@ Leia [o guia local](README.md). Os comandos partem deste diretório; não é nec
 ## Critérios de conclusão
 
 Os checks devem terminar com status zero. Entregue implementação, trace de três fragmentações e dois casos inválidos explicados.
-Justifique a independência dos vetores, o tratamento de EOF e o limite de memória antes de fazer allocation.
-Explique por que um teste de ida e volta (roundtrip) pode deixar passar erros
+Justifique a independência dos test vectors, o tratamento de EOF e o limite de memória antes de fazer alocação.
+Explique por que um teste de round-trip pode deixar passar erros
 simétricos no encoder e no decoder, e por que uma leitura de socket não equivale
 a uma mensagem.
 Os checks públicos cobrem casos finitos; não provam correção geral nem custo assintótico.

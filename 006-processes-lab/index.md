@@ -15,12 +15,41 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Um processo possui uma imagem de execução e descritores de arquivo (file descriptors).
+### O que você vai construir
+
+Você vai **implementar `oxrun`, um programa que executa um comando ou conecta
+dois comandos por um pipe**. Complete `materials/starter/oxrun.c` em duas partes:
+primeiro o modo `run`, depois o modo `pipe`.
+
+```sh
+./oxrun run -- printf abc
+./oxrun pipe -- printf abc ::: wc -c
+```
+
+No primeiro exemplo, o filho escreve `abc`. No segundo, `printf` escreve três
+bytes no pipe e `wc -c` lê esses bytes e informa a contagem 3. A conexão é:
+
+```text
+filho esquerdo: stdout → pipe → stdin: filho direito
+                      pai espera os dois
+```
+
+Sua responsabilidade inclui criar os filhos, conectar e fechar os file descriptors,
+esperar todos os filhos e devolver o status exigido. `probe.c` já está pronto
+para ajudar a observar estados de término. Não há um parser de shell a construir:
+os argumentos já chegam separados em `argv`.
+
+Entregue a implementação, uma tabela de file descriptors do pai e dos filhos e
+execuções explicadas, incluindo EOF e término por sinal.
+
+### Conceitos para a investigação
+
+Um processo possui uma imagem de execução e file descriptors.
 A chamada `fork` cria um processo filho; `execvp` substitui a imagem do processo
 que a chama. Um pipe conecta um escritor a um leitor. Você vai investigar como
-as cópias dos descritores afetam o EOF, a indicação de fim dos dados.
+as cópias dos file descriptors afetam o EOF, a indicação de fim dos dados.
 
-### Contrato técnico
+#### Contrato técnico
 
 Implemente exatamente estas interfaces:
 
@@ -44,7 +73,7 @@ Use `fork`, `execvp` e `waitpid`; no pipeline, acrescente `pipe`, `dup2` e `clos
 | Outra falha de `execvp` | 126 |
 | Uso inválido ou falha interna de preparação | 2 e diagnóstico |
 
-Valide todo o uso antes de iniciar processos. Espere todos os filhos diretos criados e recolha seus estados de término (reaping), mesmo quando o status solicitado já estiver disponível. Retome `waitpid` após `EINTR`.
+Valide todo o uso antes de iniciar processos. Espere todos os filhos diretos criados e faça reaping deles, mesmo quando o status solicitado já estiver disponível. Retome `waitpid` após `EINTR`.
 
 Inicie os dois lados antes de esperar seu término. Feche cópias desnecessárias para permitir EOF.
 
@@ -56,8 +85,7 @@ Se a preparação falhar após criar um filho, feche os file descriptors, encerr
 
 A implementação de referência usa **C11** em Linux x86-64. Outras linguagens são
 aceitas se usarem interfaces POSIX equivalentes; Rust e Python são alternativas
-recomendadas. Criação de processos, `exec`, pipes, descritores e coleta do término
-dos filhos (reaping) devem permanecer explícitos.
+recomendadas. Criação de processos, `exec`, pipes, file descriptors e reaping dos filhos devem permanecer explícitos.
 
 Os materiais fornecem código inicial em C11. Implementações em outras linguagens
 podem cumprir o mesmo contrato da parte obrigatória.

@@ -15,17 +15,43 @@ difficulty: advanced
 
 ## O que vamos investigar
 
+### O que você vai construir e investigar
+
+Você vai **implementar um supervisor que inicia um programa, aplica limites e
+acompanha seu término**, e depois comparar supervisão com mecanismos de isolamento.
+Complete `materials/supervisor.c`.
+
+```text
+supervisor → filho principal → possível descendente benigno
+     └→ controla prazo, encerra o grupo próprio e faz reaping
+```
+
+Se o programa principal terminar com status 7 dentro do prazo, o supervisor deve
+preservar esse status depois de limpar os descendentes. Se o prazo vencer antes
+do término observado, deve encerrar o grupo, fazer reaping dos filhos e retornar 124.
+Enviar um sinal e fazer reaping são responsabilidades diferentes.
+
+**Execute supervisor, fixtures e checks dinâmicos somente na VM descartável
+exigida abaixo.** Sem VM, é possível compilar e concluir o percurso teórico,
+registrando a verificação prática como pendente.
+
+A entrega prática reúne o supervisor, evidências dos checks, uma árvore de
+processos explicada e uma tabela de recursos e restrições de namespaces, cgroups
+e seccomp. Essa comparação deve mostrar quais propriedades cada mecanismo oferece;
+o supervisor sozinho não estabelece uma fronteira completa de isolamento.
+
+### Conceitos para a investigação
+
 Um supervisor acompanha processos e encerra trabalho que excede um prazo. Um limite
 de recursos restringe consumo. Uma fronteira de isolamento restringe acesso a objetos
 e operações. Vamos construir o primeiro e investigar como os outros dois diferem.
 
-### Contrato técnico
+#### Contrato técnico
 
 Implemente [supervisor.c](materials/supervisor.c) conforme o [contrato completo](materials/contract.md).
 A interface de linha de comando (CLI) recebe um prazo de 100 a 5000 ms,
 o caminho do executável e seus argumentos. O supervisor aplica limites
-ao filho, preserva seu status, encerra a árvore de processos benignos que criou e recolhe seus estados de
-término (reaping).
+ao filho, preserva seu status, encerra a árvore de processos benignos que criou e faz reaping deles.
 O contrato especifica erros, file descriptors, sinais, adoção de órfãos e limpeza após falhas.
 A solução didática **não é adequada para execução de código adversarial em produção**
 sem arquitetura, revisão e isolamento adicionais.
@@ -64,7 +90,7 @@ Use o [modelo de relatório](report-template.md) e as [leituras orientadas](refe
 ## Etapas da investigação
 
 1. **Prever:** desenhe a árvore principal/filho e preveja status para saída 7, sinal,
-   timeout, reserva de memória recusada e arquivo sem permissão. Diferencie o tempo de CPU do tempo total decorrido (tempo de parede).
+   timeout, reserva de memória recusada e arquivo sem permissão. Diferencie o tempo de CPU do wall-clock time.
 2. **Observar:** na VM, compile e execute apenas as fixtures descritas no guia. Registre
    status e limites. O starter retorna 125; isso ainda não verifica supervisão.
 3. **Explicar:** identifique quem executa reaping de um descendente após a saída do pai. Explique

@@ -15,11 +15,35 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
+### O que você vai investigar e entregar
+
+Você vai **descobrir e explicar a regra usada por um programa para aceitar uma
+chave de seis bytes**. O programa já está pronto: seu trabalho é analisar suas
+instruções de máquina e reconstruir a decisão em pseudocódigo ou código próprio.
+
+```text
+entrada de seis bytes → comparações do programa → aceita ou rejeita
+                              ↓
+                 sua tabela de restrições
+```
+
+Por exemplo, `ABC` deve ser rejeitada por não ter o comprimento exigido.
+Para uma entrada de seis bytes, você precisará descobrir quais outras condições
+são verificadas. Registre cada condição junto ao trecho de disassembly que a
+sustenta; encontrar uma chave aceita é apenas uma parte do trabalho.
+
+A entrega central reúne uma tabela de restrições, seu modelo da decisão e duas
+execuções explicadas: uma entrada aceita e uma quase correta, com a comparação
+que a rejeita. Comece pelo executável `-O0` e guarde a leitura do fonte para o
+confronto final. A comparação com `-O2` é uma extensão opcional.
+
+### Conceitos para a investigação
+
 Um disassembly representa instruções de máquina em texto. Você investigará como
 comparações e saltos decidem aceitar ou rejeitar uma entrada. O objetivo é
 reconstruir e explicar essa decisão, ligando cada restrição a instruções concretas.
 
-### Contrato técnico
+#### Contrato técnico
 
 O alvo da investigação é `gate.c`, que preserva o programa original do Anexo A.
 A função `main` exige exatamente um argumento. Se a
@@ -89,7 +113,7 @@ Entregue relato com ambiente e comandos, tabela de todas as restrições ligada 
 disassembly, verificação de comprimento e interpretação dos status 2/1/0.
 Demonstre uma entrada aceita e uma quase correta rejeitada, com a comparação
 responsável e a sequência de execução que sustenta essa conclusão. Explique o
-efeito da leitura como `unsigned char`, das promoções inteiras e do curto-circuito
+efeito da leitura como `unsigned char`, das integer promotions e do short-circuit evaluation
 das condições, usando evidência do executável e do confronto final com C.
 
 Os checks públicos devem passar, mas não comprovam que alguma entrada é aceita.

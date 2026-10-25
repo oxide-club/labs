@@ -15,18 +15,46 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
+### O que você vai construir
+
+Você vai **implementar um interpretador de uma pequena linguagem de instruções**.
+O programa de entrada é texto; seu interpretador mantém uma stack, oito variáveis
+e a posição da próxima instrução, chamada PC.
+
+Um exemplo de programa é:
+
+```text
+PUSH 2
+PUSH 3
+ADD
+HALT
+```
+
+Ele coloca 2 e 3 na stack, substitui os dois valores pela soma e termina com
+`stack=[5]`, `pc=3` e `steps=4`. O trace registra a stack antes de cada instrução,
+permitindo explicar como a máquina chegou ao resultado.
+
+Complete `run` em `materials/vm.py`: valide o programa inteiro, selecione a
+operação de cada instrução e atualize o estado. Implemente também os erros e o
+limite de passos que interrompe laços sem fim.
+
+Entregue o interpretador, três programas válidos, três inválidos e um trace
+explicado. Além do resultado final, importa demonstrar o estado preservado quando
+uma instrução falha. A tabela abaixo define a linguagem que você deve executar.
+
+### Conceitos para a investigação
+
 Uma máquina virtual (VM) executa instruções sobre um estado definido pelo interpretador.
-O contador de programa (PC) identifica a próxima instrução. O dispatch seleciona
-a ação indicada pelo código da operação (opcode).
+O program counter (PC) identifica a próxima instrução. O dispatch seleciona
+a ação indicada pelo opcode.
 Investigue como uma alteração do PC produz um laço e como limites tornam essa execução controlável.
 Você deve implementar o dispatch, a validação e as transições na linguagem escolhida, sem `eval`, `exec` ou bibliotecas de VM.
 
-### Contrato técnico
+#### Contrato técnico
 
 Na versão Python, a API obrigatória é `run(source: str, budget: int = 1000) -> dict` em `materials/vm.py`.
-Cada chamada começa com um estado independente: PC igual a 0, pilha (stack)
-vazia, oito variáveis iguais a zero, contador `steps` igual a 0 e registro de
-execução (trace) vazio. O parâmetro `budget` limita o número de instruções executadas.
+Cada chamada começa com um estado independente: PC igual a 0, stack
+vazia, oito variáveis iguais a zero, contador `steps` igual a 0 e trace vazio. O parâmetro `budget` limita o número de instruções executadas.
 O chamador fornece `str` e budget inteiro de 1 a 10000, sem bool; outros budgets geram `ValueError`.
 
 O formato é textual, não bytecode binário. Cada linha não vazia contém um opcode maiúsculo e seus operandos, separados por espaço ASCII ou tab.
@@ -36,7 +64,7 @@ São permitidos de 1 a 256 instruções e no máximo 16384 caracteres, incluindo
 O PC é o índice da instrução após remover linhas vazias, começando em zero; não é o número da linha.
 A VM deve validar o programa inteiro antes de executar, inclusive instruções inalcançáveis.
 
-Todos os valores são inteiros com sinal de 32 bits, de -2147483648 a 2147483647.
+Todos os valores são signed integers de 32 bits, de -2147483648 a 2147483647.
 Overflow gera erro; não há wraparound. A stack comporta no máximo 32 valores, com topo à direita.
 As variáveis têm índices de 0 a 7 e começam inicializadas. Não há divisão nesta ISA.
 
@@ -84,7 +112,7 @@ Exceções inesperadas do interpretador são defeitos de implementação, não e
 
 A implementação de referência usa **Python**, mas você pode escolher outra
 linguagem, como C, Rust ou Go. Rust, Go e Python são opções recomendadas.
-Preserve a ISA textual publicada e os inteiros com sinal de 32 bits. Implemente
+Preserve a ISA textual publicada e os signed integers de 32 bits. Implemente
 a validação integral do programa e a seleção da operação de cada instrução (dispatch).
 
 Há código inicial em Python e em Rust (`materials/starter/rust/`). Outras linguagens
@@ -118,7 +146,7 @@ Registre uma previsão que mudou após observar a execução. Os checks público
 ## Extensões opcionais
 
 Você pode criar um assembler que converta labels para índices ou definir bytecode binário.
-Preserve a ISA obrigatória e documente decodificação, truncamento e compatibilidade antes de alterar o formato.
+Preserve a ISA obrigatória e documente decoding, truncamento e compatibilidade antes de alterar o formato.
 Frames e funções também são opcionais e exigem novos contratos.
 
 ## Participação no clube

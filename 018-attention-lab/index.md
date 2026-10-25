@@ -15,6 +15,33 @@ difficulty: advanced
 
 ## O que vamos investigar
 
+### O que você vai construir e investigar
+
+Você vai **implementar o cálculo de atenção a partir de matrizes já fornecidas**,
+com todos os intermediários visíveis. Complete três funções em
+`materials/attention.py`:
+
+| Função | Responsabilidade |
+| --- | --- |
+| `scaled_scores` | Comparar as linhas de Q e K e dividir os produtos por `sqrt(d_k)`. |
+| `softmax` | Receber uma linha de pontuações e convertê-la em pesos cuja soma é 1, com estabilidade numérica. |
+| `attention` | Aplicar a máscara causal quando solicitada e combinar as linhas de V pelos pesos. |
+
+```text
+Q e K → scores → máscara, se causal → probabilidades → combinação de V
+```
+
+Como exemplo, pesos `[0.25, 0.75]` e valores `[[2], [6]]` produzem
+`0.25*2 + 0.75*6 = 5`. No modo causal, a primeira posição só pode usar a
+primeira linha de V: posições futuras devem receber peso exatamente zero.
+
+Entregue implementação, tabelas dos intermediários, checks e medições de memória
+para comprimentos crescentes. A investigação conecta correção numérica e
+causalidade ao custo das matrizes N×N. As entradas Q/K/V já existem: treinamento,
+projeções aprendidas e construção de um LLM não fazem parte do núcleo.
+
+### Conceitos para a investigação
+
 O mecanismo de atenção por produto escalar escalado (scaled dot-product attention)
 compara consultas Q com chaves K e usa os pesos resultantes para combinar valores V.
 Cada pontuação (score) mede a relação entre duas posições. O softmax transforma
@@ -23,7 +50,7 @@ impede que uma posição use valores de posições futuras.
 Investigue `Attention(Q,K,V) = softmax(Q × Kᵀ / sqrt(d_k) + M) × V`.
 Não é necessário construir um LLM para observar esse mecanismo.
 
-### Contrato técnico
+#### Contrato técnico
 
 O [contrato completo](materials/contract.md) define três funções: `scaled_scores`,
 `softmax` e `attention`. Use listas Python e aritmética explícita, sem framework
@@ -93,7 +120,7 @@ observação da implementação. Registre evidências no [modelo de relato](repo
    `experiments/memory.py` conforme o roteiro. Registre as três repetições por N.
 7. **Interpretar:** compare N e 2N. O número de scores quadruplica; investigue
    por que memória rastreada e tempo não precisam seguir exatamente essa razão.
-   Distinga dados densos binary64, objetos Python e pico de allocations da chamada.
+   Distinga dados densos binary64, objetos Python e pico de alocações da chamada.
 
 ## Critérios de conclusão
 

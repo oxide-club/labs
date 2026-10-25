@@ -1,12 +1,12 @@
 ---
-title: Laboratório de Bibliotecas Compartilhadas e Linking Dinâmico
+title: Laboratório de Shared Libraries e Dynamic Linking
 area: compilation-execution
 slug: 014-dynamic-linking-lab
 summary: Compare archives e shared objects e implemente carregamento explícito com diagnóstico de erros.
 question: Como o executável utiliza código de uma biblioteca em outro arquivo?
 draft: false
 publishedAt: 2026-10-25
-topics: [Linking, ELF, Bibliotecas compartilhadas]
+topics: [Linking, ELF, Shared libraries]
 prerequisites: [C, Compilação separada, Símbolos]
 tools: [GCC, binutils, Python 3]
 environment: Linux x86-64 com dynamic loader ELF
@@ -15,16 +15,38 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Uma biblioteca compartilhada mantém código em um arquivo carregado durante a execução.
-Você vai comparar esse mecanismo com a incorporação de código de uma biblioteca
-estática (archive) durante a ligação (linking). A investigação mostra em que
+### O que você vai comparar e construir
+
+Você vai **comparar três formas de usar funções de uma biblioteca**. A biblioteca
+com soma e quadrado e dois clientes já estão prontos. Sua implementação será
+o terceiro cliente, `dynamic.c`.
+
+| Cliente | Como obtém o código da biblioteca |
+| --- | --- |
+| `archive-client` | Incorpora código de `liboxide.a` durante o linking. |
+| `shared-client` | Depende de `liboxide.so`, carregada para executar o programa. |
+| `dynamic` | Abre explicitamente a biblioteca com `dlopen` e busca uma função com `dlsym`. |
+
+No modo `call`, ao escolher `oxide_add`, seu cliente deve chamar a função com
+os argumentos 3 e 4 e imprimir `7` seguido de newline após fechar a biblioteca
+com sucesso. No modo `skip`, apenas abre e fecha a biblioteca.
+
+O trabalho inclui tratar biblioteca ausente, símbolo ausente e fechamento do
+handle, além de observar a resolução imediata (`now`) ou adiada (`lazy`).
+Entregue o cliente, checks e um relato com dependências, símbolos, tamanhos dos
+arquivos e experiências de falha. O contrato abaixo fixa a CLI e os códigos de erro.
+
+### Conceitos para a investigação
+
+Uma shared library mantém código em um arquivo carregado durante a execução.
+Você vai comparar esse mecanismo com a incorporação de código de uma static library (archive) durante o linking. A investigação mostra em que
 momento as referências a funções precisam ser resolvidas.
 
-### Contrato técnico
+#### Contrato técnico
 
 O [contrato completo](materials/contract.md) fixa API, CLI, estados após falhas e limites.
 A biblioteca fornece funções de soma e quadrado. Dois clientes completos permitem
-comparar a ligação estática com a dinâmica. Sua tarefa é implementar `dynamic.c`,
+comparar static linking com dynamic linking. Sua tarefa é implementar `dynamic.c`,
 que carrega a biblioteca explicitamente com `dlopen` e `dlsym`.
 O archive não torna o executável inteiro estático. O contrato não exige `-static` nem libc estática.
 
@@ -33,7 +55,7 @@ O archive não torna o executável inteiro estático. O contrato não exige `-st
 ### Linguagens e ambiente
 
 A parte obrigatória usa **C11 em Linux x86-64/ELF**. A investigação envolve `dlopen`, `dlsym`,
-código independente de posição (PIC), símbolos e tempo de vida do handle da
+position-independent code (PIC), símbolos e lifetime do handle da
 biblioteca. Os materiais fornecem código em C11.
 
 Rust e C++ são recomendados para extensões de interoperabilidade. Essas comparações
@@ -65,7 +87,7 @@ Use o [modelo de relatório](report-template.md) e consulte as [referências](re
    `nm -D materials/build/liboxide.so`, `readelf -d materials/build/shared-client` e
    `readelf -r materials/build/shared-client`. Registre símbolos, NEEDED, RUNPATH e relocations.
 3. **Explicar:** relacione símbolos definidos e indefinidos às dependências; explique PIC
-   (código independente de posição) e por que uma relocation não é simplesmente uma chamada de função.
+   (position-independent code) e por que uma relocation não é simplesmente uma chamada de função.
 4. **Implementar:** complete o carregamento explícito conforme o contrato; trate erros e lifetime do handle.
 5. **Verificar:** execute `python3 checks/check.py`. O starter compila, mas deve falhar nos checks de `dynamic`.
    Faça as experiências de falha e de resolução no roteiro. Registre comandos, status e stderr.
