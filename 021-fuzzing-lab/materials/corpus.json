@@ -1,0 +1,6 @@
+{
+  "empty": {"hex": "4f58463100000000", "purpose": "Cabeçalho válido sem registros."},
+  "number": {"hex": "4f5846310001040001020100", "purpose": "Registro numérico pequeno."},
+  "text": {"hex": "4f5846310001040002024f4b", "purpose": "Texto ASCII imprimível."},
+  "checksum": {"hex": "4f584631010000000000", "purpose": "Documento vazio com checksum."}
+}

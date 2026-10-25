@@ -664,5 +664,248 @@
       "status": 1,
       "contains": "checks reprovaram a implementação; não houve medição."
     }
+  ],
+  "019-atomics-lab": [
+    {
+      "name": "exportar formatos distribuídos para cópia isolada",
+      "argv": [
+        "python3",
+        "../scripts/export-lab-package.py",
+        "{lab}",
+        "{work}/package"
+      ],
+      "contains": "OK pacote"
+    },
+    {
+      "name": "conferir instrumentos e fixtures",
+      "argv": [
+        "python3",
+        "{work}/package/checks/test_support.py"
+      ],
+      "contains": "OK"
+    },
+    {
+      "name": "compilar starter sem aprovar conclusão",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py",
+        "--build-only"
+      ],
+      "contains": "OK",
+      "timeout": 240
+    },
+    {
+      "name": "rejeitar starter incompleto",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py"
+      ],
+      "status": 1,
+      "contains": "not yet implemented",
+      "timeout": 240
+    }
+  ],
+  "020-dispatch-lab": [
+    {
+      "name": "exportar formatos distribuídos para cópia isolada",
+      "argv": [
+        "python3",
+        "../scripts/export-lab-package.py",
+        "{lab}",
+        "{work}/package"
+      ],
+      "contains": "OK pacote"
+    },
+    {
+      "name": "conferir instrumentos e fixtures",
+      "argv": [
+        "python3",
+        "{work}/package/checks/test_support.py"
+      ],
+      "contains": "OK"
+    },
+    {
+      "name": "compilar starter sem aprovar conclusão",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py",
+        "--build-only"
+      ],
+      "contains": "OK",
+      "timeout": 240
+    },
+    {
+      "name": "rejeitar starter incompleto",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py"
+      ],
+      "status": 1,
+      "contains": "not yet implemented",
+      "timeout": 240
+    }
+  ],
+  "021-fuzzing-lab": [
+    {
+      "name": "exportar formatos distribuídos para cópia isolada",
+      "argv": [
+        "python3",
+        "../scripts/export-lab-package.py",
+        "{lab}",
+        "{work}/package"
+      ],
+      "contains": "OK pacote"
+    },
+    {
+      "name": "compilar runner ASan UBSan",
+      "argv": [
+        "make",
+        "-C",
+        "{work}/package/materials/starter/c"
+      ],
+      "timeout": 120
+    },
+    {
+      "name": "smoke de preparação",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py",
+        "{work}/package/materials/starter/c/build/runner",
+        "--smoke"
+      ],
+      "contains": "PREPARATION_OK"
+    },
+    {
+      "name": "gerar corpus",
+      "argv": [
+        "python3",
+        "{work}/package/checks/corpus.py",
+        "{work}/corpus"
+      ]
+    },
+    {
+      "name": "preparação pública preserva a investigação",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py",
+        "{work}/package/materials/starter/c/build/runner"
+      ],
+      "status": 0,
+      "contains": "PREPARATION_OK",
+      "timeout": 120
+    },
+    {
+      "name": "fuzz target permanece tarefa do participante",
+      "argv": [
+        "make",
+        "-C",
+        "{work}/package/materials/starter/c",
+        "fuzz"
+      ],
+      "status": 2,
+      "contains": "Implemente o target"
+    },
+    {
+      "name": "separação das fases no pacote distribuído",
+      "argv": [
+        "python3",
+        "{work}/package/checks/test_phases.py"
+      ],
+      "contains": "OK",
+      "timeout": 120
+    }
+  ],
+  "022-page-protection-lab": [
+    {
+      "name": "exportar formatos distribuídos para cópia isolada",
+      "argv": [
+        "python3",
+        "../scripts/export-lab-package.py",
+        "{lab}",
+        "{work}/package"
+      ],
+      "contains": "OK pacote"
+    },
+    {
+      "name": "regressões do parser de auditoria, sem substituir processos reais",
+      "argv": [
+        "python3",
+        "{work}/package/checks/test_audit.py"
+      ],
+      "contains": "OK"
+    },
+    {
+      "name": "compilar starter e sonda nativa",
+      "argv": [
+        "make",
+        "-C",
+        "{work}/package/materials/starter/c"
+      ]
+    },
+    {
+      "name": "inspecionar sonda",
+      "argv": [
+        "make",
+        "-C",
+        "{work}/package/materials/starter/c",
+        "audit"
+      ],
+      "contains": "probe_write"
+    },
+    {
+      "name": "rejeitar supervisor incompleto",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py",
+        "{work}/package/materials/starter/c/pageprobe"
+      ],
+      "status": 1,
+      "contains": "matriz incompleta"
+    }
+  ],
+  "023-elf-hardening-lab": [
+    {
+      "name": "exportar formatos distribuídos para cópia isolada",
+      "argv": [
+        "python3",
+        "../scripts/export-lab-package.py",
+        "{lab}",
+        "{work}/package"
+      ],
+      "contains": "OK pacote"
+    },
+    {
+      "name": "construir seis perfis",
+      "argv": [
+        "python3",
+        "{work}/package/experiments/run.py",
+        "build",
+        "--out",
+        "{work}/artifacts"
+      ],
+      "timeout": 120
+    },
+    {
+      "name": "casos funcionais e controles negativos",
+      "argv": [
+        "python3",
+        "{work}/package/checks/check.py",
+        "--out",
+        "{work}/artifacts"
+      ],
+      "contains": "18 casos funcionais"
+    },
+    {
+      "name": "inspeções e quarenta lançamentos reais",
+      "argv": [
+        "python3",
+        "{work}/package/experiments/run.py",
+        "collect",
+        "--out",
+        "{work}/artifacts"
+      ],
+      "contains": "coleta completa",
+      "timeout": 120
+    }
   ]
 }
