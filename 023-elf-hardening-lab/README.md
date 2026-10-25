@@ -1,6 +1,6 @@
 # Guia local — Evidências de hardening em executáveis ELF
 
-Leia o [enunciado](index.md). **Em elaboração:** instrumentos validados; revisão independente e piloto pendentes.
+Leia o [enunciado](index.md). O laboratório está aprovado para publicação, com `draft: false`.
 
 ## Ambiente
 

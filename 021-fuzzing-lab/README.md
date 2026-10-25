@@ -1,6 +1,6 @@
 # Guia local — Fuzzing e análise de falhas
 
-Leia o [enunciado](index.md). A variante C possui materiais executáveis validados. O laboratório permanece em elaboração, com `draft: true`; o piloto ainda não ocorreu.
+Leia o [enunciado](index.md). O laboratório está aprovado para publicação, com `draft: false`.
 
 ## Ambiente
 

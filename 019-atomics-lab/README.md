@@ -1,6 +1,6 @@
 # Guia local — Atomics e memory ordering
 
-Leia o [enunciado](index.md). O pacote permanece em elaboração (`draft: true`).
+Leia o [enunciado](index.md). O laboratório está aprovado para publicação, com `draft: false`.
 A validação do instrumento não substitui sua investigação.
 
 ## Ambiente

@@ -1,6 +1,6 @@
 # Materiais — Fuzzing e análise de falhas
 
-**Situação:** variante C11 preparada e validada localmente; revisão humana e piloto pendentes. Revisão do pacote: `021-c-2026-10-25-v3`.
+**Situação:** materiais aprovados para publicação. Revisão do pacote: `021-c-2026-10-25-v3`.
 
 ## Inventário
 

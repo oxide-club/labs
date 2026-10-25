@@ -48,17 +48,17 @@ O [registro de IDs](docs/catalogo.json) mantém a correspondência com o curríc
 | [017 — Computação Paralela em GPU](017-gpu-lab/index.md) | Publicado |
 | [018 — Mecanismos de Atenção](018-attention-lab/index.md) | Publicado |
 
-### Roteiros em elaboração
+### Novos laboratórios aprovados
 
-As cinco propostas abaixo têm pacotes executáveis preparados e verificados. Permanecem em elaboração até revisão humana e piloto. Os READMEs de cada laboratório descrevem os comandos, materiais e limites de execução.
+As cinco propostas abaixo têm pacotes executáveis preparados e verificados. Estão aprovadas para publicação, com `draft: false`; a publicação no website depende da integração e do deploy. Os READMEs de cada laboratório descrevem os comandos, materiais e limites de execução.
 
 | Laboratório | Estado |
 | --- | --- |
-| [019-atomics-lab — Atomics e memory ordering](019-atomics-lab/index.md) | Em elaboração |
-| [020-dispatch-lab — Monomorfização e dynamic dispatch](020-dispatch-lab/index.md) | Em elaboração |
-| [021-fuzzing-lab — Fuzzing e análise de falhas](021-fuzzing-lab/index.md) | Em elaboração |
-| [022-page-protection-lab — Page protection e access violations](022-page-protection-lab/index.md) | Em elaboração |
-| [023-elf-hardening-lab — Evidências de hardening em executáveis ELF](023-elf-hardening-lab/index.md) | Em elaboração |
+| [019-atomics-lab — Atomics e memory ordering](019-atomics-lab/index.md) | Aprovado para publicação |
+| [020-dispatch-lab — Monomorfização e dynamic dispatch](020-dispatch-lab/index.md) | Aprovado para publicação |
+| [021-fuzzing-lab — Fuzzing e análise de falhas](021-fuzzing-lab/index.md) | Aprovado para publicação |
+| [022-page-protection-lab — Page protection e access violations](022-page-protection-lab/index.md) | Aprovado para publicação |
+| [023-elf-hardening-lab — Evidências de hardening em executáveis ELF](023-elf-hardening-lab/index.md) | Aprovado para publicação |
 
 Os números identificam os laboratórios. Você pode escolher a ordem de estudo.
 

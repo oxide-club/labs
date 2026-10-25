@@ -4,7 +4,8 @@ area: "concurrency-parallelism"
 slug: "019-atomics-lab"
 summary: "Compare ordenações atômicas com Loom e explique as observações por relações de sincronização."
 question: "Por que duas variáveis atômicas podem comunicar um estado logicamente inconsistente?"
-draft: true
+draft: false
+publishedAt: 2026-10-25
 topics: ["Atomics", "Memory ordering", "Concorrência"]
 prerequisites: ["Rust", "Threads", "Operações atômicas", "Happens-before"]
 tools: ["Cargo", "Loom"]
@@ -63,7 +64,7 @@ Rust 1.98.1, threads e Loom 0.7.2; limites no guia local.
 
 Rust faz parte do mecanismo investigado e é obrigatório no núcleo.
 
-**Em elaboração.** Este rascunho define a atividade. Os materiais executáveis estão disponíveis; revisão humana e piloto permanecem pendentes. O [guia local](README.md) registra a situação da preparação.
+**Aprovado para publicação.** O [guia local](README.md) descreve os materiais, comandos e limites de execução.
 
 ## Materiais
 

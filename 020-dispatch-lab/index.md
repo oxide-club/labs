@@ -4,7 +4,8 @@ area: "compilation-execution"
 slug: "020-dispatch-lab"
 summary: "Compare generics, trait objects e enum com trabalho equivalente, disassembly e medições."
 question: "Como a seleção de comportamento aparece no código gerado e em medições comparáveis?"
-draft: true
+draft: false
+publishedAt: 2026-10-25
 topics: ["Monomorfização", "Dynamic dispatch", "Desempenho"]
 prerequisites: ["Traits e generics", "Trait objects", "Disassembly", "Medição de desempenho"]
 tools: ["Cargo", "nm", "objdump"]
@@ -59,7 +60,7 @@ Linux x86-64; Rust/Cargo 1.98.1, GNU binutils e harness fornecido.
 
 Rust faz parte do mecanismo investigado e é obrigatório no núcleo.
 
-**Em elaboração.** Este rascunho define a atividade. Os materiais executáveis estão disponíveis; revisão humana e piloto permanecem pendentes. O [guia local](README.md) registra a situação da preparação.
+**Aprovado para publicação.** O [guia local](README.md) descreve os materiais, comandos e limites de execução.
 
 ## Materiais
 

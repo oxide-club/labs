@@ -1,6 +1,6 @@
 # Guia local — Page protection e access violations
 
-Leia o [enunciado](index.md). **Em elaboração.** O pacote executável está preparado para revisão; `draft: true` permanece até revisão e piloto.
+Leia o [enunciado](index.md). O laboratório está aprovado para publicação, com `draft: false`.
 
 ## Ambiente
 

@@ -4,7 +4,8 @@ area: "memory"
 slug: "022-page-protection-lab"
 summary: "Investigue permissões de páginas com sondas isoladas e uma matriz de previsões e resultados."
 question: "O que distingue um endereço numérico, uma página mapeada e uma operação permitida naquela página?"
-draft: true
+draft: false
+publishedAt: 2026-10-25
 topics: ["Memória virtual", "Page protection", "Processos"]
 prerequisites: ["Ponteiros", "Memória virtual", "Processos e sinais", "Disassembly"]
 tools: ["Compilador C", "objdump", "/proc"]
@@ -68,7 +69,7 @@ Linux x86-64; C, usuário comum, processos próprios e toolchain registrada.
 
 C é a linguagem-base do núcleo. As alternativas indicadas nas extensões são complementares.
 
-**Em elaboração.** O pacote inicial e os checks estão preparados. O [guia local](README.md) registra comandos, ambiente observado e limites. A publicação depende de revisão e piloto.
+**Aprovado para publicação.** O [guia local](README.md) descreve os materiais, comandos e limites de execução.
 
 ## Materiais
 

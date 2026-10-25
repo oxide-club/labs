@@ -4,7 +4,8 @@ area: "data-protocols"
 slug: "021-fuzzing-lab"
 summary: "Investigue dois defeitos de um parser OXF1 por fuzzing, reprodução, minimização e regressão."
 question: "Como transformar entradas inesperadas em defeitos compreendidos e regressões permanentes?"
-draft: true
+draft: false
+publishedAt: 2026-10-25
 topics: ["Fuzzing", "Parsing binário", "Análise de falhas"]
 prerequisites: ["Parsing binário", "Testes", "Diagnóstico de falhas"]
 tools: ["libFuzzer ou cargo-fuzz", "ASan e UBSan na variante C"]
@@ -74,7 +75,7 @@ Linux x86-64; C com libFuzzer ou Rust com cargo-fuzz; uma variante para avaliaç
 
 Escolha uma variante: C com libFuzzer ou Rust com cargo-fuzz. As duas preservam OXF1, mas exigem defeitos e diagnósticos próprios. Não é necessário concluir ambas.
 
-**Em elaboração.** A variante C possui materiais executáveis e comandos validados. O piloto permanece pendente; `draft: true` está preservado. O [guia local](README.md) registra ambiente, resultados e limitações.
+**Aprovado para publicação.** O [guia local](README.md) descreve os materiais, comandos e limites de execução.
 
 ## Materiais
 

@@ -1,6 +1,6 @@
 # Guia local — Monomorfização e dynamic dispatch
 
-Leia o [enunciado](index.md). O pacote permanece em elaboração (`draft: true`).
+Leia o [enunciado](index.md). O laboratório está aprovado para publicação, com `draft: false`.
 
 ## Ambiente
 

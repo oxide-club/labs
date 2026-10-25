@@ -29,10 +29,11 @@ class ReviewPreparationTests(unittest.TestCase):
                 for url in urls:self.assertIn(']('+url+')',text)
                 self.assertNotIn('https://docs.rs/loom/latest/',text)
                 self.assertNotIn('https://doc.rust-lang.org/nightly/nightly-rustc/src/',text)
-    def test_shared_editorial_state_does_not_publish_any_lab(self):
+    def test_approved_labs_have_publication_metadata(self):
         for lab in IDS:
             text=(ROOT/lab/'index.md').read_text()
-            self.assertRegex(text,r'(?m)^draft: true$')
-            self.assertIn('**Em elaboração.',text)
+            self.assertRegex(text,r'(?m)^draft: false$')
+            self.assertRegex(text,r'(?m)^publishedAt: \d{4}-\d{2}-\d{2}$')
+            self.assertIn('**Aprovado para publicação.',text)
             self.assertNotIn('**Em revisão.',text)
 if __name__=='__main__':unittest.main()

@@ -1,6 +1,6 @@
 # Materiais — Evidências de hardening em executáveis ELF
 
-**Situação:** instrumentos executáveis preparados; interpretação, revisão independente e piloto pendentes. Preserve `draft: true`.
+**Situação:** materiais aprovados para publicação.
 
 ## Inventário
 

@@ -4,7 +4,8 @@ area: "compilation-execution"
 slug: "023-elf-hardening-lab"
 summary: "Relacione seis builds ELF a instruções, metadados e evidências de hardening em execução."
 question: "Que evidência permite afirmar a presença e o alcance de uma mitigação num executável específico?"
-draft: true
+draft: false
+publishedAt: 2026-10-25
 topics: ["ELF", "Hardening", "Código gerado"]
 prerequisites: ["ELF", "Linking dinâmico", "Disassembly", "Mapeamentos de memória"]
 tools: ["GCC", "GNU binutils", "/proc"]
@@ -73,7 +74,7 @@ Linux x86-64; C, GCC, GNU binutils e glibc; versões a registrar.
 
 C é a linguagem-base do núcleo. As alternativas indicadas nas extensões são complementares.
 
-**Em elaboração.** Os instrumentos foram preparados e verificados em Linux x86-64. O [guia local](README.md) contém os comandos. Revisão independente e piloto continuam pendentes.
+**Aprovado para publicação.** O [guia local](README.md) descreve os materiais, comandos e limites de execução.
 
 ## Materiais
 

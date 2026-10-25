@@ -32,7 +32,7 @@ Implemente `pageprobe`, isole cada sonda num filho e construa a investigação d
 
 Build e comandos executados em cópia isolada em `/tmp`. Starter rejeitado; referência privada aprovada; oito mutantes rejeitados por requisitos distintos. As soluções e o guia reservado ficam fora do pacote. Os registros de preparação pertencem às evidências do repositório, não às previsões do participante.
 
-O guia local descreve os ambientes observados e a VM. A revisão independente identificou um falso positivo de saída 139; esta revisão o rejeita pela terminação real. Piloto e revisão humana de publicação continuam pendentes. Preserve `draft: true`.
+O guia local descreve os ambientes observados e a VM. A revisão independente identificou um falso positivo de saída 139; esta revisão o rejeita pela terminação real. A publicação foi aprovada pelo responsável.
 
 ## Origem e licenças
 
