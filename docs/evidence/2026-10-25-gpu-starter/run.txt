@@ -1,0 +1,27 @@
+Ferramentas disponíveis: nvcc, make, python3
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ make -C materials gpu BUILD=build CC=cc
+make[1]: Entering directory '/tmp/oxide-gpu-starter-package/materials'
+make[1]: Nothing to be done for 'gpu'.
+make[1]: Leaving directory '/tmp/oxide-gpu-starter-package/materials'
+Evidências desta execução: /tmp/oxide-gpu-starter-package/results/20261025-165732-qsqo9n41
++ /usr/bin/python3 experiments/measure.py
+Traceback (most recent call last):
+  File "/tmp/oxide-gpu-starter-package/checks/check.py", line 78, in <module>
+    gpu() if args.gpu else cpu()
+    ~~~^^
+  File "/tmp/oxide-gpu-starter-package/checks/check.py", line 53, in gpu
+    assert api.returncode == 0, api.stderr
+           ^^^^^^^^^^^^^^^^^^^
+AssertionError: GPU API: operation not supported
+
+Traceback (most recent call last):
+  File "/tmp/oxide-gpu-starter-package/experiments/measure.py", line 9, in <module>
+    subprocess.run([sys.executable, str(ROOT/'checks/check.py'), '--gpu'], check=True, stdout=sys.stderr)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/usr/bin/python3', '/tmp/oxide-gpu-starter-package/checks/check.py', '--gpu']' returned non-zero exit status 1.
+ERRO: Command '['/usr/bin/python3', 'experiments/measure.py']' returned non-zero exit status 1.
+make: *** [Makefile:11: run] Error 1

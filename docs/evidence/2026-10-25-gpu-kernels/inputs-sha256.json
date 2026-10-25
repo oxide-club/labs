@@ -1,0 +1,5 @@
+{
+  "017-gpu-lab/materials/kernels.cu": "71dd53ec688ac955b52525a36810ba2b3248bb92152c9d65d19c8d679c91ce1b",
+  "017-gpu-lab/checks/api.cu": "54c15b12f0976d014b2a05c9f1dc85fd628bfb08b0e9b69a137b60786f9e3371",
+  "017-gpu-lab/checks/check.py": "ff039a2bed7f115b38a871c0ad11014cce72098d3df15967422f7ad5718c7abc"
+}

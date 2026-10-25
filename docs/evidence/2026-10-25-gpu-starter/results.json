@@ -1,0 +1,18 @@
+[
+  {
+    "action": "setup",
+    "status": 0
+  },
+  {
+    "action": "build",
+    "status": 0
+  },
+  {
+    "action": "test",
+    "status": 2
+  },
+  {
+    "action": "run",
+    "status": 2
+  }
+]

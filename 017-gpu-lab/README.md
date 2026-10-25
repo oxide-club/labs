@@ -66,3 +66,7 @@ sem substituição automática pelo modo CPU.
 No modo GPU, `setup` compila e executa somente `materials/probe.cu`: verifica
 dispositivo, runtime, alocação e cópias. Não executa os kernels do participante.
 `build` permanece uma operação apenas de compilação, mesmo sem GPU disponível.
+
+Os [checks públicos](checks/README.md) incluem 60 casos diretos da API, além
+dos casos do CLI. O pacote contém o starter e os checks, sem a solução de
+referência usada na validação privada.

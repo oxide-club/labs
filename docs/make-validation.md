@@ -43,6 +43,11 @@ como previsto para o starter original.
 
 ## Recursos GPU
 
+Este registro descreve a validação anterior do starter. Após solicitação do
+responsável, um controle privado foi implementado e aprovado para validar os
+checks; a entrega mantém o starter incompleto. Veja a
+[validação dos checks](gpu-kernels-validation.md).
+
 A investigação inicial ocorreu dentro do sandbox, que ocultava os dispositivos
 `/dev/nvidia*`. A indisponibilidade observada era restrita a esse ambiente, não
 à máquina: fora do sandbox, NVIDIA-SMI reconheceu a RTX 4060 e o driver 615.78.08.

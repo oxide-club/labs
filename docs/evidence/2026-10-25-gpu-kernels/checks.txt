@@ -1,0 +1,9 @@
+Ferramentas disponíveis: nvcc, make, python3
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ make -C materials gpu BUILD=build CC=cc
+make[1]: Entering directory '/tmp/oxide-labs-make/017-gpu-lab/materials'
+make[1]: Nothing to be done for 'gpu'.
+make[1]: Leaving directory '/tmp/oxide-labs-make/017-gpu-lab/materials'
++ /usr/bin/python3 checks/check.py --gpu
+GPU API: 60 cases passed, repeated outputs and unchanged inputs.
+GPU: casos públicos passaram, incluindo caudas e rejeições.

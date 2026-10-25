@@ -1,0 +1,6 @@
+========= COMPUTE-SANITIZER
+GPU=NVIDIA GeForce RTX 4060 runtime=13040 driver=13040
+n,block,seed,kernel_ms,h2d_ms,d2h_ms,total_ms
+4194305,64,29,20.082880,14.452774,6.435210,41.260947
+========= LEAK SUMMARY: 0 bytes leaked in 0 allocations
+========= ERROR SUMMARY: 0 errors

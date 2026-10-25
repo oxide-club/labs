@@ -4,7 +4,7 @@ NVCC ?= nvcc
 CFLAGS ?= -O2 -std=c11 -Wall -Wextra -Werror
 .PHONY: cpu gpu clean
 cpu: build/cpu build/oracle-check
-gpu: build/gpu build/probe
+gpu: build/gpu build/probe build/gpu-api
 build:
 	mkdir -p build
 build/cpu: cpu.c oracle.c oracle.h | build
@@ -15,5 +15,7 @@ build/probe: probe.cu | build
 	$(NVCC) -O2 -std=c++14 probe.cu -o $@
 build/gpu: runner.cu kernels.cu oracle.c kernels.h oracle.h | build
 	$(NVCC) -O2 -std=c++14 runner.cu kernels.cu oracle.c -o $@
+build/gpu-api: ../checks/api.cu kernels.cu kernels.h | build
+	$(NVCC) -O2 -std=c++14 -I. ../checks/api.cu kernels.cu -o $@
 clean:
-	rm -f build/cpu build/gpu build/oracle-check build/probe
+	rm -f build/cpu build/gpu build/oracle-check build/probe build/gpu-api
