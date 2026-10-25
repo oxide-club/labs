@@ -1,5 +1,9 @@
 # Materiais da arena
 
+**Material histórico:** atividade consolidada no [desafio 017-arena](https://oxideclub.dev/desafios/017-arena/).
+As APIs abaixo documentam a versão anterior; não são requisitos adicionais do desafio.
+
+
 Execute os comandos abaixo na raiz deste laboratório, onde está `index.md`.
 Requisitos: compilador C11, Linux e GNU ld para o check com `--wrap`.
 Binários ficam em `/tmp`, fora dos materiais distribuídos.

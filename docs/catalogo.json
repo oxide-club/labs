@@ -21,7 +21,8 @@
     "id": "004-arena-lab",
     "curriculum": 7,
     "title": "Memory Allocation",
-    "status": "published"
+    "status": "superseded",
+    "supersededBy": "017-arena"
   },
   {
     "id": "005-cache-lab",
@@ -51,7 +52,8 @@
     "id": "009-vm-lab",
     "curriculum": 4,
     "title": "Máquinas Virtuais",
-    "status": "published"
+    "status": "superseded",
+    "supersededBy": "021-bytecode"
   },
   {
     "id": "010-concurrency-lab",

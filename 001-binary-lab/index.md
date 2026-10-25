@@ -2,224 +2,157 @@
 title: Laboratório de Representação Binária
 area: data-protocols
 slug: 001-binary-lab
-summary: Implemente um header de 32 bits e sua representação externa little-endian.
-question: Como campos lógicos viram bits de uma word e bytes de um formato externo?
+summary: Investigue como valor numérico, layout em memória e formato externo se relacionam.
+question: Quando os mesmos valores produzem bytes diferentes, e quais bytes permitem perceber a diferença?
 draft: false
 publishedAt: 2026-10-25
-topics: [Representação binária, Operadores bitwise, Endianness]
+updatedAt: 2026-10-25
+topics: [Representação binária, Endianness, Layout, Serialização]
 prerequisites: [Funções em C, Arrays, Unsigned integers, Hexadecimal]
-tools: [GCC ou Clang]
-environment: C11 com bytes de oito bits e inteiros uint32_t e uint8_t
+tools: [GCC ou Clang, Python 3]
+environment: C11 com bytes de oito bits e tipos uint8_t uint16_t e uint32_t
 difficulty: intermediate
+relatedChallenges: [005-base64, 013-record-inspector]
 ---
 
 ## O que vamos investigar
 
-### O que você vai construir
+Um inteiro, seus bytes na memória e os bytes de um arquivo são coisas relacionadas,
+mas diferentes. Você vai investigar **quais observações distinguem essas representações**.
+O instrumento já está completo. O trabalho central é formular hipóteses, escolher
+entradas que as discriminem, observar e explicar.
 
-Você vai construir **um encoder e um decoder de um header binário
-de quatro bytes**. Imagine que um programa precisa guardar ou transmitir quatro
-informações: `version`, `type`, `flags` e `length`. Sua tarefa é reunir esses
-campos em um inteiro de 32 bits, escrever esse inteiro em quatro bytes e fazer
-o caminho inverso para recuperar as informações originais.
+A investigação tem duas comparações controladas:
 
-Os mesmos dados terão três representações:
+- Preserve o valor de uma word de 32 bits e altere a ordem externa entre LE e BE.
+- Preserve os valores de três campos e altere sua ordem de declaração em duas structs C.
 
-```text
-Campos (Header)              Inteiro de 32 bits         Quatro bytes
+Little-endian (LE) escreve primeiro o byte menos significativo; big-endian (BE)
+escreve primeiro o mais significativo. Essa regra define um formato externo.
+Ela não determina automaticamente o layout que seu compilador usa para uma struct.
 
-version = 1
-type    = 2    ──pack──▶      0x22500102    ──store──▶   02 01 50 22
-flags   = 5    ◀─unpack─                   ◀──load───
-length  = 258
-```
+Uma hipótese como “o host usa LE” precisa de uma entrada capaz de distingui-la de BE.
+`0xFFFFFFFF` não permite essa distinção. Investigue por quê e escolha um contraexemplo.
+Não é necessário ter acesso a uma segunda arquitetura: as duas codificações externas
+são produzidas explicitamente no mesmo host. Essa comparação não emula outra CPU.
 
-Neste enunciado, **word** significa o inteiro de 32 bits. **Formato externo**
-é a sequência de quatro bytes que poderia ser gravada em um arquivo ou enviada
-a outro programa. O exercício trabalha essas conversões em memória; não exige
-implementar envio pela rede ou gravação em arquivo.
+### Instrumento e limites
 
-Os nomes dos campos dão contexto ao exercício. `length=258`, por exemplo, é
-apenas um número: você não precisa criar uma mensagem com 258 bytes nem fornecer
-seu conteúdo (payload).
+[representation.c](materials/experiments/representation.c) produz três codificações:
+bytes do host, bytes externos LE e bytes externos BE. Também lê bytes LE como BE
+para expor uma interpretação incompatível. Em seguida, observa tamanho, alignment
+e offsets de duas structs, sem ler ou comparar seus bytes de padding.
 
-#### As quatro funções que você deve implementar
-
-O código inicial em [packet.c](materials/starter/packet.c) contém quatro funções
-incompletas. Complete seus corpos mantendo as assinaturas de
-[packet.h](materials/starter/packet.h):
-
-| Função | Entrada | Resultado esperado |
-| --- | --- | --- |
-| `header_pack` | Um `Header` com os quatro campos | Validar os campos, reuni-los em uma word de 32 bits e indicar sucesso ou falha. |
-| `header_unpack` | Uma word de 32 bits | Separar a word e escrever os quatro campos em um `Header`. |
-| `store_le32` | Uma word de 32 bits | Escrever sua representação little-endian em um array de quatro bytes. |
-| `load_le32` | Um array de quatro bytes little-endian | Reconstruir e retornar a word de 32 bits. |
-
-### Como representar os dados
-
-#### Dos campos para a word
-
-Cada campo ocupa uma parte fixa do inteiro. As posições são numeradas de 0 a 31,
-com o bit menos significativo na posição zero:
-
-```text
-bits:  31 a 29 | 28 a 24 | 23 a 20 | 19 a 0
-       version    type     flags     length
-        3 bits   5 bits    4 bits    20 bits
-```
-
-Use shifts para posicionar os valores e operações bitwise para combinar
-ou extrair os campos. Os espaços reservados somam 32 bits e determinam os
-intervalos aceitos:
-
-| Campo | Bits da word | Largura | Valores aceitos |
-| --- | --- | ---: | --- |
-| version | 31 a 29 | 3 | 0 a 7 |
-| type | 28 a 24 | 5 | 0 a 31 |
-| flags | 23 a 20 | 4 | 0 a 15 |
-| length | 19 a 0 | 20 | 0 a 1048575 |
-
-Todos os valores nos intervalos da tabela são válidos. No exemplo acima,
-`version=1` ocupa os três bits superiores e `length=258` ocupa os vinte bits
-inferiores. Com `type=2` e `flags=5` nas posições indicadas, a word resultante
-é `0x22500102`.
-
-#### Da word para os bytes
-
-**Little-endian significa escrever primeiro o byte menos significativo.**
-Por isso, a word `0x22500102` deve produzir este array:
-
-```text
-índice:    0    1    2    3
-byte:     02   01   50   22
-```
-
-Essa ordem é uma regra do formato externo e deve ser a mesma em qualquer máquina.
-A posição dos campos no valor numérico também é fixa; a endianness da máquina
-descreve como ela representa esse valor na memória.
-
-Faça a conversão por campos e bytes explícitos. Copiar diretamente a memória da
-`struct Header` não implementa o formato: a struct guarda quatro campos
-`uint32_t`, enquanto a representação externa reúne todos eles em quatro bytes.
-O layout de `Header` na memória não define a serialização.
-
-#### Validação e condições de uso
-
-A API está em [packet.h](materials/starter/packet.h). `header_pack` retorna `false`
-se qualquer pointer for null ou um campo estiver fora do intervalo permitido
-na tabela. Por exemplo, `version` aceita valores de 0 a 7; o valor 8 deve ser
-rejeitado, pois não cabe nos três bits reservados para esse campo.
-
-Em sucesso, `header_pack` escreve a word em `out` e retorna `true`.
-Se `out` for válido, a falha deve preservar seu valor anterior. Valide a entrada
-antes de alterar a saída: descartar os bits que não cabem não é uma forma de
-rejeitar um valor inválido.
-
-`header_unpack` recebe
-um `Header *` válido e deve fazer decode de qualquer word de 32 bits.
-`store_le32` e `load_le32` recebem uma região válida de quatro bytes.
-Os argumentos de entrada e saída de cada operação não se sobrepõem.
-A conversão deve usar bytes e campos explícitos.
+As structs contêm `tag` de 8 bits, `length` de 32 e `flags` de 16. A ordem dos membros
+muda, mas seus valores são iguais. O formato externo de sete bytes mantém a ordem
+`tag`, `length` LE32 e `flags` LE16. Ele não é o header compactado da extensão histórica.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-A implementação de referência usa **C11**, mas você pode escolher outra linguagem,
-como C, Rust, Go ou Python. Rust, Go e Python são alternativas recomendadas.
-Use bytes de 8 bits e uma unsigned word de 32 bits. A conversão entre campos,
-word e bytes deve ser explícita.
+Use C11 para observar o layout dos objetos C fornecidos. Você pode usar Python,
+Rust, Go ou outra linguagem para analisar os logs e implementar a extensão de
+serialização. Uma estrutura de outra linguagem é uma comparação adicional, não
+uma observação do layout C. Não há dependências externas.
 
-Os materiais fornecem código inicial em C11. Outras linguagens são aceitas com
-adaptação do contrato, conforme o guia abaixo.
-
-Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-
-Você deve conhecer funções, arrays, condições, unsigned integers, hexadecimal e
-os operadores bitwise `&`, `|`, `^`, `<<` e `>>`. Instale GCC ou Clang e use um
-terminal. O [guia dos materiais](materials/README.md) contém os comandos completos
-para compilar, executar os checks e observar a representação do host.
-
-Não aplique as funções que exigem quatro bytes a buffers menores. Null pointers
-só são entradas a rejeitar em `header_pack`; as outras funções têm pré-condições.
+Conheça hexadecimal, shifts e arrays. Registre sistema, arquitetura, compilador e
+flags. Siga os comandos do [guia de materiais](materials/README.md).
+Não use cast de um array de bytes para pointer de inteiro para interpretar os dados.
+O instrumento usa acesso por `unsigned char` à word e conversões explícitas.
 
 ## Materiais
 
-- [Starter](materials/starter/packet.c): corpos incompletos das quatro funções.
-- [Checks públicos](materials/checks/tests.c): test vectors, limites, falhas e round-trip.
-- [Fixtures](materials/fixtures/vectors.csv): os quatro test vectors do contrato original.
-- [Experimento](materials/experiments/observe.c): word, bytes do host e bytes externos.
-- [Guia autocontido](materials/README.md): contrato e instruções de execução.
-- [Modelo de relato](report-template.md): roteiro para registrar evidências.
+- [Instrumento completo](materials/experiments/representation.c).
+- [Guia de execução e registro](materials/README.md).
+- [Modelo de relato](report-template.md) para hipóteses, evidências e limitações.
+- [Contrato histórico opcional](materials/legacy.md), com starter, vetores e checks do header.
+
+Os checks do header antigo verificam aquela implementação opcional. Eles não avaliam
+esta investigação e não precisam passar para iniciá-la ou concluí-la.
 
 ## Etapas da investigação
 
-1. **Prever.** Escolha duas combinações de campos válidos e desenhe as posições
-   de bits ocupadas por cada campo. Sem executar código, calcule suas words
-   e seus bytes. Para praticar com os test vectors fornecidos, use os campos
-   `(version=2, type=17, flags=8, length=4096)` e
-   `(version=7, type=31, flags=15, length=1048575)`; registre o raciocínio antes
-   de consultar os resultados esperados.
-2. **Observar.** Consulte os [test vectors conhecidos](materials/fixtures/vectors.csv).
-   Compile o starter e execute os checks. Registre status, primeira falha e contagem.
-   A compilação deve funcionar; o starter deve falhar nos testes de funcionalidade.
-3. **Explicar.** Justifique a posição de cada campo e a ordem dos quatro bytes.
-   Explique por que truncar campos inválidos contraria o contrato e por que a saída
-   precisa permanecer intacta em uma falha.
-4. **Implementar.** Complete `packet.c`, sem alterar a API, sem usar o layout da
-   `struct` como formato externo e sem fornecer payload. Você pode começar pelo
-   par `header_pack`/`header_unpack` e depois implementar o par
-   `store_le32`/`load_le32`. Crie também seus testes.
-5. **Verificar.** Execute os checks e acrescente combinações válidas próprias.
-   Rode o experimento e compare host e formato externo. Explique por que dois
-   componentes com o mesmo erro podem passar em round-trip, mas falhar nos test vectors.
+### 1. Formular hipóteses discriminantes
 
-Um round-trip verifica, por exemplo, se o pack seguido de unpack recupera
-os campos originais, ou se escrever e depois ler os bytes recupera a word.
-Isso é necessário, mas não basta: se duas funções usarem a mesma ordem errada,
-uma poderá desfazer o erro da outra. Os test vectors conhecidos verificam também se
-a word e os bytes correspondem exatamente ao formato exigido.
+Antes de executar, registre duas interpretações possíveis para os bytes do host:
+LE e BE. Preveja os bytes de `0x01020304`, `0x22500102` e `0xFFFFFFFF` em ambas.
+Identifique qual entrada não distingue as hipóteses. Admita outra ordem se os dados
+não sustentarem nenhuma delas, em vez de forçar uma classificação.
+
+Formule também uma hipótese sobre as structs: mesmos campos e valores implicam
+mesmo tamanho, mesmos offsets e mesma representação externa? Separe essas três afirmações.
+Desenhe uma tabela prevista, marcando o que depende da ABI e precisa ser observado.
+
+### 2. Observar bytes e interpretações
+
+Compile o instrumento e salve a saída original. Para cada word, compare host, LE e BE.
+Relacione a coluna `wrong` à leitura de bytes LE por um leitor BE.
+Explique por que o valor numérico não muda ao escolher outra codificação, mas muda
+quando os mesmos bytes recebem uma interpretação incompatível.
+
+Escolha uma quarta word que discrimine LE de BE e acrescente-a ao array `words` numa
+cópia do instrumento. Preveja o resultado antes de executar. Essa pequena alteração
+é a implementação obrigatória; entregue o patch e a observação correspondente.
+
+### 3. Investigar o layout
+
+Registre `sizeof`, `_Alignof` e `offsetof` de A e B. Calcule os intervalos ocupados
+pelos campos, os intervalos de padding e o espaço após o último campo.
+Não suponha um tamanho universal nem uma diferença obrigatória entre os tamanhos.
+Mesmo se os tamanhos coincidirem, verifique separadamente os offsets.
+
+Confronte a hipótese com `logical_equal` e `external_equal`. Explique por que igualdade
+de campos e de bytes serializados não exige igualdade de layout.
+Acrescente a uma cópia do instrumento um campo `uint8_t marker` no início de A,
+sem mudar o formato externo. Preveja quais offsets podem mudar, meça e explique.
+Mantenha o marker fora da igualdade dos três campos originais.
+
+### 4. Confrontar uma hipótese de round-trip
+
+Usando as funções do instrumento, acrescente numa cópia uma leitura LE explícita.
+Demonstre uma ida e volta BE→leitura BE que recupera a word, embora um consumidor
+que exija LE interprete aqueles bytes incorretamente. Use uma word discriminante.
+Compare com bytes LE calculados independentemente. Explique qual teste distingue
+“o par desfaz suas próprias operações” de “o par implementa o formato combinado”.
+
+### 5. Explicar o alcance das evidências
+
+Repita as observações com `-O0` e `-O2`. Não é obrigatório observar diferenças.
+Separe propriedades do formato, observações desta ABI e conclusões não demonstradas.
+Escolha uma hipótese que os dados rejeitam ou delimitam. Se sua previsão estava
+correta, apresente uma hipótese alternativa rejeitada; não invente um erro inicial.
 
 ## Critérios de conclusão
 
-Execute também o build com UndefinedBehaviorSanitizer do guia; ele deve terminar com status zero e sem `runtime error`.
+Entregue o relato, os comandos, os logs e suas alterações instrumentais. O relato deve conter:
 
-Entregue `packet.h`, `packet.c` com as quatro funções implementadas, seus testes
-automatizados e um relato curto seguindo o [modelo](report-template.md).
-No relato, explique como posicionou e recuperou os campos, por que os bytes têm
-aquela ordem e o que os resultados dos testes e do experimento demonstram.
-Os checks públicos devem
-terminar com status zero e zero falhas após sua implementação. Demonstre:
+- Hipóteses anteriores à execução, incluindo um caso que não as distingue.
+- Tabela de bytes para as quatro words e explicação da interpretação incompatível.
+- Tamanhos, offsets e padding de A/B, antes e depois de adicionar o marker.
+- Evidência de que igualdade lógica e formato externo podem sobreviver à mudança de layout.
+- Contraexemplo no qual round-trip passa e o formato externo está errado.
+- Comparação O0/O2, ambiente e limites de generalização.
 
-- os quatro test vectors e seu decoding;
-- a rejeição de `version=8`, `type=32`, `flags=16` e `length=1048576`, testados separadamente;
-- a preservação do valor de saída `0xA5A5A5A5` em caso de falha;
-- a rejeição de null pointers em `header_pack`;
-- a conversão de round-trip.
-
-Compare campos individualmente; igualdade dos bytes de uma `struct` não define
-igualdade entre headers. Explique a separação entre word e bytes e registre
-o ambiente. A execução dos checks complementa a explicação; não prova correção geral.
+O programa funcional, sozinho, não conclui o laboratório. Outra pessoa deve conseguir
+reproduzir as observações e entender qual hipótese cada comparação sustenta ou rejeita.
+Não use igualdade de memória bruta de structs como prova de igualdade dos campos.
 
 ## Extensões opcionais
 
-Acrescente `uint32_t rotate_left32(uint32_t word, unsigned n)` e
-`unsigned count_bits32(uint32_t word)`. A rotação aceita `0 <= n < 32`, incluindo
-zero; a contagem retorna o total de bits iguais a um. A tabela completa fica no
-[guia dos materiais](materials/README.md). Essas funções são opcionais.
+Implemente o header compactado de quatro bytes do [guia histórico](materials/legacy.md).
+Se fizer essa extensão, preserve sua API e rode seus checks e UBSan.
+Você também pode comparar outra arquitetura ou outra ABI, registrando o ambiente.
+Essas atividades não substituem as comparações obrigatórias.
 
 ## Participação no clube
 
-Compartilhe uma tentativa com hipótese, comando, entrada e resultado observado.
-Ao pedir ajuda, indique o primeiro test vector que falha e a explicação que tentou.
-Evite publicar uma solução completa na discussão inicial. Melhorias nos checks
-devem citar o requisito do contrato que passam a verificar.
+Compartilhe uma hipótese, o caso que a distingue de uma alternativa e os bytes observados.
+Ao pedir ajuda, inclua comando, compilador e a primeira diferença que não conseguiu explicar.
+Use o [modelo de relato](report-template.md); preserve previsões anteriores à coleta.
 
 ## Referências e atividades relacionadas
 
-Leia as [referências orientadas](references.md) após concluir as etapas obrigatórias: C11 para
-regras de shift, Protobuf para leitura com limites e Linux para campos de
-rede. A representação binária prepara a leitura de object files, protocolos e
-metadados de allocators. A inspiração temática vem do Data Lab de CS:APP;
-o formato e a API usados aqui pertencem ao caderno do Oxide Club.
+As [referências orientadas](references.md) apoiam a explicação de tipos, shifts e formatos externos.
+Base64 e o inspetor de registros são desafios de implementação relacionados.
+Este laboratório investiga por que uma representação funciona e o que suas observações permitem concluir.

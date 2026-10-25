@@ -5,7 +5,9 @@ slug: 004-arena-lab
 summary: Implemente uma arena com alignment correto e explique limites, falhas e reset.
 question: Como distribuir uma região limitada preservando alignment, limites e estado?
 draft: false
+supersededBy: 017-arena
 publishedAt: 2026-10-25
+updatedAt: 2026-10-25
 topics: [Memória, Alocação, C]
 prerequisites: [Pointers, size_t, malloc e free, Unsigned overflow]
 tools: [Compilador C11, GNU ld]
@@ -14,6 +16,11 @@ difficulty: intermediate
 ---
 
 ## O que vamos investigar
+
+Esta atividade foi consolidada no [desafio 017-arena](https://oxideclub.dev/desafios/017-arena/).
+O roteiro abaixo permanece como material histórico. Para iniciar ou continuar, use o desafio;
+não é necessário implementar os dois contratos.
+
 
 ### O que você vai construir
 
