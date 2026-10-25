@@ -1,0 +1,11 @@
+
+=================================================================
+==2208==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x55852d3fbbe0 in malloc /home/buildozer/aports/main/llvm-runtimes/src/llvm-project-20.1.8.src/compiler-rt/lib/asan/asan_malloc_linux.cpp:67:3
+    #1 0x55852d440601 in leak /home/lab/probes/leak.c:3:51
+    #2 0x55852d440643 in main /home/lab/probes/leak.c:4:16
+    #3 0x7fc76cc48455  (/lib/ld-musl-x86_64.so.1+0x41455) (BuildId: 986a74df4394717ee2838c5c7d53f87e81825f6d)
+
+SUMMARY: AddressSanitizer: 64 byte(s) leaked in 1 allocation(s).
