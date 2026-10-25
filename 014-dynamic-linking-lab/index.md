@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Bibliotecas Compartilhadas e Linking Dinâmico
+area: compilation-execution
 slug: 014-dynamic-linking-lab
 summary: Compare archives e shared objects e implemente carregamento explícito com diagnóstico de erros.
 question: Como o executável utiliza código de uma biblioteca em outro arquivo?

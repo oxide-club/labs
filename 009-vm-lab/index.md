@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Máquinas Virtuais
+area: compilation-execution
 slug: 009-vm-lab
 summary: Implemente uma VM de stack com saltos, variáveis e falhas observáveis.
 question: Como instruções alteram o estado de uma máquina abstrata?

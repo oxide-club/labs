@@ -134,3 +134,10 @@ ABI e runtime separados quando a linguagem fizer parte do contrato.
 Antes de declarar uma variante oficial, verifique build, exemplos, fixtures,
 rejeição esperada do starter e distribuição do pacote. Registre o que não foi
 executado. Um starter incompleto não deve passar nos checks de conclusão.
+
+## Áreas de interesse
+
+Cada roteiro, inclusive rascunhos, declara uma única `area` com um ID de
+`areas.json`. O registro define título, descrição, slug e ordem das áreas no site.
+Escolha a área principal; `topics` continua descrevendo os conceitos específicos.
+Não renumere atividades ao mudar sua área. Atualize o registro para criar áreas.

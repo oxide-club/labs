@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Protocolos Binários
+area: binary-reverse-engineering
 slug: 011-protocol-lab
 summary: Implemente framing incremental com limites e erros explícitos.
 question: Como reconhecer mensagens em fragmentos arbitrários de bytes?

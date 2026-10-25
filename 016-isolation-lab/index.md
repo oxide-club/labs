@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Isolamento de Processos
+area: systems-concurrency
 slug: 016-isolation-lab
 summary: Construa um supervisor limitado e investigue recursos, namespaces e políticas de syscalls em VM descartável.
 question: Quais propriedades distinguem supervisão, limites de recursos e isolamento de segurança?

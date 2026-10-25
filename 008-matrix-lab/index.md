@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Multiplicação Matricial
+area: performance-parallelism
 slug: 008-matrix-lab
 summary: Implemente três variantes e investigue tempos e localidade.
 question: Por que a mesma operação O(mkn) pode levar tempos diferentes?

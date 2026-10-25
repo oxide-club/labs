@@ -1,4 +1,5 @@
 """SPDX-License-Identifier: MIT"""
+import json
 import importlib.util
 from pathlib import Path
 import tempfile
@@ -11,6 +12,7 @@ class ValidationTests(unittest.TestCase):
         module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
         return module
     def fixture(self, root, module):
+        (root/'areas.json').write_text(json.dumps([dict(id='memory',slug='memoria',title='Memória',description='Explore memória.')]))
         lab=root/'001-test-lab'; lab.mkdir()
         (lab/'index.md').write_text('''---
 title: Laboratório de Teste
@@ -23,11 +25,28 @@ prerequisites: [Python]
 tools: [Python 3]
 environment: Linux
 difficulty: intermediate
+area: memory
 ---
 '''+'\n'.join('## '+title+'\n\nTexto.\n' for title in module.SECTIONS))
         for name in ['README.md','references.md','report-template.md','materials/README.md']:
             p=lab/name; p.parent.mkdir(parents=True,exist_ok=True); p.write_text('Texto.\n')
         return lab
+    def test_rejects_unknown_area_even_in_drafts(self):
+        module=self.module()
+        with tempfile.TemporaryDirectory() as d:
+            lab=self.fixture(Path(d),module);p=lab/'index.md'
+            p.write_text(p.read_text().replace('area: memory','area: unknown'))
+            self.assertTrue(any('area' in e for e in module.validate_lab(lab)))
+    def test_rejects_invalid_registry(self):
+        module=self.module()
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);self.fixture(root,module);p=root/'areas.json'
+            valid=json.loads(p.read_text())
+            for data in [[], {}, [None], valid+valid, [dict(valid[0], slug='../bad')]]:
+                p.write_text(json.dumps(data))
+                with self.assertRaises(ValueError): module.load_areas(root)
+            p.unlink();p.symlink_to(root/'missing.json')
+            with self.assertRaises(ValueError): module.load_areas(root)
     def test_valid_then_rejects_slug_and_missing_link(self):
         module=self.module()
         with tempfile.TemporaryDirectory() as d:

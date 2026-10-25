@@ -1,5 +1,6 @@
 ---
 title: Laboratório de ABI e Calling Conventions
+area: compilation-execution
 slug: 012-abi-lab
 summary: Investigue argumentos, preservação de registradores e alinhamento entre C e assembly.
 question: Como módulos compilados separadamente concordam sobre uma chamada?

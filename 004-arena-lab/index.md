@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Memory Allocation
+area: memory
 slug: 004-arena-lab
 summary: Implemente uma arena alinhada e explique limites, falhas e reset.
 question: Como distribuir uma região limitada preservando alinhamento, limites e estado?

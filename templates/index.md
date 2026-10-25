@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Tema
+area: memory
 slug: 000-tema
 summary: Descreva o resultado que o participante deve produzir.
 question: Qual pergunta vamos investigar?

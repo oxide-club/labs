@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Mecanismos de Atenção
+area: performance-parallelism
 slug: 018-attention-lab
 summary: Implemente attention com aritmética explícita e investigue estabilidade, causalidade e memória.
 question: Como comparar posições de uma sequência sem perder estabilidade numérica nem consultar posições futuras?

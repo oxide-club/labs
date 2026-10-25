@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Representação Binária
+area: binary-reverse-engineering
 slug: 001-binary-lab
 summary: Implemente um header de 32 bits e sua representação externa little-endian.
 question: Como campos lógicos viram bits de uma palavra e bytes de um formato externo?

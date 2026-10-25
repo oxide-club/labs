@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Compilação e Execução
+area: compilation-execution
 slug: 007-compilation-lab
 summary: Observe a transformação de dois módulos C em um processo Linux.
 question: O que acontece entre o arquivo-fonte e o processo em execução?

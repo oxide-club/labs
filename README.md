@@ -97,3 +97,10 @@ e `challenges`, com suporte adicional ao repositório e aos identificadores de l
 Avisos de publicação em `#novidades` dependem do repositório do site.
 A implementação atual do site contempla apenas desafios e notas;
 este workflow divulga propostas de laboratórios para revisão.
+
+## Áreas de interesse
+
+Cada roteiro, inclusive rascunhos, declara uma única `area` com um ID de
+`areas.json`. O registro define título, descrição, slug e ordem das áreas no site.
+Escolha a área principal; `topics` continua descrevendo os conceitos específicos.
+Não renumere atividades ao mudar sua área. Atualize o registro para criar áreas.

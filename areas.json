@@ -1,0 +1,32 @@
+[
+  {
+    "id": "binary-reverse-engineering",
+    "slug": "representacao-binaria-e-engenharia-reversa",
+    "title": "Representação binária e engenharia reversa",
+    "description": "Investigue representações, formatos e o comportamento de programas."
+  },
+  {
+    "id": "memory",
+    "slug": "memoria-e-alocacao",
+    "title": "Memória e alocação",
+    "description": "Explore tempo de vida, segurança de memória e estratégias de alocação."
+  },
+  {
+    "id": "systems-concurrency",
+    "slug": "sistemas-operacionais-e-concorrencia",
+    "title": "Sistemas operacionais e concorrência",
+    "description": "Investigue processos, comunicação, sincronização e execução assíncrona."
+  },
+  {
+    "id": "compilation-execution",
+    "slug": "compilacao-linguagens-e-execucao",
+    "title": "Compilação, linguagens e execução",
+    "description": "Explore como código é compilado, ligado e executado."
+  },
+  {
+    "id": "performance-parallelism",
+    "slug": "desempenho-e-computacao-paralela",
+    "title": "Desempenho e computação paralela",
+    "description": "Investigue localidade, operações numéricas e paralelismo."
+  }
+]

@@ -15,7 +15,7 @@ SECTIONS = ['O que vamos investigar', 'Antes de começar', 'Materiais',
             'Etapas da investigação', 'Critérios de conclusão', 'Extensões opcionais',
             'Participação no clube', 'Referências e atividades relacionadas']
 REQUIRED = ['title', 'slug', 'summary', 'question', 'draft', 'topics',
-            'prerequisites', 'tools', 'environment', 'difficulty']
+            'prerequisites', 'tools', 'environment', 'difficulty', 'area']
 
 
 def prose(text):
@@ -45,6 +45,25 @@ def distributed(path):
     return (parts[0] in ['materials','checks','experiments']
             and not set(parts[1:-1]) & {'node_modules','__pycache__','target','build','dist','solutions'}
             and (path.name in {'Makefile', 'go.mod'} or path.suffix in {'.md','.txt','.c','.h','.py','.json','.csv','.rs','.S','.s','.cu','.toml','.go'}))
+
+
+def load_areas(root):
+    path = root/'areas.json'
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('areas.json deve ser um arquivo regular')
+    areas = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(areas, list) or not areas:
+        raise ValueError('areas.json deve conter áreas')
+    for area in areas:
+        if not isinstance(area, dict) or any(
+            not isinstance(area.get(key), str) or not area[key].strip()
+            for key in ['id', 'slug', 'title', 'description']
+        ) or any(not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', area[key]) for key in ['id', 'slug']):
+            raise ValueError('área inválida em areas.json')
+    for key in ['id', 'slug']:
+        if len({a[key] for a in areas}) != len(areas):
+            raise ValueError(f'{key} duplicado em areas.json')
+    return areas
 
 
 def validate_lab(lab):
@@ -83,6 +102,13 @@ def validate_lab(lab):
             errors.append('publicação sem publishedAt')
         if metadata.get('difficulty') not in ['beginner','intermediate','advanced']:
             errors.append('difficulty inválida')
+        try:
+            areas = load_areas(lab.parent)
+            area = metadata.get('area', '').strip().strip('\"\'')
+            if area not in {entry['id'] for entry in areas}:
+                errors.append('area deve referenciar um ID de areas.json')
+        except (ValueError, OSError) as error:
+            errors.append(str(error))
         body = text[match.end():]
     headings = re.findall(r'^## (.+)$', prose(body), re.M)
     if headings != SECTIONS:

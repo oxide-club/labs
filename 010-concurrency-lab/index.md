@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Concorrência e Sincronização
+area: systems-concurrency
 slug: 010-concurrency-lab
 summary: Corrija um contador, implemente uma fila limitada e investigue deadlock.
 question: Como coordenar threads que compartilham estado e precisam terminar?

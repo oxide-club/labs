@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Computação Paralela em GPU
+area: performance-parallelism
 slug: 017-gpu-lab
 summary: Implemente soma vetorial e reduction em CUDA e separe cálculo de comunicação.
 question: Quando a distribuição de trabalho compensa o custo de transferir dados para a GPU?

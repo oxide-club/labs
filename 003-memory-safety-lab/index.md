@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Segurança de Memória
+area: memory
 slug: 003-memory-safety-lab
 summary: Diagnostique um use-after-free e corrija o lifetime sem causar memory leak.
 question: Quando um ponteiro deixa de permitir acesso aos dados?

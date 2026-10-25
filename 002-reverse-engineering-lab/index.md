@@ -1,5 +1,6 @@
 ---
 title: Laboratório de Engenharia Reversa
+area: binary-reverse-engineering
 slug: 002-reverse-engineering-lab
 summary: Reconstrua a decisão de um executável e justifique suas restrições com disassembly.
 question: Como reconstruir uma decisão observando instruções de máquina?
