@@ -43,15 +43,33 @@ como previsto para o starter original.
 
 ## Recursos GPU
 
-A investigação encontrou nvcc instalado, mas nenhum dispositivo CUDA acessível.
-Antes da correção, setup retornava zero apenas por encontrar as ferramentas.
-Agora setup compila e executa a sonda já existente probe.cu: retornou erro com
-`no CUDA-capable device is detected`, sem executar kernels do participante.
-`make build MODE=gpu` compilou os binários CUDA com sucesso mesmo sem dispositivo,
-confirmando a separação entre build e execução. Os testes de regressão cobrem
-recursos disponíveis e indisponíveis com uma
-sonda substituta, sem exigir GPU na suíte local. Compilação e validação de
-kernels CUDA são coberturas diferentes; não houve validação de kernels GPU.
+A investigação inicial ocorreu dentro do sandbox, que ocultava os dispositivos
+`/dev/nvidia*`. A indisponibilidade observada era restrita a esse ambiente, não
+à máquina: fora do sandbox, NVIDIA-SMI reconheceu a RTX 4060 e o driver 615.78.08.
+A correção de setup continua válida: detecta quando as ferramentas existem, mas
+o dispositivo não está acessível. Os testes cobrem ambas as condições.
+
+A pedido do responsável, a interface Make foi exercitada fora do sandbox,
+com acesso à RTX 4060 (runtime e driver CUDA reportados: 13040):
+
+| Comando | Status do Make | Resultado |
+| --- | --- | --- |
+| `make setup MODE=gpu` | 0 | Sonda verificou dispositivo, alocação e cópias |
+| `make build MODE=gpu` | 0 | Binários CUDA compilados e atualizados |
+| `make test MODE=gpu` | 2 | Primeiro caso, n=0/bloco=64, recusado com operation not supported |
+| `make run MODE=gpu` | 2 | Medição recusada porque os checks falharam |
+
+O arquivo distribuído `materials/kernels.cu` ainda contém os TODOs de
+`launch_add` e `launch_reduce`, ambos retornando `cudaErrorNotSupported`.
+Seu SHA256, igual no checkout principal, no branch e no pacote testado, é
+`86abce55506290ee1b9bc9df9126735630960993c1a3f50fa1d6c99200656f56`.
+A suíte para na primeira falha: os demais casos não foram aprovados nem medidos.
+Não há implementação de kernels nesse starter que possa ser declarada validada.
+Os fontes foram preservados; não foi introduzida uma solução do exercício.
+
+[Logs de setup, build, test e run](evidence/2026-10-25-make-gpu/results.json)
+registram esta execução. O README da atividade menciona uma implementação
+privada validada anteriormente; isso não torna o starter distribuído completo.
 
 ## Evidências
 

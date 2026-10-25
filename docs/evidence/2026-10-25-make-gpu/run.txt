@@ -1,0 +1,26 @@
+Ferramentas disponíveis: nvcc, make, python3
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ make -C materials gpu BUILD=build CC=cc
+make[1]: Entering directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
+make[1]: Nothing to be done for 'gpu'.
+make[1]: Leaving directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
+Evidências desta execução: /tmp/oxide remaining packages/017-gpu-lab/results/20261025-164822-hw7j3d1j
++ /usr/bin/python3 experiments/measure.py
+Traceback (most recent call last):
+  File "/tmp/oxide remaining packages/017-gpu-lab/checks/check.py", line 75, in <module>
+    gpu() if args.gpu else cpu()
+    ~~~^^
+  File "/tmp/oxide remaining packages/017-gpu-lab/checks/check.py", line 55, in gpu
+    assert result.returncode == 0, (n, block, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (0, 64, 'GPU=NVIDIA GeForce RTX 4060 runtime=13040 driver=13040\noperation not supported\n')
+Traceback (most recent call last):
+  File "/tmp/oxide remaining packages/017-gpu-lab/experiments/measure.py", line 9, in <module>
+    subprocess.run([sys.executable, str(ROOT/'checks/check.py'), '--gpu'], check=True, stdout=sys.stderr)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/usr/bin/python3', '/tmp/oxide remaining packages/017-gpu-lab/checks/check.py', '--gpu']' returned non-zero exit status 1.
+ERRO: Command '['/usr/bin/python3', 'experiments/measure.py']' returned non-zero exit status 1.
+make: *** [Makefile:11: run] Error 1

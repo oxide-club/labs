@@ -1,0 +1,17 @@
+Ferramentas disponíveis: nvcc, make, python3
+Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
++ make -C materials gpu BUILD=build CC=cc
+make[1]: Entering directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
+make[1]: Nothing to be done for 'gpu'.
+make[1]: Leaving directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
++ /usr/bin/python3 checks/check.py --gpu
+Traceback (most recent call last):
+  File "/tmp/oxide remaining packages/017-gpu-lab/checks/check.py", line 75, in <module>
+    gpu() if args.gpu else cpu()
+    ~~~^^
+  File "/tmp/oxide remaining packages/017-gpu-lab/checks/check.py", line 55, in gpu
+    assert result.returncode == 0, (n, block, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (0, 64, 'GPU=NVIDIA GeForce RTX 4060 runtime=13040 driver=13040\noperation not supported\n')
+ERRO: Command '['/usr/bin/python3', 'checks/check.py', '--gpu']' returned non-zero exit status 1.
+make: *** [Makefile:11: test] Error 1
