@@ -19,31 +19,31 @@ todas as toolchains. Para uma atividade existente, use
 
 ## Catálogo
 
-Os 18 laboratórios estão aprovados para publicação, com `draft: false`.
-O estado `publication-ready` indica aprovação; `published` indica publicação confirmada.
+Os 18 laboratórios estão [publicados no website](https://oxideclub.dev/labs/), com `draft: false`.
+O estado `published` no catálogo indica publicação confirmada.
 Os starters continuam incompletos por desenho.
 O [registro de IDs](docs/catalogo.json) mantém a correspondência com o currículo.
 
 | Laboratório | Estado |
 | --- | --- |
-| [001 — Representação Binária](001-binary-lab/index.md) | Aprovado; publicação pendente |
-| [002 — Engenharia Reversa](002-reverse-engineering-lab/index.md) | Aprovado; publicação pendente |
-| [003 — Segurança de Memória](003-memory-safety-lab/index.md) | Aprovado; publicação pendente |
-| [004 — Memory Allocation](004-arena-lab/index.md) | Aprovado; publicação pendente |
-| [005 — Cache e Localidade](005-cache-lab/index.md) | Publicado; preservado |
-| [006 — Processos e Pipes](006-processes-lab/index.md) | Aprovado; publicação pendente |
-| [007 — Compilação e Execução](007-compilation-lab/index.md) | Aprovado; publicação pendente |
-| [008 — Multiplicação Matricial](008-matrix-lab/index.md) | Aprovado; publicação pendente |
-| [009 — Máquinas Virtuais](009-vm-lab/index.md) | Aprovado; publicação pendente |
-| [010 — Concorrência e Sincronização](010-concurrency-lab/index.md) | Aprovado; publicação pendente |
-| [011 — Protocolos Binários](011-protocol-lab/index.md) | Aprovado; publicação pendente |
-| [012 — ABI e Calling Conventions](012-abi-lab/index.md) | Aprovado; publicação pendente |
-| [013 — Syscalls](013-syscalls-lab/index.md) | Aprovado; publicação pendente |
-| [014 — Bibliotecas Compartilhadas e Linking Dinâmico](014-dynamic-linking-lab/index.md) | Aprovado; publicação pendente |
-| [015 — Execução Assíncrona](015-async-lab/index.md) | Aprovado; publicação pendente |
-| [016 — Isolamento de Processos](016-isolation-lab/index.md) | Aprovado; publicação pendente |
-| [017 — Computação Paralela em GPU](017-gpu-lab/index.md) | Aprovado; publicação pendente |
-| [018 — Mecanismos de Atenção](018-attention-lab/index.md) | Aprovado; publicação pendente |
+| [001 — Representação Binária](001-binary-lab/index.md) | Publicado |
+| [002 — Engenharia Reversa](002-reverse-engineering-lab/index.md) | Publicado |
+| [003 — Segurança de Memória](003-memory-safety-lab/index.md) | Publicado |
+| [004 — Memory Allocation](004-arena-lab/index.md) | Publicado |
+| [005 — Cache e Localidade](005-cache-lab/index.md) | Publicado |
+| [006 — Processos e Pipes](006-processes-lab/index.md) | Publicado |
+| [007 — Compilação e Execução](007-compilation-lab/index.md) | Publicado |
+| [008 — Multiplicação Matricial](008-matrix-lab/index.md) | Publicado |
+| [009 — Máquinas Virtuais](009-vm-lab/index.md) | Publicado |
+| [010 — Concorrência e Sincronização](010-concurrency-lab/index.md) | Publicado |
+| [011 — Protocolos Binários](011-protocol-lab/index.md) | Publicado |
+| [012 — ABI e Calling Conventions](012-abi-lab/index.md) | Publicado |
+| [013 — Syscalls](013-syscalls-lab/index.md) | Publicado |
+| [014 — Bibliotecas Compartilhadas e Linking Dinâmico](014-dynamic-linking-lab/index.md) | Publicado |
+| [015 — Execução Assíncrona](015-async-lab/index.md) | Publicado |
+| [016 — Isolamento de Processos](016-isolation-lab/index.md) | Publicado |
+| [017 — Computação Paralela em GPU](017-gpu-lab/index.md) | Publicado |
+| [018 — Mecanismos de Atenção](018-attention-lab/index.md) | Publicado |
 
 Os números identificam os laboratórios. Você pode escolher a ordem de estudo.
 
