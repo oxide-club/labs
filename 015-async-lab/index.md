@@ -1,6 +1,6 @@
 ---
 title: Laboratório de Execução Assíncrona
-area: systems-concurrency
+area: concurrency-parallelism
 slug: 015-async-lab
 summary: Construa um executor cooperativo com notificações e estados explícitos.
 question: Como várias tarefas progridem sem uma thread para cada tarefa?

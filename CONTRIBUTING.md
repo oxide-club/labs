@@ -139,5 +139,10 @@ executado. Um starter incompleto não deve passar nos checks de conclusão.
 
 Cada roteiro, inclusive rascunhos, declara uma única `area` com um ID de
 `areas.json`. O registro define título, descrição, slug e ordem das áreas no site.
-Escolha a área principal; `topics` continua descrevendo os conceitos específicos.
+Escolha a área principal pela pergunta central e pela investigação exigida no
+roteiro. Use `topics` para conceitos transversais, como desempenho, segurança,
+memória e ponto flutuante; a linguagem ou ferramenta utilizada não determina a área.
+Percursos de estudo podem atravessar áreas e não definem a classificação.
 Não renumere atividades ao mudar sua área. Atualize o registro para criar áreas.
+
+Consulte a distribuição atual no [README](README.md#áreas-de-interesse).

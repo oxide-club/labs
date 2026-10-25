@@ -102,5 +102,17 @@ este workflow divulga propostas de laboratórios para revisão.
 
 Cada roteiro, inclusive rascunhos, declara uma única `area` com um ID de
 `areas.json`. O registro define título, descrição, slug e ordem das áreas no site.
-Escolha a área principal; `topics` continua descrevendo os conceitos específicos.
+Escolha a área principal pela pergunta central e pela investigação exigida no
+roteiro. Use `topics` para conceitos transversais, como desempenho, segurança,
+memória e ponto flutuante; a linguagem ou ferramenta utilizada não determina a área.
+Percursos de estudo podem atravessar áreas e não definem a classificação.
 Não renumere atividades ao mudar sua área. Atualize o registro para criar áreas.
+
+| Área | Escopo | Laboratórios atuais |
+| --- | --- | --- |
+| Representação de dados e protocolos | Codificação, serialização e reconhecimento de mensagens em bytes. | 001, 011 |
+| Memória e localidade | Tempo de vida, alocação, validade dos acessos e comportamento da cache. | 003, 004, 005 |
+| Compilação e execução de programas | Transformação, interpretação, linking e análise de código executável. | 002, 007, 009, 012, 014 |
+| Sistemas operacionais e processos | Interfaces do kernel, processos, recursos e isolamento. | 006, 013, 016 |
+| Concorrência e paralelismo | Progresso de tarefas, sincronização e distribuição de trabalho. | 010, 015, 017 |
+| Computação numérica | Operações matemáticas, custo computacional, memória e precisão. | 008, 018 |

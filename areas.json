@@ -1,32 +1,38 @@
 [
   {
-    "id": "binary-reverse-engineering",
-    "slug": "representacao-binaria-e-engenharia-reversa",
-    "title": "Representação binária e engenharia reversa",
-    "description": "Investigue representações, formatos e o comportamento de programas."
+    "id": "data-protocols",
+    "slug": "representacao-de-dados-e-protocolos",
+    "title": "Representação de dados e protocolos",
+    "description": "Investigue como dados são codificados, serializados e reconhecidos em fluxos de bytes."
   },
   {
     "id": "memory",
-    "slug": "memoria-e-alocacao",
-    "title": "Memória e alocação",
-    "description": "Explore tempo de vida, segurança de memória e estratégias de alocação."
-  },
-  {
-    "id": "systems-concurrency",
-    "slug": "sistemas-operacionais-e-concorrencia",
-    "title": "Sistemas operacionais e concorrência",
-    "description": "Investigue processos, comunicação, sincronização e execução assíncrona."
+    "slug": "memoria-e-localidade",
+    "title": "Memória e localidade",
+    "description": "Explore tempo de vida, alocação, segurança de memória e localidade dos acessos."
   },
   {
     "id": "compilation-execution",
-    "slug": "compilacao-linguagens-e-execucao",
-    "title": "Compilação, linguagens e execução",
-    "description": "Explore como código é compilado, ligado e executado."
+    "slug": "compilacao-e-execucao-de-programas",
+    "title": "Compilação e execução de programas",
+    "description": "Investigue como código é compilado, ligado, interpretado e analisado em sua forma executável."
   },
   {
-    "id": "performance-parallelism",
-    "slug": "desempenho-e-computacao-paralela",
-    "title": "Desempenho e computação paralela",
-    "description": "Investigue localidade, operações numéricas e paralelismo."
+    "id": "operating-systems",
+    "slug": "sistemas-operacionais-e-processos",
+    "title": "Sistemas operacionais e processos",
+    "description": "Explore interfaces do kernel, comunicação entre processos, gestão de recursos e isolamento."
+  },
+  {
+    "id": "concurrency-parallelism",
+    "slug": "concorrencia-e-paralelismo",
+    "title": "Concorrência e paralelismo",
+    "description": "Investigue progresso de tarefas, sincronização, compartilhamento de estado e distribuição de trabalho."
+  },
+  {
+    "id": "numerical-computing",
+    "slug": "computacao-numerica",
+    "title": "Computação numérica",
+    "description": "Implemente operações matemáticas considerando custo computacional, memória e precisão numérica."
   }
 ]

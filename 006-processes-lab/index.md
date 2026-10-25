@@ -1,6 +1,6 @@
 ---
 title: Laboratório de Processos e Pipes
-area: systems-concurrency
+area: operating-systems
 slug: 006-processes-lab
 summary: Implemente um executor POSIX e um pipeline de dois comandos.
 question: Como criar processos, conectar file descriptors e observar seu término?

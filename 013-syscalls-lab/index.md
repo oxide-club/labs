@@ -1,6 +1,6 @@
 ---
 title: Laboratório de Syscalls
-area: systems-concurrency
+area: operating-systems
 slug: 013-syscalls-lab
 summary: Compare write da libc com syscall e trate retornos parciais e erros.
 question: Onde termina a interface C e começa a interface de syscalls?
