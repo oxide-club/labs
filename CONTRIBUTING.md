@@ -51,3 +51,29 @@ Esta adaptação não declara conformidade formal com o padrão de inglês técn
 - Use o mesmo termo para o mesmo conceito. Explique termos técnicos antes de usá-los nas instruções.
 - Separe explicações, instruções e resultados esperados.
 - Preserve nomes de arquivos, comandos, fórmulas e valores ao revisar a linguagem.
+
+## Notificações no Discord
+
+PRs prontos para revisão que adicionam `NNN-nome/index.md` são divulgados
+em `#contribuicoes`, com título e link para o PR. PRs em draft aguardam
+a passagem para pronto. Atualizações e reaberturas não repetem avisos
+já confirmados. Edições, materiais isolados e renomeações não são novas propostas.
+O campo `draft` do conteúdo não impede a divulgação de uma proposta para revisão.
+
+Mantenedores devem configurar o Actions Secret `DISCORD_CONTRIBUTIONS_WEBHOOK_URL`
+neste repositório, apontando para o webhook de `#contribuicoes`. O workflow
+usará o código da base confiável do PR, inclusive para contribuições de forks.
+Ele precisa de `contents: write` para registrar os envios e de `pull-requests: read`
+para consultar os arquivos. A branch `discord-state` é criada automaticamente,
+com histórico em `state.json`. Não apague esse histórico.
+
+Se um envio ficar pendente, confira o canal antes de tentar novamente.
+Consulte [docs/DISCORD-NOTIFICATIONS.md](docs/DISCORD-NOTIFICATIONS.md) para recuperação.
+
+Execute os testes sem enviar mensagens: `node --test tests/discord-*.test.mjs`,
+com Node.js 24. Os módulos de `scripts/discord/` seguem o padrão de `notes`
+e `challenges`, com suporte adicional ao repositório e aos identificadores de labs.
+
+Avisos de publicação em `#novidades` dependem do repositório do site.
+A implementação atual do site contempla apenas desafios e notas;
+este workflow divulga propostas de laboratórios para revisão.

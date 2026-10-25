@@ -1,5 +1,8 @@
 name: Check labs
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore: [discord-state]
+  pull_request:
 permissions:
   contents: read
 jobs:
