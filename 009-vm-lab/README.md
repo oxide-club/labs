@@ -1,5 +1,9 @@
 # Guia local — Máquinas Virtuais
 
+**Material histórico:** atividade consolidada no [desafio 021-bytecode](https://oxideclub.dev/desafios/021-bytecode/).
+As APIs abaixo documentam a versão anterior; não são requisitos adicionais do desafio.
+
+
 Leia [o enunciado](index.md). Use Python 3.10+ e biblioteca padrão; não é necessário instalar pacotes.
 
 Execute a partir deste diretório:

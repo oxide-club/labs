@@ -1,5 +1,9 @@
 # Materiais da VM
 
+**Material histórico:** atividade consolidada no [desafio 021-bytecode](https://oxideclub.dev/desafios/021-bytecode/).
+As APIs abaixo documentam a versão anterior; não são requisitos adicionais do desafio.
+
+
 `vm.py` contém somente a assinatura que você deve implementar.
 `expression.txt` calcula uma expressão; `branch.txt` contém um salto condicional e um salto incondicional;
 `loop.txt` decrementa uma variável até zero. `bad-opcode.txt`, `bad-jump.txt` e `underflow.txt` cobrem três falhas distintas.

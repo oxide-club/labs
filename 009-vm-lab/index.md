@@ -5,7 +5,9 @@ slug: 009-vm-lab
 summary: Implemente uma VM de stack com saltos, variáveis e falhas observáveis.
 question: Como instruções alteram o estado de uma máquina abstrata?
 draft: false
+supersededBy: 021-bytecode
 publishedAt: 2026-10-25
+updatedAt: 2026-10-25
 topics: [Máquinas virtuais, Interpretadores]
 prerequisites: [Funções, Arrays, Stacks, Inteiros]
 tools: [Python 3]
@@ -14,6 +16,11 @@ difficulty: intermediate
 ---
 
 ## O que vamos investigar
+
+Esta atividade foi consolidada no [desafio 021-bytecode](https://oxideclub.dev/desafios/021-bytecode/).
+O roteiro abaixo permanece como material histórico. Para iniciar ou continuar, use o desafio;
+não é necessário implementar os dois contratos.
+
 
 ### O que você vai construir
 

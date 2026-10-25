@@ -6,6 +6,9 @@ O pacote contém um starter incompleto, checks públicos e vetores conhecidos; c
 não significa concluir a atividade. Implemente as quatro funções antes de esperar
 que os checks terminem com status zero.
 
+Os materiais em `starter/packet.c` e seus checks continuam disponíveis como
+[extensão opcional](materials/legacy.md), com o contrato anterior preservado
+
 Os comandos usam C11, GCC ou Clang e bytes de oito bits. Não há dependências externas
 para executar o núcleo. As [referências](references.md) servem para consulta posterior.
 Use o [modelo de relato](report-template.md) para registrar previsões e evidências.
