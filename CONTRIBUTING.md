@@ -91,7 +91,10 @@ este workflow divulga propostas de laboratórios para revisão.
 7. Registre decisões, evidências e limitações na descrição do pull request ou em evidências de CI.
 8. Mantenha `draft: true` durante a revisão, inclusive quando a infraestrutura passar nos testes.
 
-Os seis originais preservam os contratos do Anexo A do currículo.
+Os contratos do Anexo A permanecem nos materiais históricos. Em 001 e 003,
+a implementação anterior é uma extensão opcional. Seus núcleos atuais exigem
+hipóteses discriminantes, comparações e explicações das evidências.
+004 e 009 foram consolidados em desafios, mantendo IDs e materiais de consulta.
 Por decisão do responsável, os fontes históricos `porta.c` e `vida.c` recebem os nomes `gate.c` e `lifetime.c`.
 A mudança de nome não altera mensagens, entradas, resultados nem o objetivo da investigação.
 
@@ -146,3 +149,15 @@ Percursos de estudo podem atravessar áreas e não definem a classificação.
 Não renumere atividades ao mudar sua área. Atualize o registro para criar áreas.
 
 Consulte a distribuição atual no [README](README.md#áreas-de-interesse).
+
+## Consolidar uma atividade
+
+Use `supersededBy: NNN-desafio` para uma atividade já publicada incorporada a um
+desafio existente. Preserve `draft: false`, ID, data e materiais históricos.
+Atualize `docs/catalogo.json` com status `superseded` e o mesmo destino.
+O site precisa oferecer suporte a esse metadado antes da integração do conteúdo.
+Ele deve retirar a atividade das listagens ativas, validar o destino publicado
+e manter a página histórica e seus downloads. Não use `draft` como arquivo histórico.
+
+Acrescente uma explicação de migração: contratos antigos não são automaticamente
+requisitos adicionais do desafio. Não renumere nem reutilize IDs retirados.
