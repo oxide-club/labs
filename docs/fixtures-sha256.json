@@ -1,10 +1,10 @@
 {
   "001-binary-lab/materials/fixtures/vectors.csv": "9198bad8538de6b339a21370f08385223735831729a1975ed3dfbc4d386e78db",
-  "001-binary-lab/materials/lab.json": "ef6b8d70fe7ff727c98baa62c388b19605e98945d20401d276055093c300a96f",
+  "001-binary-lab/materials/lab.json": "373e3e449bcd9a48fc7c043a20a7ea70408e47971edd609bddd17df37c5471e7",
   "002-reverse-engineering-lab/materials/environment.json": "91a1fce7e0751c6d15a45887e72af5bfaf0e41adad8b32c40980951b1a4bb3c0",
   "002-reverse-engineering-lab/materials/lab.json": "35dca4e1e1ee9c086e2745d984b7bccae78d750c9f772946e498e8b7b9800e90",
   "003-memory-safety-lab/materials/environment.json": "91a1fce7e0751c6d15a45887e72af5bfaf0e41adad8b32c40980951b1a4bb3c0",
-  "003-memory-safety-lab/materials/lab.json": "c24deee3311f4d674179c6fa08a7e4cb6b347a7063c918d1f40f037c6dba0dcb",
+  "003-memory-safety-lab/materials/lab.json": "bf4f3bbfd525f13a6e4a0ac8aa0c52234db3c79edabc6cc48de611575be7b6bc",
   "004-arena-lab/materials/fixtures/requests.csv": "f1c71554fbc2c80c5cdab5252043b030503cffff2e61506a4f08d965e9d8639d",
   "004-arena-lab/materials/lab.json": "89be2588b46d32ceae6828eb962678fe4eecc02b8d8431310fb4d67e32ef0b30",
   "005-cache-lab/materials/inputs/trace-a.txt": "fcc9b88840d7ee4810a5283a0de7a9a21614c69f5684865dfd9b8ba9cb8fef34",

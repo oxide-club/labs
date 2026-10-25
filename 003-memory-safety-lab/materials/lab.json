@@ -61,7 +61,17 @@
       "note": "run observa o defeito original; test verifica a correção com ASan/LSan.",
       "preparation": [
         {
-          "name": "observar UAF original",
+          "name": "comparar lifetime e validade lógica",
+          "argv": [
+            "python3",
+            "materials/experiments/compare.py",
+            "{work}/comparison"
+          ],
+          "contains": "4 cenários; 0 falhas de preparação.",
+          "timeout": 60
+        },
+        {
+          "name": "extensão histórica: observar UAF original",
           "argv": [
             "python3",
             "materials/experiments/observe.py",
@@ -70,7 +80,7 @@
           "contains": "Use-after-free observado"
         },
         {
-          "name": "compilar variação incompleta",
+          "name": "extensão histórica: compilar variação incompleta",
           "argv": [
             "cc",
             "-std=c11",
@@ -85,7 +95,7 @@
           ]
         },
         {
-          "name": "variação continua incompleta",
+          "name": "extensão histórica: variação continua incompleta",
           "argv": [
             "{work}/variation",
             "6"

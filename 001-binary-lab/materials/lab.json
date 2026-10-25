@@ -54,7 +54,29 @@
       ],
       "preparation": [
         {
-          "name": "compilar starter e checks",
+          "name": "compilar instrumento completo de representação",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-O2",
+            "materials/experiments/representation.c",
+            "-o",
+            "{work}/representation"
+          ]
+        },
+        {
+          "name": "comparar representações e layouts",
+          "argv": [
+            "{work}/representation"
+          ],
+          "contains": "logical_equal=1 external_equal=1"
+        },
+        {
+          "name": "extensão histórica: compilar starter e checks",
           "argv": [
             "cc",
             "-std=c11",
@@ -71,7 +93,7 @@
           ]
         },
         {
-          "name": "checks rejeitam starter",
+          "name": "extensão histórica: checks rejeitam starter",
           "argv": [
             "{work}/packet-tests"
           ],
@@ -79,7 +101,7 @@
           "contains": "falhas"
         },
         {
-          "name": "compilar observação",
+          "name": "extensão histórica: compilar observação",
           "argv": [
             "cc",
             "-std=c11",
@@ -96,7 +118,7 @@
           ]
         },
         {
-          "name": "observar representação",
+          "name": "extensão histórica: observar representação",
           "argv": [
             "{work}/observe"
           ],
