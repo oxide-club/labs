@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  cache-model:
+  materials:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,4 +15,38 @@ jobs:
           python-version: '3.x'
       - run: python3 -m unittest discover -s tests
       - run: python3 scripts/verify-cache-model.py
+      - run: python3 scripts/prepare-reports.py --check
+      - run: python3 scripts/validate.py
+      - run: python3 scripts/verify-preparation.py --exclude-lab 015-async-lab
       - run: cc -std=c11 -Wall -Wextra -Wpedantic 005-cache-lab/materials/starter/cache.c -o /tmp/cache-starter
+  rust:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [cache-rust, vm-rust, concurrency-rust, async-rust]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: rustc --version
+      - run: python3 scripts/verify-variants.py --variant ${{ matrix.variant }}
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.20.x'
+          cache: false
+      - run: python3 scripts/verify-variants.py --variant protocol-go
+  optional-hardware-status:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo 'GPU runtime e desempenho: NÃO EXECUTADOS neste CI sem GPU.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Isolamento em VM descartável: NÃO EXECUTADO neste CI.' >> "$GITHUB_STEP_SUMMARY"

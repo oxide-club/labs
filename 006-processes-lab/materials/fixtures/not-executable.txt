@@ -1,0 +1,1 @@
+Fixture CC0-1.0: arquivo sem permissão de execução para testar EACCES.

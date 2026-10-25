@@ -1,0 +1,10 @@
+# Referências orientadas
+
+- [OSTEP, capítulo 5 — Process API](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-api.pdf): leia a relação entre `fork`, `exec` e espera. Preveja quais instruções pai e filho executam antes de observar exemplos. É fundamentação, não contrato da CLI.
+- [Linux man-pages — pipe(7)](https://man7.org/linux/man-pages/man7/pipe.7.html): consulte EOF, cópias de file descriptors e capacidade limitada. Pergunta: qual condição permite que um leitor termine após consumir os bytes pendentes?
+- [Linux man-pages — waitpid(2)](https://man7.org/linux/man-pages/man2/waitpid.2.html): consulte macros de status, `EINTR` e estado de filho terminado cujo reaping ainda não ocorreu. Diferencie o status codificado de espera do código devolvido por `oxrun`.
+- [BusyBox — shell/ash.c, commit 371fe9f71d445d18be28c82a2a6d82115c8af19d](https://github.com/mirror/busybox/blob/371fe9f71d445d18be28c82a2a6d82115c8af19d/shell/ash.c#L9686): código de produção em C. Leia `evalpipe`, especialmente os fechamentos no pai e as duplicações no filho, e a chamada a `waitforjob`. Observe como `forkshell` concentra responsabilidades adicionais. Ao contrário do exercício, `ash` tem parser, vários estágios, sinais e job control. Pergunta: quais cópias do escritor deixam de existir em cada caminho? Código externo GPLv2 ou posterior; somente leitura, sem cópia neste pacote.
+
+Verificação em 25/10/2026: `git ls-remote` identificou o commit acima; a versão raw do arquivo foi aberta e `evalpipe` foi localizada nas linhas 9686–9746. `pipe(7)` foi aberta e confirmou EOF e capacidade limitada. O acesso inicial à API GitHub falhou; a referência final usa o commit verificado. OSTEP capítulo 5 e `waitpid(2)` também foram abertos; os conteúdos correspondem à criação/espera de processos e à interpretação de status indicada acima.
+
+Origem pedagógica: seção curricular 10 e Anexo A do Caderno Unificado do Oxide Club. `probe.c` preserva o conteúdo original, com identificação de licença adicionada. O executor central permanece como exercício.

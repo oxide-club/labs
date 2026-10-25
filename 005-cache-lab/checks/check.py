@@ -11,6 +11,9 @@ CASES = [
     ('trace A', [0,15,16,64,79,0,31,80], (3,5,3)),
     ('trace B', [0,16,32,48,1,17,33,49,64,80,96,112,0,16,32,48], (4,12,8)),
     ('endereço de 64 bits', [0xffffffffffffffff, 0xfffffffffffffff0], (1,1,0)),
+    ('bits acima de 32 bits', [0x100000000, 0x0], (0,2,1)),
+    ('contadores hits acima de 255', [0]*300, (299,1,0)),
+    ('contadores misses/evictions acima de 255', [0,64]*130, (0,260,259)),
 ]
 def main():
     if len(sys.argv) != 2:

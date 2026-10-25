@@ -5,9 +5,9 @@ summary: Construa um simulador de cache. Compare sequências de acesso à memór
 question: Como a sequência de endereços muda os acertos de uma cache?
 draft: false
 publishedAt: 2026-10-21
-updatedAt: 2026-10-22
+updatedAt: 2026-10-25
 topics: [Cache, Localidade, Mapeamento direto]
-prerequisites: [Operadores bit a bit, Estruturas em C, Leitura de arquivos]
+prerequisites: [Operadores bitwise, Estruturas em C, Leitura de arquivos]
 tools: [GCC ou Clang, Python 3]
 environment: C11 com uint64_t e terminal Linux
 difficulty: intermediate
@@ -72,7 +72,16 @@ Use o indicador de validade para verificar essa condição.
 
 ## Antes de começar
 
-Você precisa conhecer operadores bit a bit, estruturas e leitura de arquivos em C.
+### Linguagens e ambiente
+
+Referência: **C11**. Aceitas: Livre; por exemplo C, Rust, Go e Python.
+Recomendadas: Rust, Go e Python. Endereços sintéticos de 64 bits, quatro linhas de 16 bytes, mapeamento direto.
+Materiais oficiais: C11 existente; Rust: `materials/starter/rust/`.
+Equivalência: equivalente ao núcleo.
+Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
+Os starters são opções de preparação; sua linguagem não é obrigatória.
+
+Você precisa conhecer operadores bitwise, estruturas e leitura de arquivos em C.
 Use GCC ou Clang com suporte a C11 e ao tipo `uint64_t`.
 Use Python 3 para executar as verificações públicas.
 As instruções usam um terminal Linux.
@@ -271,6 +280,8 @@ Mantenha sua solução separada do código inicial.
 Avise quando sua mensagem mostrar resultados que outras pessoas ainda precisam prever.
 
 ## Referências e atividades relacionadas
+
+Consulte [as referências orientadas](references.md) para leituras e investigação de código real após o núcleo.
 
 - [CS:APP — Lab Assignments](https://csapp.cs.cmu.edu/3e/labs.html): laboratórios que inspiraram os temas do clube.
 - [CS:APP — Cache Lab](https://csapp.cs.cmu.edu/3e/cachelab.pdf): outro laboratório sobre cache.

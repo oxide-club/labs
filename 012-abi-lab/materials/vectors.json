@@ -1,0 +1,7 @@
+[
+ {"name":"zero","args":[0,0,0,0,0,0,0,0],"expected":0},
+ {"name":"ordered","args":[1,2,3,4,5,6,7,8],"expected":204},
+ {"name":"stack7","args":[0,0,0,0,0,0,11,0],"expected":77},
+ {"name":"stack8","args":[0,0,0,0,0,0,0,13],"expected":104},
+ {"name":"wrap","args":[18446744073709551615,1,0,0,0,0,0,0],"expected":1}
+]

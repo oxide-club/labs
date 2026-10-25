@@ -5,24 +5,67 @@ Cada diretório numerado contém um roteiro em `index.md`, materiais e verifica�
 O site lê os arquivos deste repositório.
 Não edite a cópia gerada em `.content/labs`.
 
+Consulte a [política de linguagens](docs/politica-de-linguagens.md).
+C permanece a referência onde já existe; linguagens aceitas não significam
+starters oficialmente mantidos. VM, protocolos e atenção têm referência Python;
+async já tem referência Rust neste checkout.
+
+Para verificar somente uma preparação adicional, execute
+`python3 scripts/verify-variants.py --variant cache-rust`.
+Os demais seletores são `vm-rust`, `protocol-go`, `concurrency-rust`, `async-rust`
+e `gpu-cuda` (somente build, sem validação de kernels). Não é necessário instalar
+todas as toolchains. Para uma atividade existente, use
+`python3 scripts/verify-preparation.py --lab 001-binary-lab`, trocando o ID.
+
 ## Catálogo
 
-- 005 — Laboratório de Cache e Localidade: disponível neste repositório.
+Os 18 laboratórios estão aprovados para publicação, com `draft: false`.
+O estado `publication-ready` indica aprovação; `published` indica publicação confirmada.
+Os starters continuam incompletos por desenho.
+O [registro de IDs](docs/catalogo.json) mantém a correspondência com o currículo.
 
-## Nomes reservados
-
-- 001 — Laboratório de Representação Binária
-- 002 — Laboratório de Engenharia Reversa
-- 003 — Laboratório de Segurança de Memória
-- 004 — Laboratório de Alocação de Memória
-- 006 — Laboratório de Processos e Pipes
+| Laboratório | Estado |
+| --- | --- |
+| [001 — Representação Binária](001-binary-lab/index.md) | Aprovado; publicação pendente |
+| [002 — Engenharia Reversa](002-reverse-engineering-lab/index.md) | Aprovado; publicação pendente |
+| [003 — Segurança de Memória](003-memory-safety-lab/index.md) | Aprovado; publicação pendente |
+| [004 — Memory Allocation](004-arena-lab/index.md) | Aprovado; publicação pendente |
+| [005 — Cache e Localidade](005-cache-lab/index.md) | Publicado; preservado |
+| [006 — Processos e Pipes](006-processes-lab/index.md) | Aprovado; publicação pendente |
+| [007 — Compilação e Execução](007-compilation-lab/index.md) | Aprovado; publicação pendente |
+| [008 — Multiplicação Matricial](008-matrix-lab/index.md) | Aprovado; publicação pendente |
+| [009 — Máquinas Virtuais](009-vm-lab/index.md) | Aprovado; publicação pendente |
+| [010 — Concorrência e Sincronização](010-concurrency-lab/index.md) | Aprovado; publicação pendente |
+| [011 — Protocolos Binários](011-protocol-lab/index.md) | Aprovado; publicação pendente |
+| [012 — ABI e Calling Conventions](012-abi-lab/index.md) | Aprovado; publicação pendente |
+| [013 — Syscalls](013-syscalls-lab/index.md) | Aprovado; publicação pendente |
+| [014 — Bibliotecas Compartilhadas e Linking Dinâmico](014-dynamic-linking-lab/index.md) | Aprovado; publicação pendente |
+| [015 — Execução Assíncrona](015-async-lab/index.md) | Aprovado; publicação pendente |
+| [016 — Isolamento de Processos](016-isolation-lab/index.md) | Aprovado; publicação pendente |
+| [017 — Computação Paralela em GPU](017-gpu-lab/index.md) | Aprovado; publicação pendente |
+| [018 — Mecanismos de Atenção](018-attention-lab/index.md) | Aprovado; publicação pendente |
 
 Os números identificam os laboratórios. Você pode escolher a ordem de estudo.
+
+Cada README local informa dependências e comandos. Isolamento exige VM descartável para execução.
+O CI usa verificações CPU de GPU; isso não substitui compilação e execução CUDA.
 
 ## Verificação editorial
 
 1. Execute `python3 -m unittest discover -s tests`.
 2. Execute `python3 scripts/verify-cache-model.py`.
+3. Execute `python3 scripts/prepare-reports.py --check`.
+4. Execute `python3 scripts/validate.py`.
+5. Execute `python3 scripts/verify-preparation.py`.
+
+O último comando distingue falhas esperadas do starter de erros na preparação.
+Use `--lab ID` para limitar a atividade e `--json CAMINHO` para guardar evidências completas.
+As verificações declaradas ficam em `docs/preparation-checks.json`; elas não substituem os checks da solução.
+
+Ao atualizar o template de relato, execute `python3 scripts/prepare-reports.py`.
+Após conferir alterações intencionais em fixtures, atualize seus hashes com `python3 scripts/validate.py --update-fixtures`.
+O hash detecta alterações; não demonstra correção semântica.
+O website faz a validação completa do schema YAML durante o build.
 
 O modelo independente verifica os resultados esperados dos experimentos.
 O pacote do participante não inclui esse modelo.

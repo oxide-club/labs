@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 /cache
 *.o
+
+# Artefatos locais de preparação e compilação
+**/build/
+**/target/

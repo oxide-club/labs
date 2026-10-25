@@ -1,0 +1,11 @@
+{
+  "license": "CC0-1.0",
+  "queue_cases": [
+    {"capacity": 1, "producers": 1, "consumers": 1, "items_per_producer": 1},
+    {"capacity": 1, "producers": 4, "consumers": 3, "items_per_producer": 257},
+    {"capacity": 2, "producers": 1, "consumers": 4, "items_per_producer": 513},
+    {"capacity": 3, "producers": 5, "consumers": 1, "items_per_producer": 129},
+    {"capacity": 64, "producers": 3, "consumers": 5, "items_per_producer": 1000},
+    {"capacity": 1, "producers": 2, "consumers": 3, "items_per_producer": 0}
+  ]
+}

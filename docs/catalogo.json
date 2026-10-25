@@ -1,0 +1,110 @@
+[
+  {
+    "id": "001-binary-lab",
+    "curriculum": 1,
+    "title": "Representação Binária",
+    "status": "publication-ready"
+  },
+  {
+    "id": "002-reverse-engineering-lab",
+    "curriculum": 2,
+    "title": "Engenharia Reversa",
+    "status": "publication-ready"
+  },
+  {
+    "id": "003-memory-safety-lab",
+    "curriculum": 6,
+    "title": "Segurança de Memória",
+    "status": "publication-ready"
+  },
+  {
+    "id": "004-arena-lab",
+    "curriculum": 7,
+    "title": "Memory Allocation",
+    "status": "publication-ready"
+  },
+  {
+    "id": "005-cache-lab",
+    "curriculum": 8,
+    "title": "Cache e Localidade",
+    "status": "published"
+  },
+  {
+    "id": "006-processes-lab",
+    "curriculum": 10,
+    "title": "Processos e Pipes",
+    "status": "publication-ready"
+  },
+  {
+    "id": "007-compilation-lab",
+    "curriculum": 3,
+    "title": "Compilação e Execução",
+    "status": "publication-ready"
+  },
+  {
+    "id": "008-matrix-lab",
+    "curriculum": 9,
+    "title": "Multiplicação Matricial",
+    "status": "publication-ready"
+  },
+  {
+    "id": "009-vm-lab",
+    "curriculum": 4,
+    "title": "Máquinas Virtuais",
+    "status": "publication-ready"
+  },
+  {
+    "id": "010-concurrency-lab",
+    "curriculum": 11,
+    "title": "Concorrência e Sincronização",
+    "status": "publication-ready"
+  },
+  {
+    "id": "011-protocol-lab",
+    "curriculum": 12,
+    "title": "Protocolos Binários",
+    "status": "publication-ready"
+  },
+  {
+    "id": "012-abi-lab",
+    "curriculum": 18,
+    "title": "ABI e Calling Conventions",
+    "status": "publication-ready"
+  },
+  {
+    "id": "013-syscalls-lab",
+    "curriculum": 20,
+    "title": "Syscalls",
+    "status": "publication-ready"
+  },
+  {
+    "id": "014-dynamic-linking-lab",
+    "curriculum": 19,
+    "title": "Bibliotecas Compartilhadas e Linking Dinâmico",
+    "status": "publication-ready"
+  },
+  {
+    "id": "015-async-lab",
+    "curriculum": 13,
+    "title": "Execução Assíncrona",
+    "status": "publication-ready"
+  },
+  {
+    "id": "016-isolation-lab",
+    "curriculum": 14,
+    "title": "Isolamento de Processos",
+    "status": "publication-ready"
+  },
+  {
+    "id": "017-gpu-lab",
+    "curriculum": 15,
+    "title": "Computação Paralela em GPU",
+    "status": "publication-ready"
+  },
+  {
+    "id": "018-attention-lab",
+    "curriculum": 17,
+    "title": "Mecanismos de Atenção",
+    "status": "publication-ready"
+  }
+]

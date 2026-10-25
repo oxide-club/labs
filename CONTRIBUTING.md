@@ -31,7 +31,7 @@ Ainda não há um catálogo automático de soluções dos laboratórios.
 ## Materiais
 
 Use links relativos para `materials/`, `checks/` e `report-template.md`.
-Os formatos aceitos são texto, C, arquivos de cabeçalho, Python, JSON e CSV.
+Os formatos aceitos seguem a lista explícita de distribuição descrita abaixo.
 Não inclua programas compilados, dependências, segredos ou links simbólicos.
 Descreva cada arquivo em `materials/README.md`.
 Informe a origem e a licença dos materiais.
@@ -39,10 +39,12 @@ Informe a origem e a licença dos materiais.
 Para ocultar resultados de conferência, use `<details><summary>Conferir resultados</summary>…</details>` sem atributos.
 Mantenha as instruções obrigatórias fora desses blocos.
 
-## Escrever textos claros
+## Português Técnico Claro
 
-Adaptamos princípios do [ASD-STE100](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf) para textos em português.
-Esta adaptação não declara conformidade formal com o padrão de inglês técnico.
+Siga o [guia de redação](docs/guia-de-redacao.md) e o [glossário](docs/glossario-tecnico.md).
+A convenção é interna ao clube; não declara conformidade com o ASD-STE100.
+Revise primeiro o contrato e os exemplos. Depois, revise clareza e terminologia.
+Use o [checklist de publicação](templates/publication-checklist.md).
 
 - Use frases curtas. Nas instruções, procure limitar cada frase a 20 palavras.
 - Escreva uma ação por frase. Use passos numerados quando a ordem for importante.
@@ -77,3 +79,58 @@ e `challenges`, com suporte adicional ao repositório e aos identificadores de l
 Avisos de publicação em `#novidades` dependem do repositório do site.
 A implementação atual do site contempla apenas desafios e notas;
 este workflow divulga propostas de laboratórios para revisão.
+
+## Preparar um laboratório
+
+1. Consulte o [registro do catálogo](docs/catalogo.json) e reserve um ID sem renumerar os existentes.
+2. Identifique a modalidade e escreva o contrato antes de preparar o starter.
+3. Use os templates de [enunciado](templates/index.md), [README](templates/README.md), [referências](templates/references.md) e [relato](templates/report-template.md).
+4. Prepare materiais concretos: código, entradas, fixtures, checks e experimentos necessários ao mecanismo.
+5. Defina entradas, saídas, limites, erros, estados após falhas e invariantes.
+6. Execute os comandos documentados em uma cópia dos materiais do participante.
+7. Registre decisões, evidências e limitações na descrição do pull request ou em evidências de CI.
+8. Mantenha `draft: true` durante a revisão, inclusive quando a infraestrutura passar nos testes.
+
+Os seis originais preservam os contratos do Anexo A do currículo.
+Por decisão do responsável, os fontes históricos `porta.c` e `vida.c` recebem os nomes `gate.c` e `lifetime.c`.
+A mudança de nome não altera mensagens, entradas, resultados nem o objetivo da investigação.
+
+Os testes do participante podem falhar no starter incompleto.
+O CI deve conferir a preparação e os fixtures sem publicar soluções para obter sucesso.
+Compare vetores independentes; round-trip sozinho pode esconder erros simétricos.
+Antes de aprovar a preparação, execute os checks contra uma implementação privada correta
+e pelo menos cinco mutantes que violem requisitos distintos. Registre comandos, resultados
+e hashes dos fontes na descrição do pull request ou em evidências de CI. Não distribua essas soluções.
+Para observação ou diagnóstico, documente os alvos e as variações controladas equivalentes.
+Justifique quando a atividade não comportar cinco mutantes distintos.
+Não use tempo universal, PID, endereço ou assembly literal como critério de correção.
+
+## Distribuir e revisar
+
+O empacotador do website inclui `materials/`, `checks/`, `experiments/`, enunciado, README, referências e relato.
+Makefiles, arquivos de documentação e fontes C, Python, Rust, assembly, CUDA e TOML são aceitos pela lista explícita do website.
+Fontes Go (`.go`) e o arquivo exato `go.mod` também são distribuídos.
+Não distribua outros arquivos `.mod`, caches ou binários Go.
+Não inclua executáveis, build, target, dependências, soluções ou dados temporários nesses diretórios.
+O pacote deve incluir licenças e identificar a revisão.
+
+O modelo de relato é compartilhado em `templates/report-template.md`.
+O script de preparação gera cópias identificadas para pacotes independentes; não as edite manualmente.
+
+Soluções da comunidade permanecem em repositórios dos participantes ou no fluxo próprio de soluções.
+Um PR de materiais não deve incorporar automaticamente uma solução completa.
+Mudanças de publicação exigem revisão humana e data real; preparar drafts não autoriza deploy.
+
+## Linguagens e variantes
+
+Siga a [política de linguagens](docs/politica-de-linguagens.md). Preserve IDs,
+contratos originais e caminhos publicados. Acrescente “Linguagens e ambiente”
+como H3 dentro de “Antes de começar”; não acrescente campos ao frontmatter.
+Novos starters usam diretórios de linguagem. Materiais históricos permanecem em
+seus caminhos para não quebrar pacotes e links; não duplique fontes por estética.
+Compartilhe fixtures e checks comportamentais. Mantenha testes de API, memória,
+ABI e runtime separados quando a linguagem fizer parte do contrato.
+
+Antes de declarar uma variante oficial, verifique build, exemplos, fixtures,
+rejeição esperada do starter e distribuição do pacote. Registre o que não foi
+executado. Um starter incompleto não deve passar nos checks de conclusão.

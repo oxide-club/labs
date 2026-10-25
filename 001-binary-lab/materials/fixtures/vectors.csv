@@ -1,0 +1,5 @@
+version,type,flags,length,word,byte0,byte1,byte2,byte3
+0,0,0,0,0x00000000,00,00,00,00
+1,2,5,258,0x22500102,02,01,50,22
+2,17,8,4096,0x51801000,00,10,80,51
+7,31,15,1048575,0xFFFFFFFF,FF,FF,FF,FF

@@ -1,0 +1,348 @@
+[
+  {
+    "name": "expression",
+    "source": "PUSH 9\nPUSH 4\nSUB\nPUSH 2\nADD\nHALT\n",
+    "expected": {
+      "status": "halted",
+      "error": null,
+      "pc": 5,
+      "stack": [
+        7
+      ],
+      "variables": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": 6,
+      "trace": [
+        {
+          "pc": 0,
+          "opcode": "PUSH",
+          "stack": []
+        },
+        {
+          "pc": 1,
+          "opcode": "PUSH",
+          "stack": [
+            9
+          ]
+        },
+        {
+          "pc": 2,
+          "opcode": "SUB",
+          "stack": [
+            9,
+            4
+          ]
+        },
+        {
+          "pc": 3,
+          "opcode": "PUSH",
+          "stack": [
+            5
+          ]
+        },
+        {
+          "pc": 4,
+          "opcode": "ADD",
+          "stack": [
+            5,
+            2
+          ]
+        },
+        {
+          "pc": 5,
+          "opcode": "HALT",
+          "stack": [
+            7
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "branch",
+    "source": "PUSH 0\nJZ 4\nPUSH 99\nJMP 5\nPUSH 7\nHALT\n",
+    "expected": {
+      "status": "halted",
+      "error": null,
+      "pc": 5,
+      "stack": [
+        7
+      ],
+      "variables": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": 4,
+      "trace": [
+        {
+          "pc": 0,
+          "opcode": "PUSH",
+          "stack": []
+        },
+        {
+          "pc": 1,
+          "opcode": "JZ",
+          "stack": [
+            0
+          ]
+        },
+        {
+          "pc": 4,
+          "opcode": "PUSH",
+          "stack": []
+        },
+        {
+          "pc": 5,
+          "opcode": "HALT",
+          "stack": [
+            7
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "loop",
+    "source": "PUSH 2\nSTORE 0\nLOAD 0\nJZ 9\nLOAD 0\nPUSH 1\nSUB\nSTORE 0\nJMP 2\nLOAD 0\nHALT\n",
+    "expected": {
+      "status": "halted",
+      "error": null,
+      "pc": 10,
+      "stack": [
+        0
+      ],
+      "variables": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": 20,
+      "trace": [
+        {
+          "pc": 0,
+          "opcode": "PUSH",
+          "stack": []
+        },
+        {
+          "pc": 1,
+          "opcode": "STORE",
+          "stack": [
+            2
+          ]
+        },
+        {
+          "pc": 2,
+          "opcode": "LOAD",
+          "stack": []
+        },
+        {
+          "pc": 3,
+          "opcode": "JZ",
+          "stack": [
+            2
+          ]
+        },
+        {
+          "pc": 4,
+          "opcode": "LOAD",
+          "stack": []
+        },
+        {
+          "pc": 5,
+          "opcode": "PUSH",
+          "stack": [
+            2
+          ]
+        },
+        {
+          "pc": 6,
+          "opcode": "SUB",
+          "stack": [
+            2,
+            1
+          ]
+        },
+        {
+          "pc": 7,
+          "opcode": "STORE",
+          "stack": [
+            1
+          ]
+        },
+        {
+          "pc": 8,
+          "opcode": "JMP",
+          "stack": []
+        },
+        {
+          "pc": 2,
+          "opcode": "LOAD",
+          "stack": []
+        },
+        {
+          "pc": 3,
+          "opcode": "JZ",
+          "stack": [
+            1
+          ]
+        },
+        {
+          "pc": 4,
+          "opcode": "LOAD",
+          "stack": []
+        },
+        {
+          "pc": 5,
+          "opcode": "PUSH",
+          "stack": [
+            1
+          ]
+        },
+        {
+          "pc": 6,
+          "opcode": "SUB",
+          "stack": [
+            1,
+            1
+          ]
+        },
+        {
+          "pc": 7,
+          "opcode": "STORE",
+          "stack": [
+            0
+          ]
+        },
+        {
+          "pc": 8,
+          "opcode": "JMP",
+          "stack": []
+        },
+        {
+          "pc": 2,
+          "opcode": "LOAD",
+          "stack": []
+        },
+        {
+          "pc": 3,
+          "opcode": "JZ",
+          "stack": [
+            0
+          ]
+        },
+        {
+          "pc": 9,
+          "opcode": "LOAD",
+          "stack": []
+        },
+        {
+          "pc": 10,
+          "opcode": "HALT",
+          "stack": [
+            0
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "bad-opcode",
+    "source": "NOPE\nHALT\n",
+    "expected": {
+      "status": "error",
+      "error": "invalid_program",
+      "pc": 0,
+      "stack": [],
+      "variables": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": 0,
+      "trace": []
+    }
+  },
+  {
+    "name": "bad-jump",
+    "source": "JMP 2\nHALT\n",
+    "expected": {
+      "status": "error",
+      "error": "invalid_program",
+      "pc": 0,
+      "stack": [],
+      "variables": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": 0,
+      "trace": []
+    }
+  },
+  {
+    "name": "underflow",
+    "source": "PUSH 1\nADD\nHALT\n",
+    "expected": {
+      "status": "error",
+      "error": "stack_underflow",
+      "pc": 1,
+      "stack": [
+        1
+      ],
+      "variables": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "steps": 1,
+      "trace": [
+        {
+          "pc": 0,
+          "opcode": "PUSH",
+          "stack": []
+        },
+        {
+          "pc": 1,
+          "opcode": "ADD",
+          "stack": [
+            1
+          ]
+        }
+      ]
+    }
+  }
+]

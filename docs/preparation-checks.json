@@ -1,0 +1,636 @@
+{
+  "001-binary-lab": [
+    {
+      "name": "compilar starter e checks",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "-Imaterials/starter",
+        "materials/starter/packet.c",
+        "materials/checks/tests.c",
+        "-o",
+        "{work}/packet-tests"
+      ]
+    },
+    {
+      "name": "checks rejeitam starter",
+      "argv": [
+        "{work}/packet-tests"
+      ],
+      "status": 1,
+      "contains": "falhas"
+    },
+    {
+      "name": "compilar observação",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "-Imaterials/starter",
+        "materials/starter/packet.c",
+        "materials/experiments/observe.c",
+        "-o",
+        "{work}/observe"
+      ]
+    },
+    {
+      "name": "observar representação",
+      "argv": [
+        "{work}/observe"
+      ],
+      "contains": "word: 0x22500102"
+    }
+  ],
+  "002-reverse-engineering-lab": [
+    {
+      "name": "preparar somente O0",
+      "argv": [
+        "python3",
+        "materials/experiments/prepare.py",
+        "{work}"
+      ]
+    },
+    {
+      "name": "checks O0",
+      "argv": [
+        "python3",
+        "materials/checks/check.py",
+        "{work}/gate-O0"
+      ],
+      "contains": "6 casos públicos: OK"
+    },
+    {
+      "name": "preparar O2 na extensão explícita",
+      "argv": [
+        "python3",
+        "materials/experiments/prepare.py",
+        "{work}",
+        "--optimized"
+      ]
+    },
+    {
+      "name": "checks O2",
+      "argv": [
+        "python3",
+        "materials/checks/check.py",
+        "{work}/gate-O2"
+      ],
+      "contains": "6 casos públicos: OK"
+    },
+    {
+      "name": "diagnósticos não expõem candidato",
+      "argv": [
+        "python3",
+        "materials/checks/test_check.py"
+      ],
+      "contains": "OK"
+    }
+  ],
+  "003-memory-safety-lab": [
+    {
+      "name": "observar UAF original",
+      "argv": [
+        "python3",
+        "materials/experiments/observe.py",
+        "{work}/observation"
+      ],
+      "contains": "Use-after-free observado"
+    },
+    {
+      "name": "compilar variação incompleta",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "materials/starter/variation.c",
+        "-o",
+        "{work}/variation"
+      ]
+    },
+    {
+      "name": "variação continua incompleta",
+      "argv": [
+        "{work}/variation",
+        "6"
+      ],
+      "status": 2,
+      "contains": "Variação ainda não implementada."
+    }
+  ],
+  "004-arena-lab": [
+    {
+      "name": "compilar starter e checks",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "-Imaterials/starter",
+        "materials/starter/arena.c",
+        "materials/checks/tests.c",
+        "-o",
+        "{work}/arena-tests"
+      ]
+    },
+    {
+      "name": "checks rejeitam starter",
+      "argv": [
+        "{work}/arena-tests"
+      ],
+      "status": 1,
+      "contains": "falhas"
+    },
+    {
+      "name": "compilar falha malloc",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "-Imaterials/starter",
+        "materials/starter/arena.c",
+        "materials/checks/fail_malloc.c",
+        "-Wl,--wrap=malloc",
+        "-o",
+        "{work}/fail-malloc"
+      ]
+    },
+    {
+      "name": "falha malloc preserva estado zerado",
+      "argv": [
+        "{work}/fail-malloc"
+      ],
+      "contains": "estado zerado"
+    },
+    {
+      "name": "compilar observação alinhamento",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "materials/experiments/layout.c",
+        "-o",
+        "{work}/layout"
+      ]
+    },
+    {
+      "name": "observar alinhamento do ambiente",
+      "argv": [
+        "{work}/layout"
+      ],
+      "contains": "long double:"
+    }
+  ],
+  "005-cache-lab": [
+    {
+      "name": "compilar starter",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "materials/starter/cache.c",
+        "-o",
+        "{work}/cache"
+      ]
+    },
+    {
+      "name": "checks rejeitam starter",
+      "argv": [
+        "python3",
+        "checks/check.py",
+        "{work}/cache"
+      ],
+      "status": 1,
+      "contains": "FALHOU"
+    }
+  ],
+  "006-processes-lab": [
+    {
+      "name": "compilar executor incompleto",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "materials/starter/oxrun.c",
+        "-o",
+        "{work}/oxrun"
+      ]
+    },
+    {
+      "name": "compilar probe original",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-O2",
+        "materials/starter/probe.c",
+        "-o",
+        "{work}/probe"
+      ]
+    },
+    {
+      "name": "probe termina com7",
+      "argv": [
+        "{work}/probe"
+      ],
+      "status": 7
+    },
+    {
+      "name": "probe termina por SIGTERM",
+      "argv": [
+        "{work}/probe",
+        "signal"
+      ],
+      "status": -15
+    },
+    {
+      "name": "checks rejeitam starter",
+      "argv": [
+        "python3",
+        "materials/tests/check.py",
+        "--oxrun",
+        "{work}/oxrun",
+        "--probe",
+        "{work}/probe"
+      ],
+      "status": 1,
+      "contains": "FAILED"
+    }
+  ],
+  "007-compilation-lab": [
+    {
+      "name": "compilar e verificar toolchain",
+      "argv": [
+        "make",
+        "-C",
+        "materials",
+        "check",
+        "BUILD={work}"
+      ],
+      "contains": "OK"
+    }
+  ],
+  "009-vm-lab": [
+    {
+      "name": "checks rejeitam VM incompleta",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "NotImplementedError"
+    }
+  ],
+  "008-matrix-lab": [
+    {
+      "name": "checks rejeitam variantes incompletas",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "falhou linha"
+    },
+    {
+      "name": "compilar benchmark",
+      "argv": [
+        "cc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Imaterials/starter",
+        "-Ichecks",
+        "experiments/benchmark.c",
+        "materials/starter/matrix.c",
+        "-lm",
+        "-o",
+        "{work}/benchmark"
+      ]
+    },
+    {
+      "name": "benchmark recusa starter",
+      "argv": [
+        "{work}/benchmark",
+        "3",
+        "5",
+        "7",
+        "2",
+        "42",
+        "1",
+        "3"
+      ],
+      "status": 1,
+      "contains": "validação falhou",
+      "env": {
+        "MATRIX_COMPILER": "cc (version recorded by CI environment)",
+        "MATRIX_FLAGS": "-std=c11 -O2 -Wall -Wextra -Wpedantic",
+        "MATRIX_HARDWARE": "preparation check only; no timing emitted"
+      }
+    }
+  ],
+  "011-protocol-lab": [
+    {
+      "name": "checks rejeitam parser incompleto",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "FAIL: NotImplementedError: implemente validação e encoder"
+    },
+    {
+      "name": "experimento depende do parser",
+      "argv": [
+        "python3",
+        "experiments/trace.py"
+      ],
+      "status": 1,
+      "contains": "FAIL: NotImplementedError: implemente parser incremental"
+    }
+  ],
+  "010-concurrency-lab": [
+    {
+      "name": "modelo de interleavings",
+      "argv": [
+        "python3",
+        "experiments/interleavings.py"
+      ]
+    },
+    {
+      "name": "checks rejeitam sincronização incompleta",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "Falhas: 16",
+      "timeout": 60,
+      "forbid": [
+        "FAIL counter-startup",
+        "FAIL deadlock bad",
+        "error:",
+        "Traceback"
+      ]
+    },
+    {
+      "name": "autotestes de rollback da fila",
+      "argv": [
+        "python3",
+        "checks/test_queue_startup.py"
+      ],
+      "contains": "OK"
+    },
+    {
+      "name": "limpeza da árvore do compilador",
+      "argv": [
+        "python3",
+        "checks/test_support.py"
+      ],
+      "contains": "OK"
+    }
+  ],
+  "012-abi-lab": [
+    {
+      "name": "checks rejeitam assembly incompleto",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "Falha: resultado=",
+      "forbid": [
+        "Traceback",
+        "error:"
+      ]
+    }
+  ],
+  "013-syscalls-lab": [
+    {
+      "name": "compilar variantes e verificar libc",
+      "argv": [
+        "make",
+        "-C",
+        "materials",
+        "libc-check",
+        "all",
+        "BUILD={work}"
+      ],
+      "contains": "CLI: OK"
+    },
+    {
+      "name": "contrato rejeita syscall incompleta",
+      "argv": [
+        "make",
+        "-C",
+        "materials",
+        "check",
+        "BUILD={work}"
+      ],
+      "status": 2,
+      "contains": "write_all(17, NULL, 0)",
+      "forbid": [
+        "error:",
+        "Traceback"
+      ]
+    }
+  ],
+  "014-dynamic-linking-lab": [
+    {
+      "name": "compilar bibliotecas e clientes",
+      "argv": [
+        "make",
+        "-C",
+        "materials"
+      ]
+    },
+    {
+      "name": "checks rejeitam carregador incompleto",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "FAIL símbolo ausente",
+      "forbid": [
+        "FAIL archive-client",
+        "FAIL shared-client",
+        "Traceback"
+      ]
+    }
+  ],
+  "015-async-lab": [
+    {
+      "name": "compilar checks e starters Rust",
+      "argv": [
+        "python3",
+        "checks/check.py",
+        "--compile-only"
+      ],
+      "contains": "Preparação:"
+    },
+    {
+      "name": "fixture independente",
+      "argv": [
+        "python3",
+        "checks/check.py",
+        "--fixture-only"
+      ],
+      "contains": "1/1 checks passaram"
+    },
+    {
+      "name": "checks rejeitam executor incompleto",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "1/10 checks passaram",
+      "forbid": [
+        "timeout de",
+        "error:",
+        "Traceback"
+      ]
+    },
+    {
+      "name": "compilar experimento Rust",
+      "argv": [
+        "python3",
+        "experiments/trace.py",
+        "--compile-only"
+      ],
+      "contains": "Preparação:"
+    },
+    {
+      "name": "trace depende do executor",
+      "argv": [
+        "python3",
+        "experiments/trace.py"
+      ],
+      "status": 101,
+      "contains": "not yet implemented"
+    }
+  ],
+  "017-gpu-lab": [
+    {
+      "name": "compilar suporte CPU",
+      "argv": [
+        "make",
+        "-C",
+        "materials",
+        "cpu"
+      ]
+    },
+    {
+      "name": "oráculos CPU independentes; não verifica CUDA",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "contains": "CPU: 17 casos e 6 rejeições passaram; nenhuma execução GPU.",
+      "timeout": 120
+    }
+  ],
+  "016-isolation-lab": [
+    {
+      "name": "compilar sem executar isolamento",
+      "argv": [
+        "make",
+        "-C",
+        "materials",
+        "all",
+        "BUILD={work}"
+      ]
+    },
+    {
+      "name": "analisar sintaxe Python sem executar",
+      "argv": [
+        "python3",
+        "-c",
+        "import ast; from pathlib import Path; [ast.parse(p.read_text()) for folder in (\"checks\", \"experiments\") for p in Path(folder).glob(\"*.py\")]; print(\"Sintaxe OK; execução em VM pendente\")"
+      ],
+      "contains": "Sintaxe OK; execução em VM pendente"
+    }
+  ],
+  "018-attention-lab": [
+    {
+      "name": "fixtures independentes com Decimal",
+      "argv": [
+        "python3",
+        "checks/verify_fixtures.py"
+      ],
+      "contains": "OK"
+    },
+    {
+      "name": "suporte de medição",
+      "argv": [
+        "python3",
+        "checks/test_support.py"
+      ],
+      "contains": "OK"
+    },
+    {
+      "name": "checks rejeitam attention incompleta",
+      "argv": [
+        "python3",
+        "checks/check.py"
+      ],
+      "status": 1,
+      "contains": "NotImplementedError"
+    },
+    {
+      "name": "modelo teórico explícito",
+      "argv": [
+        "python3",
+        "experiments/memory.py",
+        "--theory"
+      ],
+      "contains": "theory"
+    },
+    {
+      "name": "medição recusa starter",
+      "argv": [
+        "python3",
+        "experiments/memory.py",
+        "--measure"
+      ],
+      "status": 1,
+      "contains": "checks reprovaram a implementação; não houve medição."
+    }
+  ]
+}

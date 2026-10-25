@@ -13,7 +13,12 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Escreva a pergunta central. Descreva o resultado esperado.
+Escreva a pergunta central e a motivação. Defina os termos novos.
+
+### Contrato técnico
+
+Especifique interfaces, formatos, limites, erros, invariantes e estados após falhas.
+Separe requisitos obrigatórios de recomendações e extensões.
 
 ## Antes de começar
 
@@ -25,7 +30,9 @@ Liste os arquivos disponíveis. Explique a função de cada arquivo.
 
 ## Etapas da investigação
 
-Escreva uma ação por passo. Indique o que prever, executar, registrar, explicar e verificar.
+Use Prever → Observar → Explicar → Implementar/Corrigir → Verificar.
+Para desempenho, acrescente Medir → Interpretar após verificar a correção.
+Cada etapa deve indicar uma ação principal, a evidência produzida e como verificá-la.
 
 ## Critérios de conclusão
 

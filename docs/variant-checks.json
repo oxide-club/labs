@@ -1,0 +1,212 @@
+{
+  "cache-rust": {
+    "lab": "005-cache-lab",
+    "checks": [
+      {
+        "name": "compilar starter Rust",
+        "argv": [
+          "rustc",
+          "--edition=2021",
+          "-D",
+          "warnings",
+          "materials/starter/rust/cache.rs",
+          "-o",
+          "{work}/cache"
+        ]
+      },
+      {
+        "name": "mesmos checks rejeitam starter Rust",
+        "argv": [
+          "python3",
+          "checks/check.py",
+          "{work}/cache"
+        ],
+        "status": 1,
+        "contains": "FALHOU"
+      }
+    ]
+  },
+  "vm-rust": {
+    "lab": "009-vm-lab",
+    "checks": [
+      {
+        "name": "compilar VM Rust",
+        "argv": [
+          "rustc",
+          "--edition=2021",
+          "-D",
+          "warnings",
+          "materials/starter/rust/main.rs",
+          "-o",
+          "{work}/vm"
+        ]
+      },
+      {
+        "name": "compilar teste de transporte",
+        "argv": [
+          "rustc",
+          "--edition=2021",
+          "--test",
+          "materials/starter/rust/main.rs",
+          "-o",
+          "{work}/transport"
+        ]
+      },
+      {
+        "name": "verificar transporte",
+        "argv": [
+          "{work}/transport"
+        ],
+        "contains": "1 passed"
+      },
+      {
+        "name": "mesmos checks rejeitam VM Rust",
+        "argv": [
+          "python3",
+          "checks/check.py",
+          "{work}/vm"
+        ],
+        "status": 1,
+        "contains": "not yet implemented: implemente validação, dispatch e transições da VM"
+      }
+    ]
+  },
+  "concurrency-rust": {
+    "lab": "010-concurrency-lab",
+    "checks": [
+      {
+        "name": "compilar harness Rust",
+        "argv": [
+          "python3",
+          "checks/rust/check.py",
+          "--compile-only"
+        ],
+        "contains": "Preparação:"
+      },
+      {
+        "name": "checks rejeitam mecanismos incompletos",
+        "argv": [
+          "python3",
+          "checks/rust/check.py"
+        ],
+        "status": 1,
+        "contains": "0/15 checks Rust passaram",
+        "forbid": [
+          "timeout",
+          "error:",
+          "Traceback"
+        ]
+      }
+    ]
+  },
+  "protocol-go": {
+    "lab": "011-protocol-lab",
+    "checks": [
+      {
+        "name": "compilar harness Go",
+        "argv": [
+          "python3",
+          "checks/go.py",
+          "--compile-only"
+        ],
+        "contains": "Preparação:",
+        "timeout": 150
+      },
+      {
+        "name": "conferir vetores compartilhados",
+        "argv": [
+          "python3",
+          "checks/go.py",
+          "--fixture-only"
+        ],
+        "contains": "1/1 grupos Go passaram",
+        "timeout": 150
+      },
+      {
+        "name": "checks rejeitam parser Go",
+        "argv": [
+          "python3",
+          "checks/go.py"
+        ],
+        "status": 1,
+        "contains": "1/5 grupos Go passaram",
+        "forbid": [
+          "timeout",
+          "build failed",
+          "Traceback"
+        ],
+        "timeout": 150
+      }
+    ]
+  },
+  "async-rust": {
+    "lab": "015-async-lab",
+    "checks": [
+      {
+        "name": "compilar checks e starters Rust",
+        "argv": [
+          "python3",
+          "checks/check.py",
+          "--compile-only"
+        ],
+        "contains": "Preparação:"
+      },
+      {
+        "name": "fixture independente",
+        "argv": [
+          "python3",
+          "checks/check.py",
+          "--fixture-only"
+        ],
+        "contains": "1/1 checks passaram"
+      },
+      {
+        "name": "checks rejeitam executor incompleto",
+        "argv": [
+          "python3",
+          "checks/check.py"
+        ],
+        "status": 1,
+        "contains": "1/10 checks passaram",
+        "forbid": [
+          "timeout de",
+          "error:",
+          "Traceback"
+        ]
+      },
+      {
+        "name": "compilar experimento Rust",
+        "argv": [
+          "python3",
+          "experiments/trace.py",
+          "--compile-only"
+        ],
+        "contains": "Preparação:"
+      },
+      {
+        "name": "trace depende do executor",
+        "argv": [
+          "python3",
+          "experiments/trace.py"
+        ],
+        "status": 101,
+        "contains": "not yet implemented"
+      }
+    ]
+  },
+  "gpu-cuda": {
+    "lab": "017-gpu-lab",
+    "checks": [
+      {
+        "name": "compilar runner e probe CUDA (não executa kernels)",
+        "argv": [
+          "make",
+          "-C",
+          "materials",
+          "gpu"
+        ],
+        "timeout": 120
+      }
+    ]
+  }
+}
