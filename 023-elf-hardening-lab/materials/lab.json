@@ -1,0 +1,113 @@
+{
+  "name": "023-elf-hardening-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3",
+        "gcc",
+        "readelf",
+        "objdump",
+        "ld",
+        "ldd"
+      ],
+      "build": [
+        [
+          "python3",
+          "experiments/run.py",
+          "build",
+          "--out",
+          "{work}"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "--out",
+          "{work}"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "experiments/run.py",
+            "build",
+            "--out",
+            "{result}/collection"
+          ],
+          [
+            "python3",
+            "checks/check.py",
+            "--out",
+            "{result}/collection"
+          ],
+          [
+            "python3",
+            "experiments/run.py",
+            "collect",
+            "--out",
+            "{result}/collection"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/A",
+        "build/B",
+        "build/C",
+        "build/D",
+        "build/E",
+        "build/F",
+        "build/commands.txt"
+      ],
+      "x86_64": true,
+      "note": "Instrumentos completos: test verifica a sonda e os controles; a matriz e a interpretação são tarefas do participante.",
+      "preparation": [
+        {
+          "name": "exportar formatos distribuídos para cópia isolada",
+          "argv": [
+            "python3",
+            "-c",
+            "import shutil, sys; shutil.copytree(sys.argv[1], sys.argv[2], ignore=shutil.ignore_patterns(\"build\", \"target\", \"results\", \"__pycache__\", \".git\")); print(\"OK pacote\")",
+            "{lab}",
+            "{work}/package"
+          ],
+          "contains": "OK pacote"
+        },
+        {
+          "name": "construir seis perfis",
+          "argv": [
+            "python3",
+            "{work}/package/experiments/run.py",
+            "build",
+            "--out",
+            "{work}/artifacts"
+          ],
+          "timeout": 120
+        },
+        {
+          "name": "casos funcionais e controles negativos",
+          "argv": [
+            "python3",
+            "{work}/package/checks/check.py",
+            "--out",
+            "{work}/artifacts"
+          ],
+          "contains": "18 casos funcionais"
+        },
+        {
+          "name": "inspeções e quarenta lançamentos reais",
+          "argv": [
+            "python3",
+            "{work}/package/experiments/run.py",
+            "collect",
+            "--out",
+            "{work}/artifacts"
+          ],
+          "contains": "coleta completa",
+          "timeout": 120
+        }
+      ]
+    }
+  }
+}

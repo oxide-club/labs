@@ -27,9 +27,23 @@ def generated():
             for config in variant.get('modes', {'default': variant}).values():
                 selector = config.pop('preparation_variant', None)
                 config['preparation'] = variants[selector]['checks'] if selector else preparation[name]
+                # Pacotes independentes não incluem os scripts do repositório.
+                config['preparation'] = [dict(check) for check in config['preparation']]
+                for check in config['preparation']:
+                    if '../scripts/export-lab-package.py' in check['argv']:
+                        check['argv'] = ['python3', '-c',
+                            'import shutil, sys; shutil.copytree(sys.argv[1], sys.argv[2], '
+                            'ignore=shutil.ignore_patterns("build", "target", "results", "__pycache__", ".git")); '
+                            'print("OK pacote")', '{lab}', '{work}/package']
         files = {'Makefile': MAKE, 'materials/lab.json': json.dumps(manifest, ensure_ascii=False, indent=2) + '\n',
                  'materials/lab.py': (ROOT / 'templates/make/lab.py').read_text(),
                  'materials/preparation.py': (ROOT / 'scripts/verify-preparation.py').read_text()}
+        if name == '021-fuzzing-lab':
+            files['Makefile'] += '''# libFuzzer exige Clang; CC na linha de comando permite seleção explícita.
+ifeq ($(origin CC),default)
+CC := clang
+endif
+'''
         if manifest.get('isolated'):
             files['Makefile'] += '''.PHONY: env-setup env-shell env-clean
 env-setup env-shell env-clean:

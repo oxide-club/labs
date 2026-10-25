@@ -1060,5 +1060,293 @@
         "note": "run demonstra o modelo teórico; EXPERIMENT=measure mede somente após os checks."
       }
     }
+  },
+  "019-atomics-lab": {
+    "name": "019-atomics-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3",
+          "cargo",
+          "rustc"
+        ],
+        "build": [
+          [
+            "python3",
+            "checks/check.py",
+            "--build-only"
+          ],
+          [
+            "python3",
+            "checks/check.py",
+            "--std-only",
+            "--build-only"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ],
+          [
+            "python3",
+            "checks/check.py",
+            "--std-only"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "checks/check.py"
+            ],
+            [
+              "python3",
+              "checks/check.py",
+              "--std-only"
+            ]
+          ],
+          "std": [
+            [
+              "python3",
+              "checks/check.py",
+              "--std-only"
+            ]
+          ]
+        },
+        "artifacts": [],
+        "x86_64": true
+      }
+    }
+  },
+  "020-dispatch-lab": {
+    "name": "020-dispatch-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3",
+          "cargo",
+          "rustc",
+          "nm",
+          "objdump",
+          "size"
+        ],
+        "build": [
+          [
+            "python3",
+            "checks/check.py",
+            "--build-only"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "materials/generate.py",
+              "--out",
+              "{result}/data",
+              "--n",
+              "65536"
+            ],
+            {
+              "argv": [
+                "python3",
+                "experiments/collect.py",
+                "--dataset",
+                "{result}/data/dataset.txt",
+                "--out",
+                "{result}/collection",
+                "--repetitions",
+                "30"
+              ],
+              "timeout": 1800
+            },
+            [
+              "python3",
+              "experiments/summarize.py",
+              "{result}/collection/inspect3-separate.csv"
+            ]
+          ]
+        },
+        "artifacts": [],
+        "x86_64": true
+      }
+    }
+  },
+  "021-fuzzing-lab": {
+    "name": "021-fuzzing-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3",
+          "cc"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-g",
+            "-O1",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-fno-omit-frame-pointer",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-Imaterials/starter/c",
+            "materials/starter/c/oxf.c",
+            "materials/starter/c/runner.c",
+            "-o",
+            "{work}/runner"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "{work}/runner",
+            "--smoke"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "checks/check.py",
+              "{work}/runner",
+              "--smoke"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/runner"
+        ],
+        "x86_64": true,
+        "note": "test e run verificam somente a preparação; não aprovam o parser. Siga README.md para a campanha e a regressão após a campanha."
+      }
+    }
+  },
+  "022-page-protection-lab": {
+    "name": "022-page-protection-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3",
+          "cc",
+          "strace",
+          "objdump"
+        ],
+        "build": [
+          [
+            "cc",
+            "-std=c11",
+            "-O2",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "materials/starter/c/pageprobe.c",
+            "materials/starter/c/probe.S",
+            "-o",
+            "{work}/pageprobe"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "{work}/pageprobe"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "{work}/pageprobe",
+              "--case",
+              "all",
+              "--timeout-ms",
+              "200"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/pageprobe"
+        ],
+        "x86_64": true
+      }
+    }
+  },
+  "023-elf-hardening-lab": {
+    "name": "023-elf-hardening-lab",
+    "variants": {
+      "reference": {
+        "tools": [
+          "python3",
+          "gcc",
+          "readelf",
+          "objdump",
+          "ld",
+          "ldd"
+        ],
+        "build": [
+          [
+            "python3",
+            "experiments/run.py",
+            "build",
+            "--out",
+            "{work}"
+          ]
+        ],
+        "test": [
+          [
+            "python3",
+            "checks/check.py",
+            "--out",
+            "{work}"
+          ]
+        ],
+        "experiments": {
+          "default": [
+            [
+              "python3",
+              "experiments/run.py",
+              "build",
+              "--out",
+              "{result}/collection"
+            ],
+            [
+              "python3",
+              "checks/check.py",
+              "--out",
+              "{result}/collection"
+            ],
+            [
+              "python3",
+              "experiments/run.py",
+              "collect",
+              "--out",
+              "{result}/collection"
+            ]
+          ]
+        },
+        "artifacts": [
+          "build/A",
+          "build/B",
+          "build/C",
+          "build/D",
+          "build/E",
+          "build/F",
+          "build/commands.txt"
+        ],
+        "x86_64": true,
+        "note": "Instrumentos completos: test verifica a sonda e os controles; a matriz e a interpretação são tarefas do participante."
+      }
+    }
   }
 }

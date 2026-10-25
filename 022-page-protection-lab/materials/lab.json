@@ -1,0 +1,99 @@
+{
+  "name": "022-page-protection-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3",
+        "cc",
+        "strace",
+        "objdump"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-O2",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "materials/starter/c/pageprobe.c",
+          "materials/starter/c/probe.S",
+          "-o",
+          "{work}/pageprobe"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "{work}/pageprobe"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "{work}/pageprobe",
+            "--case",
+            "all",
+            "--timeout-ms",
+            "200"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/pageprobe"
+      ],
+      "x86_64": true,
+      "preparation": [
+        {
+          "name": "exportar formatos distribuídos para cópia isolada",
+          "argv": [
+            "python3",
+            "-c",
+            "import shutil, sys; shutil.copytree(sys.argv[1], sys.argv[2], ignore=shutil.ignore_patterns(\"build\", \"target\", \"results\", \"__pycache__\", \".git\")); print(\"OK pacote\")",
+            "{lab}",
+            "{work}/package"
+          ],
+          "contains": "OK pacote"
+        },
+        {
+          "name": "regressões do parser de auditoria, sem substituir processos reais",
+          "argv": [
+            "python3",
+            "{work}/package/checks/test_audit.py"
+          ],
+          "contains": "OK"
+        },
+        {
+          "name": "compilar starter e sonda nativa",
+          "argv": [
+            "make",
+            "-C",
+            "{work}/package/materials/starter/c"
+          ]
+        },
+        {
+          "name": "inspecionar sonda",
+          "argv": [
+            "make",
+            "-C",
+            "{work}/package/materials/starter/c",
+            "audit"
+          ],
+          "contains": "probe_write"
+        },
+        {
+          "name": "rejeitar supervisor incompleto",
+          "argv": [
+            "python3",
+            "{work}/package/checks/check.py",
+            "{work}/package/materials/starter/c/pageprobe"
+          ],
+          "status": 1,
+          "contains": "matriz incompleta"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "name": "020-dispatch-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3",
+        "cargo",
+        "rustc",
+        "nm",
+        "objdump",
+        "size"
+      ],
+      "build": [
+        [
+          "python3",
+          "checks/check.py",
+          "--build-only"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "materials/generate.py",
+            "--out",
+            "{result}/data",
+            "--n",
+            "65536"
+          ],
+          {
+            "argv": [
+              "python3",
+              "experiments/collect.py",
+              "--dataset",
+              "{result}/data/dataset.txt",
+              "--out",
+              "{result}/collection",
+              "--repetitions",
+              "30"
+            ],
+            "timeout": 1800
+          },
+          [
+            "python3",
+            "experiments/summarize.py",
+            "{result}/collection/inspect3-separate.csv"
+          ]
+        ]
+      },
+      "artifacts": [],
+      "x86_64": true,
+      "preparation": [
+        {
+          "name": "exportar formatos distribuídos para cópia isolada",
+          "argv": [
+            "python3",
+            "-c",
+            "import shutil, sys; shutil.copytree(sys.argv[1], sys.argv[2], ignore=shutil.ignore_patterns(\"build\", \"target\", \"results\", \"__pycache__\", \".git\")); print(\"OK pacote\")",
+            "{lab}",
+            "{work}/package"
+          ],
+          "contains": "OK pacote"
+        },
+        {
+          "name": "conferir instrumentos e fixtures",
+          "argv": [
+            "python3",
+            "{work}/package/checks/test_support.py"
+          ],
+          "contains": "OK"
+        },
+        {
+          "name": "compilar starter sem aprovar conclusão",
+          "argv": [
+            "python3",
+            "{work}/package/checks/check.py",
+            "--build-only"
+          ],
+          "contains": "OK",
+          "timeout": 240
+        },
+        {
+          "name": "rejeitar starter incompleto",
+          "argv": [
+            "python3",
+            "{work}/package/checks/check.py"
+          ],
+          "status": 1,
+          "contains": "not yet implemented",
+          "timeout": 240
+        }
+      ]
+    }
+  }
+}

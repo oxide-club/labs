@@ -1,0 +1,124 @@
+{
+  "name": "021-fuzzing-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "python3",
+        "cc"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-g",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fno-omit-frame-pointer",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-Imaterials/starter/c",
+          "materials/starter/c/oxf.c",
+          "materials/starter/c/runner.c",
+          "-o",
+          "{work}/runner"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py",
+          "{work}/runner",
+          "--smoke"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "checks/check.py",
+            "{work}/runner",
+            "--smoke"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/runner"
+      ],
+      "x86_64": true,
+      "note": "test e run verificam somente a preparação; não aprovam o parser. Siga README.md para a campanha e a regressão após a campanha.",
+      "preparation": [
+        {
+          "name": "exportar formatos distribuídos para cópia isolada",
+          "argv": [
+            "python3",
+            "-c",
+            "import shutil, sys; shutil.copytree(sys.argv[1], sys.argv[2], ignore=shutil.ignore_patterns(\"build\", \"target\", \"results\", \"__pycache__\", \".git\")); print(\"OK pacote\")",
+            "{lab}",
+            "{work}/package"
+          ],
+          "contains": "OK pacote"
+        },
+        {
+          "name": "compilar runner ASan UBSan",
+          "argv": [
+            "make",
+            "-C",
+            "{work}/package/materials/starter/c"
+          ],
+          "timeout": 120
+        },
+        {
+          "name": "smoke de preparação",
+          "argv": [
+            "python3",
+            "{work}/package/checks/check.py",
+            "{work}/package/materials/starter/c/build/runner",
+            "--smoke"
+          ],
+          "contains": "PREPARATION_OK"
+        },
+        {
+          "name": "gerar corpus",
+          "argv": [
+            "python3",
+            "{work}/package/checks/corpus.py",
+            "{work}/corpus"
+          ]
+        },
+        {
+          "name": "preparação pública preserva a investigação",
+          "argv": [
+            "python3",
+            "{work}/package/checks/check.py",
+            "{work}/package/materials/starter/c/build/runner"
+          ],
+          "status": 0,
+          "contains": "PREPARATION_OK",
+          "timeout": 120
+        },
+        {
+          "name": "fuzz target permanece tarefa do participante",
+          "argv": [
+            "make",
+            "-C",
+            "{work}/package/materials/starter/c",
+            "fuzz"
+          ],
+          "status": 2,
+          "contains": "Implemente o target"
+        },
+        {
+          "name": "separação das fases no pacote distribuído",
+          "argv": [
+            "python3",
+            "{work}/package/checks/test_phases.py"
+          ],
+          "contains": "OK",
+          "timeout": 120
+        }
+      ]
+    }
+  }
+}
