@@ -19,7 +19,7 @@ todas as toolchains. Para uma atividade existente, use
 
 ## Catálogo
 
-Os 18 laboratórios estão [publicados no website](https://oxideclub.dev/labs/), com `draft: false`.
+Os 18 laboratórios iniciais estão [publicados no website](https://oxideclub.dev/labs/), com `draft: false`.
 O estado `published` no catálogo indica publicação confirmada.
 Os starters continuam incompletos por desenho.
 O [registro de IDs](docs/catalogo.json) mantém a correspondência com o currículo.
@@ -44,6 +44,18 @@ O [registro de IDs](docs/catalogo.json) mantém a correspondência com o curríc
 | [016 — Isolamento de Processos](016-isolation-lab/index.md) | Publicado |
 | [017 — Computação Paralela em GPU](017-gpu-lab/index.md) | Publicado |
 | [018 — Mecanismos de Atenção](018-attention-lab/index.md) | Publicado |
+
+### Roteiros em elaboração
+
+As cinco propostas abaixo têm pacotes executáveis preparados e verificados. Permanecem em elaboração até revisão humana e piloto. Os READMEs de cada laboratório descrevem os comandos, materiais e limites de execução.
+
+| Laboratório | Estado |
+| --- | --- |
+| [019-atomics-lab — Atomics e memory ordering](019-atomics-lab/index.md) | Em elaboração |
+| [020-dispatch-lab — Monomorfização e dynamic dispatch](020-dispatch-lab/index.md) | Em elaboração |
+| [021-fuzzing-lab — Fuzzing e análise de falhas](021-fuzzing-lab/index.md) | Em elaboração |
+| [022-page-protection-lab — Page protection e access violations](022-page-protection-lab/index.md) | Em elaboração |
+| [023-elf-hardening-lab — Evidências de hardening em executáveis ELF](023-elf-hardening-lab/index.md) | Em elaboração |
 
 Os números identificam os laboratórios. Você pode escolher a ordem de estudo.
 

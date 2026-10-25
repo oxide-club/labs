@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "origin": "Material fornecido pelo Oxide Club; não é descoberta da campanha do participante.",
+  "parser_sha256": "12cb45ae1a79078f8fe804b1d8f3d06a12da04944e2a1c7c58d4616696717d0f",
+  "reproducers": [
+    {
+      "id": "reserve-a",
+      "hex": "4f584631000103000102aa",
+      "sha256": "dc29ab57000a998a13585481622f8c7f9ac79baf8a3cd6f73bf194e1de03012a"
+    },
+    {
+      "id": "reserve-b",
+      "hex": "4f584631000208000102409c0102409c",
+      "sha256": "d87580f49b2bb2742c630b174a89c4da1c8f9cdba1688bff6ff128617c84e1ef"
+    }
+  ]
+}

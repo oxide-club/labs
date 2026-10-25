@@ -106,5 +106,30 @@
     "curriculum": 17,
     "title": "Mecanismos de Atenção",
     "status": "published"
+  },
+  {
+    "id": "019-atomics-lab",
+    "title": "Atomics e memory ordering",
+    "status": "draft"
+  },
+  {
+    "id": "020-dispatch-lab",
+    "title": "Monomorfização e dynamic dispatch",
+    "status": "draft"
+  },
+  {
+    "id": "021-fuzzing-lab",
+    "title": "Fuzzing e análise de falhas",
+    "status": "draft"
+  },
+  {
+    "id": "022-page-protection-lab",
+    "title": "Page protection e access violations",
+    "status": "draft"
+  },
+  {
+    "id": "023-elf-hardening-lab",
+    "title": "Evidências de hardening em executáveis ELF",
+    "status": "draft"
   }
 ]

@@ -1,0 +1,8 @@
+[package]
+name = "atomics-lab"
+version = "0.1.0"
+edition = "2021"
+[features]
+model = ["dep:loom"]
+[dependencies]
+loom = { version = "=0.7.2", optional = true }

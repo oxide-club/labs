@@ -6,3 +6,6 @@ __pycache__/
 # Artefatos locais de preparação e compilação
 **/build/
 **/target/
+
+# Referências e guias reservados locais; nunca empacotar.
+/.preparation-private/
