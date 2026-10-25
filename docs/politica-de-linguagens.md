@@ -1,6 +1,8 @@
 # Política de linguagens dos laboratórios
 
-C permanece a referência dos laboratórios existentes em C. A auditoria identificou referências Python e Rust que também permanecem preservadas. Os seis contratos C11 do Anexo A (001–006) não mudam.
+C permanece a referência dos laboratórios existentes em C. A auditoria identificou referências Python e Rust que também permanecem preservadas. Os contratos históricos do Anexo A permanecem nos materiais. Em 001 e 003,
+sua implementação é uma extensão opcional; o núcleo atual exige observar os instrumentos C.
+004 e 009 são registros históricos consolidados nos desafios 017 e 021.
 
 Linguagem aceita não significa variante mantida. Uma alternativa é aceita quando preserva o mecanismo e cumpre o contrato aplicável. Bibliotecas auxiliares são permitidas; delegar o mecanismo central não é. Os exemplos de linguagens livres não limitam o conjunto aceito.
 
@@ -8,7 +10,7 @@ Linguagem aceita não significa variante mantida. Uma alternativa é aceita quan
 
 | ID | Referência real | Aceitas | Recomendadas | Restrições | Equivalência de alternativas | Materiais oficiais |
 | --- | --- | --- | --- | --- | --- | --- |
-| [001-binary-lab](../001-binary-lab/materials/README.md#linguagens-e-ambiente) | C11 | Livre; por exemplo C, Rust, Go e Python | Rust, Go e Python | Bytes de 8 bits; palavra sem sinal de 32 bits; conversão explícita de campos e bytes | equivalente sob contrato adaptado | C11 existente |
+| [001-binary-lab](../001-binary-lab/materials/README.md#linguagens-e-ambiente) | C11 | C para observação de layout; outras linguagens para análise e extensão | C no instrumento | Bytes de 8 bits, LE/BE explícitos, sizeof/offsetof e hipóteses sobre layout | apenas comparativa para outro layout | Instrumento C11 completo; header histórico opcional |
 | [002-reverse-engineering-lab](../002-reverse-engineering-lab/materials/README.md#linguagens-e-ambiente) | C + x86-64 | C no alvo original; Rust somente para comparação | Rust para comparação | Linux x86-64; preservar gate.c e os alvos O0/O2 | apenas comparativa para outro alvo | C + x86-64 existente |
 | [003-memory-safety-lab](../003-memory-safety-lab/materials/README.md#linguagens-e-ambiente) | C11 | C no núcleo; C++ e Rust para comparação | C++ e Rust | AddressSanitizer no núcleo C; observar allocation, deallocation e acesso inválido | apenas comparativa para outras linguagens | C11 existente |
 | [004-arena-lab](../004-arena-lab/materials/README.md#linguagens-e-ambiente) | C11 | Livre sob gerenciamento explícito; por exemplo C, Rust e C++ | Rust e C++ | Região real, alinhamento, ponteiros, lifetime e política própria de allocation | equivalente sob contrato adaptado | C11 existente |
@@ -34,7 +36,7 @@ Linguagem aceita não significa variante mantida. Uma alternativa é aceita quan
 
 ## Verificação e contribuição
 
-As APIs originais continuam normativas. Consulte os READMEs de cada variante para interfaces, checks, dependências e limitações.
+As APIs originais continuam normativas para suas extensões e registros históricos, não como critérios adicionais dos núcleos reformulados. Consulte os READMEs de cada variante para interfaces, checks, dependências e limitações.
 
 Para contribuir, documente preparação, interface, mapeamento dos erros, precisão, overflow, layout e lifetime. Reutilize fixtures e checks; inclua revisão do mecanismo. Uma contribuição só se torna variante oficial após build, testes de preparação e revisão. Não publique soluções completas como starters.
 

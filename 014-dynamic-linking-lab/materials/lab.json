@@ -1,0 +1,74 @@
+{
+  "name": "014-dynamic-linking-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "make",
+        "ar",
+        "python3"
+      ],
+      "build": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "all"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "materials/build/dynamic",
+            "./materials/build/liboxide.so",
+            "oxide_add",
+            "now",
+            "call"
+          ]
+        ]
+      },
+      "artifacts": [
+        "materials/build/archive-client",
+        "materials/build/shared-client",
+        "materials/build/dynamic",
+        "materials/build/broken.so",
+        "materials/build/renamed.so",
+        "materials/build/lifetime.so",
+        "materials/build/dynamic-lifetime",
+        "materials/build/library.o",
+        "materials/build/liboxide.a",
+        "materials/build/liboxide.so"
+      ],
+      "preparation": [
+        {
+          "name": "compilar bibliotecas e clientes",
+          "argv": [
+            "make",
+            "-C",
+            "materials"
+          ]
+        },
+        {
+          "name": "checks rejeitam carregador incompleto",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "FAIL símbolo ausente",
+          "forbid": [
+            "FAIL archive-client",
+            "FAIL shared-client",
+            "Traceback"
+          ]
+        }
+      ]
+    }
+  }
+}

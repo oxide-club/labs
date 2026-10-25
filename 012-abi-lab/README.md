@@ -15,3 +15,30 @@ Registre evidências no [modelo de relato](report-template.md), incluído a part
 
 Documentação original: CC BY 4.0. Código original: MIT. Fixtures originais: CC0 1.0.
 Fontes externas mantêm suas licenças; não foram copiadas para o laboratório.
+
+## Interface Make
+
+Execute da raiz deste laboratório, com GNU Make e Python 3.10+:
+
+```sh
+make help                 # Comandos, requisitos e seletores
+make setup                # Verifica as ferramentas; não instala globalmente
+make build                # Compila sem executar o exercício
+make test                 # Checks da solução; o starter pode falhar
+make run                  # Experimento padrão
+make verify-preparation   # Verifica a preparação do starter original
+make clean                # Limpa artefatos conhecidos; preserva resultados
+```
+
+`make` sem argumentos mostra ajuda. Veja os seletores `VARIANT`, `MODE` e
+`EXPERIMENT` disponíveis em `make help`. Cada pacote funciona independentemente.
+A interface exige Linux; requisitos de arquitetura seguem o roteiro acima.
+Saídas de `run` ficam em um diretório novo de `results/`; falhas continuam visíveis.
+Após modificar o starter, use `test`: `verify-preparation` compara a preparação
+original e não comprova a correção da sua solução.
+
+### Experimento e seletores deste laboratório
+
+`make run` mostra o disassembly do executável de checks, sem aprovar o código
+assembly do participante. `make test` verifica os contratos da ABI x86-64 e
+rejeita o starter incompleto.

@@ -9,3 +9,7 @@ __pycache__/
 
 # Referências e guias reservados locais; nunca empacotar.
 /.preparation-private/
+
+# Evidências e estado descartável dos ambientes locais
+**/results/
+**/.lab-env/

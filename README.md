@@ -19,9 +19,12 @@ todas as toolchains. Para uma atividade existente, use
 
 ## Catálogo
 
-Os 18 laboratórios iniciais estão [publicados no website](https://oxideclub.dev/labs/), com `draft: false`.
-O estado `published` no catálogo indica publicação confirmada.
-Os starters continuam incompletos por desenho.
+O catálogo mantém 16 laboratórios ativos e dois registros históricos consolidados em desafios.
+Os IDs 004 e 009 não são reutilizados. `supersededBy` retira esses registros das listagens
+ativas no site compatível, preservando a página, seus materiais e o destino do desafio.
+O estado `published` registra publicação anterior; esta revisão local ainda precisa ser integrada ao site.
+Os starters de implementação continuam incompletos por desenho.
+Os instrumentos de observação de 001 e 003 estão completos e independem dos starters históricos.
 O [registro de IDs](docs/catalogo.json) mantém a correspondência com o currículo.
 
 | Laboratório | Estado |
@@ -29,12 +32,12 @@ O [registro de IDs](docs/catalogo.json) mantém a correspondência com o curríc
 | [001 — Representação Binária](001-binary-lab/index.md) | Publicado |
 | [002 — Engenharia Reversa](002-reverse-engineering-lab/index.md) | Publicado |
 | [003 — Segurança de Memória](003-memory-safety-lab/index.md) | Publicado |
-| [004 — Memory Allocation](004-arena-lab/index.md) | Publicado |
+| [004 — Alocação de Memória](004-arena-lab/index.md) | Consolidado no desafio 017 — Arena |
 | [005 — Cache e Localidade](005-cache-lab/index.md) | Publicado |
 | [006 — Processos e Pipes](006-processes-lab/index.md) | Publicado |
 | [007 — Compilação e Execução](007-compilation-lab/index.md) | Publicado |
 | [008 — Multiplicação Matricial](008-matrix-lab/index.md) | Publicado |
-| [009 — Máquinas Virtuais](009-vm-lab/index.md) | Publicado |
+| [009 — Máquinas Virtuais](009-vm-lab/index.md) | Consolidado no desafio 021 — Bytecode |
 | [010 — Concorrência e Sincronização](010-concurrency-lab/index.md) | Publicado |
 | [011 — Protocolos Binários](011-protocol-lab/index.md) | Publicado |
 | [012 — ABI e Calling Conventions](012-abi-lab/index.md) | Publicado |
@@ -123,8 +126,26 @@ Não renumere atividades ao mudar sua área. Atualize o registro para criar áre
 | Área | Escopo | Laboratórios atuais |
 | --- | --- | --- |
 | Representação de dados e protocolos | Codificação, serialização e reconhecimento de mensagens em bytes. | 001, 011 |
-| Memória e localidade | Tempo de vida, alocação, validade dos acessos e comportamento da cache. | 003, 004, 005 |
-| Compilação e execução de programas | Transformação, interpretação, linking e análise de código executável. | 002, 007, 009, 012, 014 |
+| Memória e localidade | Tempo de vida, alocação, validade dos acessos e comportamento da cache. | 003, 005 |
+| Compilação e execução de programas | Transformação, interpretação, linking e análise de código executável. | 002, 007, 012, 014 |
 | Sistemas operacionais e processos | Interfaces do kernel, processos, recursos e isolamento. | 006, 013, 016 |
 | Concorrência e paralelismo | Progresso de tarefas, sincronização e distribuição de trabalho. | 010, 015, 017 |
 | Computação numérica | Operações matemáticas, custo computacional, memória e precisão. | 008, 018 |
+
+## Comandos locais padronizados
+
+Cada pacote tem um Makefile independente. Comece com `make help` na raiz do
+laboratório. Use `setup`, `build`, `test`, `run`, `clean` e `verify-preparation`.
+Os starters incompletos continuam falhando em `test`. Evidências de `run` ficam
+em `results/`, preservado por `clean`. GNU Make, Python 3.10+ e Linux são requisitos
+da interface; toolchains e hardware dependem da atividade e variante.
+
+Os laboratórios 002, 003 e 016 executam em VM descartável preparada por
+`make env-setup`; `make env-shell` permite inspeção e confirmação no guest.
+A imagem Alpine e cada pacote têm hash fixado; os experimentos rodam sem rede.
+
+Mantenedores: edite `docs/make-labs.json` e `templates/make/`; execute
+`python3 scripts/prepare-make.py` e confira `python3 scripts/prepare-make.py --check`.
+A preparação local reutiliza cópias geradas do verificador e dos manifests
+editoriais. Após mudanças intencionais nos manifests distribuídos, atualize seus
+hashes com `python3 scripts/validate.py --update-fixtures`.

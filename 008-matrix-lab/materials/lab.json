@@ -1,0 +1,105 @@
+{
+  "name": "008-matrix-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "python3"
+      ],
+      "build": [
+        [
+          "cc",
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Wpedantic",
+          "-Imaterials/starter",
+          "-Ichecks",
+          "experiments/benchmark.c",
+          "materials/starter/matrix.c",
+          "-lm",
+          "-o",
+          "{work}/benchmark"
+        ]
+      ],
+      "test": [
+        [
+          "python3",
+          "checks/check.py"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "python3",
+            "checks/check.py"
+          ],
+          [
+            "{work}/benchmark",
+            "31",
+            "47",
+            "29",
+            "8",
+            "42",
+            "2",
+            "7"
+          ]
+        ]
+      },
+      "artifacts": [
+        "build/benchmark"
+      ],
+      "note": "run exige MATRIX_COMPILER, MATRIX_FLAGS e MATRIX_HARDWARE reais; consulte experiments/README.md.",
+      "preparation": [
+        {
+          "name": "checks rejeitam variantes incompletas",
+          "argv": [
+            "python3",
+            "checks/check.py"
+          ],
+          "status": 1,
+          "contains": "falhou linha"
+        },
+        {
+          "name": "compilar benchmark",
+          "argv": [
+            "cc",
+            "-std=c11",
+            "-O2",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Imaterials/starter",
+            "-Ichecks",
+            "experiments/benchmark.c",
+            "materials/starter/matrix.c",
+            "-lm",
+            "-o",
+            "{work}/benchmark"
+          ]
+        },
+        {
+          "name": "benchmark recusa starter",
+          "argv": [
+            "{work}/benchmark",
+            "3",
+            "5",
+            "7",
+            "2",
+            "42",
+            "1",
+            "3"
+          ],
+          "status": 1,
+          "contains": "validação falhou",
+          "env": {
+            "MATRIX_COMPILER": "cc (version recorded by CI environment)",
+            "MATRIX_FLAGS": "-std=c11 -O2 -Wall -Wextra -Wpedantic",
+            "MATRIX_HARDWARE": "preparation check only; no timing emitted"
+          }
+        }
+      ]
+    }
+  }
+}

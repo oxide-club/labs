@@ -27,3 +27,10 @@ Explique quais saídas, traces ou tabelas devem acompanhar a entrega.
 
 Documentação original: CC BY 4.0. Código original: MIT. Dados originais: CC0 1.0.
 Consulte os avisos incluídos no pacote. Identifique materiais de terceiros separadamente.
+
+## Interface Make
+
+Configure `help`, `setup`, `build`, `test`, `run`, `clean` e `verify-preparation`.
+Documente o experimento padrão, seletores, falhas esperadas e requisitos do ambiente.
+`make` deve mostrar ajuda. Os arquivos gerados devem acompanhar o pacote, sem
+dependência no repositório completo. Preserve evidências em `results/` na limpeza.

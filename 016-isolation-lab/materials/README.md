@@ -24,6 +24,8 @@ Os binários ficam em `materials/build/` e não entram no pacote. Para outro des
 use `make -C materials BUILD=/tmp/oxide-isolation-build`. Os checks esperam o destino
 padrão dentro da VM. Não há dependências locais fora do pacote. Não use sanitizers
 com os checks de RLIMIT_AS: eles alteram as reservas virtuais do processo.
+A fixture `probe` usa `-fno-builtin-malloc`: Clang em `-O2` pode eliminar a
+allocation que o experimento precisa observar. A flag não altera o supervisor.
 
 ## Execução exclusivamente dentro da VM descartável
 

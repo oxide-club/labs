@@ -41,7 +41,7 @@ def distributed(path):
     if any(not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9._-]*', part) for part in parts):
         return False
     if len(parts) == 1:
-        return parts[0] in ['index.md','README.md','references.md','report-template.md']
+        return parts[0] in ['index.md','README.md','references.md','report-template.md','Makefile']
     return (parts[0] in ['materials','checks','experiments']
             and not set(parts[1:-1]) & {'node_modules','__pycache__','target','build','dist','solutions'}
             and (path.name in {'Makefile', 'go.mod'} or path.suffix in {'.md','.txt','.c','.h','.py','.json','.csv','.rs','.S','.s','.cu','.toml','.go'}))

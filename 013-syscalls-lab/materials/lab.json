@@ -1,0 +1,78 @@
+{
+  "name": "013-syscalls-lab",
+  "variants": {
+    "reference": {
+      "tools": [
+        "cc",
+        "make",
+        "python3",
+        "strace",
+        "objdump"
+      ],
+      "build": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "all"
+        ]
+      ],
+      "test": [
+        [
+          "make",
+          "-C",
+          "materials",
+          "check"
+        ]
+      ],
+      "experiments": {
+        "default": [
+          [
+            "strace",
+            "-o",
+            "{result}/libc.trace",
+            "-e",
+            "trace=write",
+            "materials/build/write_libc"
+          ]
+        ]
+      },
+      "artifacts": [
+        "materials/build/write_libc",
+        "materials/build/write_syscall",
+        "materials/build/contract_libc",
+        "materials/build/contract_syscall"
+      ],
+      "preparation": [
+        {
+          "name": "compilar variantes e verificar libc",
+          "argv": [
+            "make",
+            "-C",
+            "materials",
+            "libc-check",
+            "all",
+            "BUILD={work}"
+          ],
+          "contains": "CLI: OK"
+        },
+        {
+          "name": "contrato rejeita syscall incompleta",
+          "argv": [
+            "make",
+            "-C",
+            "materials",
+            "check",
+            "BUILD={work}"
+          ],
+          "status": 2,
+          "contains": "write_all(17, NULL, 0)",
+          "forbid": [
+            "error:",
+            "Traceback"
+          ]
+        }
+      ]
+    }
+  }
+}
