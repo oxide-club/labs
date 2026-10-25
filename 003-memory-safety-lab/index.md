@@ -15,24 +15,25 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Um endereço armazenado em um ponteiro não prolonga o lifetime do objeto.
-Lifetime é o intervalo em que o objeto existe segundo o modelo da linguagem.
+Guardar o endereço de um objeto em um ponteiro não prolonga seu tempo de vida
+(lifetime), isto é, o intervalo em que ele existe segundo o modelo da linguagem.
 Um *use-after-free* ocorre quando o programa acessa um bloco depois de liberá-lo.
-Vamos correlacionar allocation, liberação e acesso inválido no AddressSanitizer (ASan).
-Depois, vamos corrigir a causa sem substituir o defeito por memory leak.
+Você vai usar o AddressSanitizer (ASan) para relacionar a alocação, a liberação e
+o acesso inválido. Depois, vai corrigir a causa sem introduzir um vazamento de memória.
 
 ### Contrato técnico
 
-O arquivo `materials/starter/lifetime.c` preserva o original `vida.c`, com o nome
-em inglês autorizado. Ele aloca `"Oxide Club"`, cria uma visão no offset 6,
+O arquivo `materials/starter/lifetime.c` contém o programa original `vida.c`.
+Ele aloca `"Oxide Club"` e cria uma visão a partir do deslocamento (offset) 6, ou
+seja, um ponteiro para uma posição dentro do mesmo bloco. Em seguida,
 libera a mensagem e tenta ler a visão. O defeito inicial é intencional.
 Corrija esse arquivo mantendo `Club\n` em stdout, status 0 e uma única liberação
 do bloco. Se `malloc` falhar, preserve o status 2. Todos os acessos devem ocorrer
 durante o lifetime do bloco. Não remova a allocation nem substitua a mensagem por
 uma string estática para contornar a investigação.
 
-Depois implemente `materials/starter/variation.c`. A CLI nova, definida neste
-laboratório porque o Anexo A não fixa sua sintaxe, é `variation DESLOCAMENTO`.
+Depois, implemente `materials/starter/variation.c`. Sua interface de linha de
+comando (CLI) é `variation DESLOCAMENTO`.
 Aceite exatamente um argumento não vazio com dígitos ASCII de `0` a `9`, sem
 sinal nem espaços, cujo valor esteja entre 0 e 10. Zeros à esquerda são aceitos.
 Rejeite valores maiores sem overflow na conversão. Valide antes de formar a
@@ -51,20 +52,21 @@ Em sucesso, stderr fica vazia. Em erro de argumento, stderr deve conter exatamen
 `Erro: use um deslocamento decimal entre 0 e 10.\n`. Em falha de allocation, retorne
 2, não escreva em stdout e libere qualquer recurso já adquirido; a mensagem em
 stderr não é fixada. Mantenha allocation dinâmica, cópia dos 11 bytes e uma única
-liberação em cada execução bem-sucedida. A visão usa borrowing: não é uma segunda
-allocation e não deve ser passada a `free`. Os checks não simulam falta de memória;
+liberação em cada execução bem-sucedida. A visão toma emprestado o acesso ao bloco (borrowing): ela não é uma segunda
+alocação e não deve ser passada a `free`. Os checks não simulam falta de memória;
 explique esse caminho na revisão do código.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: C no núcleo; C++ e Rust para comparação.
-Recomendadas: C++ e Rust. AddressSanitizer no núcleo C; observar allocation, deallocation e acesso inválido.
-Materiais oficiais: C11 existente.
-Equivalência: apenas comparativa para outras linguagens.
+A parte obrigatória usa **C11 e AddressSanitizer** para observar a alocação, a liberação e o
+acesso inválido. Os materiais fornecem código em C11.
+
+C++ e Rust são recomendados para comparações. Essas comparações complementam a
+investigação do defeito em C, mas não a substituem.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Conheça `malloc`, `free`, arrays, strings terminadas em zero e aritmética de
 ponteiros. Instale Python 3 e GCC ou Clang com runtime ASan. Linux x86-64 é o

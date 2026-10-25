@@ -15,7 +15,7 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Uma arena reserva uma região e distribui blocos sequenciais. O padding é o espaço
+Uma arena reserva uma região de memória e distribui blocos em sequência. O padding é o espaço
 entre o fim de um bloco e o início alinhado do próximo. Esse espaço também consome
 capacidade. Como garantir que blocos vivos não se sobreponham e que uma falha não
 consuma espaço?
@@ -49,12 +49,15 @@ a região por um array declarado de `char` para justificar acesso por outro tipo
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: Livre sob gerenciamento explícito; por exemplo C, Rust e C++.
-Recomendadas: Rust e C++. Região real, alinhamento, ponteiros, lifetime e política própria de allocation.
-Materiais oficiais: C11 existente.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **C11**. Você pode usar outra linguagem que
+permita gerenciamento explícito de memória, como Rust ou C++, ambas recomendadas.
+Trabalhe com uma região real de memória e implemente sua própria política de
+alocação, respeitando alinhamento, ponteiros e tempo de vida dos objetos.
+
+Os materiais fornecem código inicial em C11. Outras linguagens são aceitas com
+adaptação do contrato, conforme o guia abaixo.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Conheça `size_t`, `SIZE_MAX`, `sizeof`, `_Alignof`, ponteiros e overflow sem sinal.
 Use Linux com compilador C11; o check de falha de allocation usa `--wrap` do GNU ld.
@@ -78,7 +81,7 @@ de leitura. O modelo compartilhado de relato acompanha o pacote como
 3. **Explicar:** desenhe blocos e padding. Justifique por que verificar somente
    o resultado de uma soma que já transbordou não basta. Distinga reset de destruição.
 4. **Implementar:** complete `arena.c`, mantendo API e contrato. Registre as condições
-   que garantem ausência de overlap e preservação do estado em falhas.
+   que garantem ausência de sobreposição e preservação do estado em falhas.
 5. **Verificar:** compile e execute os dois checks. Registre retornos, offsets e
    resultados; acrescente um caso próprio de fronteira. O starter deve falhar no
    check principal. Uma compilação bem-sucedida não encerra o laboratório.
@@ -112,4 +115,4 @@ antes/depois. Compare explicações dos invariantes sem publicar uma solução c
 
 Leia [as referências orientadas](references.md). Representação binária ajuda a
 entender metadados; segurança de memória aprofunda lifetime; cache e localidade
-permite investigar o efeito de percursos sobre os blocos reservados.
+permitem investigar o efeito de percursos sobre os blocos reservados.

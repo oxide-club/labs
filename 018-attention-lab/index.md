@@ -15,10 +15,11 @@ difficulty: advanced
 
 ## O que vamos investigar
 
-Scaled dot-product attention compara consultas Q com chaves K e usa os pesos
-resultantes para combinar valores V. Um score mede a relação entre duas posições.
-O softmax transforma uma linha de scores em probabilidades que somam 1.
-A causal mask proíbe que uma posição use valores de posições futuras.
+O mecanismo de atenção por produto escalar escalado (scaled dot-product attention)
+compara consultas Q com chaves K e usa os pesos resultantes para combinar valores V.
+Cada pontuação (score) mede a relação entre duas posições. O softmax transforma
+uma linha de scores em probabilidades que somam 1. A máscara causal (causal mask)
+impede que uma posição use valores de posições futuras.
 Investigue `Attention(Q,K,V) = softmax(Q × Kᵀ / sqrt(d_k) + M) × V`.
 Não é necessário construir um LLM para observar esse mecanismo.
 
@@ -42,12 +43,15 @@ absoluta `1e-12`, com zeros mascarados exatos e soma de probabilidades a `1e-12`
 
 ### Linguagens e ambiente
 
-Referência: **Python**. Aceitas: Livre; por exemplo C, Rust, C++ e Python.
-Recomendadas: Rust, C++ e Python. Binary64; produtos, transposição, softmax estável e causal mask próprios; sem framework central.
-Materiais oficiais: Python existente.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **Python**, mas você pode escolher outra
+linguagem, como C, Rust ou C++. Rust, C++ e Python são opções recomendadas.
+Use valores binary64 e implemente os produtos, a transposição, o softmax estável
+e a máscara causal, sem delegar o mecanismo central a um framework.
+
+Os materiais fornecem código inicial em Python. Outras linguagens são aceitas com
+adaptação do contrato, conforme o guia abaixo.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Revise vetores, produto matricial, transposição e exponenciação.
 O [guia local](README.md) mostra os comandos a executar na raiz do laboratório.
@@ -104,7 +108,7 @@ correção geral: justifique também os invariantes e as limitações da sua sol
 
 Explore multi-head, projeções Q/K/V, KV cache ou tiling para evitar materializar
 as duas matrizes inteiras. Declare a alteração de contrato e compare resultados
-antes de comparar recursos. Treinamento e backpropagation ficam fora do núcleo.
+antes de comparar recursos. Treinamento e backpropagation não fazem parte das atividades obrigatórias.
 
 ## Participação no clube
 
@@ -115,5 +119,5 @@ observações e pontos ainda não verificados. Não compartilhe apenas um tempo 
 ## Referências e atividades relacionadas
 
 As [leituras orientadas](references.md) conectam as operações a um forward pass
-real depois do núcleo. Relacione o laboratório a multiplicação matricial,
+real depois das etapas obrigatórias. Relacione o laboratório a multiplicação matricial,
 representação de números e à nota sobre memória de LLMs.

@@ -15,9 +15,11 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Concorrência permite progresso por interleavings; paralelismo envolve execução simultânea.
-Uma data race envolve acessos conflitantes ao mesmo objeto, sem a sincronização exigida pela linguagem, com pelo menos uma escrita.
-Em C, uma data race produz comportamento indefinido (UB). O resultado do contador defeituoso não tem faixa nem valor garantidos.
+Na concorrência, tarefas podem progredir intercalando suas operações (interleavings).
+No paralelismo, elas executam simultaneamente.
+Uma data race ocorre quando há acessos conflitantes ao mesmo objeto sem a
+sincronização exigida pela linguagem, e pelo menos um desses acessos é uma escrita.
+Em C, uma data race produz comportamento indefinido (UB). Não há garantia de um valor específico nem de um intervalo de resultados para o contador defeituoso.
 Uma race condition é um defeito que depende da ordem de eventos; pode existir mesmo sem data race.
 Um deadlock ocorre quando threads esperam indefinidamente por recursos que não podem obter.
 
@@ -29,6 +31,7 @@ O contador oferece modos `COUNTER_UNSAFE`, `COUNTER_MUTEX` e `COUNTER_ATOMIC`.
 Os modos mutex e atomic devem retornar zero e gravar `threads * iterations` em `*out`, após reunir todas as threads.
 Use mutex na primeira variante e operações C11 sobre objeto atômico na segunda. Não substitua os incrementos pelo produto.
 O modo unsafe fornecido existe somente para diagnóstico; não se exige resultado numérico específico.
+
 Modo desconhecido, ponteiro out nulo ou limites inválidos retornam `EINVAL`, preservando saída não nula.
 Falha de inicialização/criação retorna o código pthread, reúne threads já criadas e preserva a saída.
 Chamadas independentes não compartilham contadores. Não use `volatile` como sincronização.
@@ -50,14 +53,17 @@ Nas operações após init, q nulo ou out nulo em pop retorna EINVAL antes de ac
 Nos demais casos, são pré-condições: fila inicializada, uso conforme lifetime e ausência de cancelamento de threads.
 Erros de primitivas pthread durante operações sobre fila válida estão fora do modelo do exercício; não esconda erros de programação como encerramento normal.
 O resultado de push concorrente com close depende de qual operação se efetiva primeiro: inserção completa ou EPIPE.
+
 A fila deve preservar FIFO na ordem em que inserções se efetivam, sem perder nem duplicar IDs.
 A ordem de retornos ou de prints de consumidores não define a ordem de retirada.
+
 Depois de close, consumidores devem drenar itens existentes e receber ENODATA. Nenhuma thread pode ficar presa por falta de notificação.
 Não há requisito de justiça entre threads. Pressupõe-se que threads executáveis recebam tempo de CPU.
 
 Use mutex e variáveis de condição na fila; espera ocupada e delays como sincronização não atendem ao contrato.
 Documente qual lock protege buffer, índices, quantidade e estado de fechamento.
-Explique os invariantes `0 <= count <= capacity`, os predicados de espera e o efeito de notificações e spurious wakeups.
+Explique os invariantes `0 <= count <= capacity`, os predicados de espera e o efeito das notificações e dos despertares espúrios (spurious wakeups).
+
 O coordenador deve reunir produtores antes de fechar a fila e reunir consumidores antes de destruí-la.
 Os checks também fecham com operações pendentes para investigar o protocolo de wakeup.
 
@@ -70,12 +76,15 @@ O modo incompleto retorna 77. Os scripts limitam cada processo e encerram soment
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: Livre sob contrato de sincronização; por exemplo C, Rust, C++ e Go.
-Recomendadas: Rust, C++ e Go. Mutex, atomics e condition variables; fila limitada própria; sem canal pronto no mecanismo.
-Materiais oficiais: C11 existente; Rust: `materials/starter/rust/`.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **C11**. Outras linguagens são aceitas desde que
+preservem o contrato de sincronização; Rust, C++ e Go são alternativas recomendadas.
+Use mutexes, operações atômicas e variáveis de condição. Implemente a fila limitada
+sem substituir esse mecanismo por um canal pronto.
+
+Há código inicial em C11 e em Rust (`materials/starter/rust/`). Outras linguagens
+são aceitas com adaptação do contrato, conforme o guia abaixo.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Conheça funções, structs, lifetime e criação/reunião de threads. Leia [o guia local](README.md).
 Use compilador C11, pthreads, linker com `--wrap` e Python 3.10+. ThreadSanitizer é opcional; registre indisponibilidade ou falha do runtime.
@@ -104,7 +113,7 @@ Repetições bem-sucedidas não provam ausência de deadlocks ou data races; jus
 
 Meça contenção somente após verificar correção. Registre repetições e use relógio monotônico.
 Investigue false sharing, ordens de memória ou starvation, distinguindo observação de garantia de justiça.
-Uma fila lock-free é um projeto separado, não requisito deste núcleo.
+Uma fila lock-free é um projeto separado, não um requisito para concluir este laboratório.
 
 ## Participação no clube
 

@@ -15,15 +15,18 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Uma syscall atravessa a fronteira entre programa e kernel. Uma função de biblioteca pode preparar essa transição.
-Compare duas interfaces C para a mesma operação e explique o que o trace permite observar.
+Uma chamada de sistema (syscall) transfere o controle do programa para o kernel.
+Uma função de biblioteca pode preparar essa transição. Você vai comparar duas
+interfaces C para a mesma operação e explicar o que o registro de execução
+(trace) permite observar.
 
 ### Contrato técnico
 
 Ambiente obrigatório: Linux x86-64, C11 e libc. Cada fonte exporta
 `int write_all(int fd, const void *buf, size_t length)`; compile uma variante por vez.
-Pré-condições: `length <= 1048576`; se positivo, `buf` aponta para `length` bytes legíveis.
-Zero aceita `NULL`, retorna 0 e não chama o backend.
+O tamanho deve respeitar `length <= 1048576`. Quando `length` for positivo, `buf`
+deve apontar para essa quantidade de bytes legíveis. Quando for zero, a função
+aceita `NULL`, retorna 0 e não chama a operação de escrita subjacente (backend).
 Sucesso retorna 0 após transmitir todos os bytes, em ordem e sem repetição.
 Retorno positivo parcial avança apenas pelos bytes confirmados. `-1/EINTR` repete o trecho pendente.
 Outro erro retorna -1, preserva o `errno` do backend e não repete a chamada.
@@ -43,12 +46,15 @@ Os checks controlam retornos para testar escrita parcial e EINTR; não afirmam q
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: C no contrato original; Rust e assembly x86-64 com adaptação explícita.
-Recomendadas: Rust e assembly x86-64. Linux x86-64; ABI syscall e distinção libc/kernel obrigatórias.
-Materiais oficiais: C11 existente.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **C11** em Linux x86-64. Rust e assembly x86-64
+são alternativas recomendadas, desde que o contrato seja adaptado explicitamente.
+Em qualquer implementação, preserve a ABI de syscall e explique a distinção
+entre a interface da libc e a do kernel.
+
+Os materiais fornecem código inicial em C11. Consulte no guia abaixo as adaptações
+necessárias para outras linguagens.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Conheça ponteiros, errno, file descriptors e valores de retorno em C.
 Instale compilador C, GNU binutils, GNU coreutils (timeout), make, Python 3 e strace. Registre versões e `uname -m`.
@@ -82,7 +88,7 @@ Inclua hipótese, observações e limitações no relatório. Use [o modelo de r
 
 Investigue `_start` em assembly ou provoque EINTR com pipe e sinais reais, usando timeout e limpeza.
 Explique por que uma escrita em pipe fechado pode produzir SIGPIPE antes de o programa tratar EPIPE.
-Essas extensões não substituem os checks do núcleo.
+Essas extensões não substituem os testes da implementação exigida.
 
 ## Participação no clube
 

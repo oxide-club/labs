@@ -21,8 +21,8 @@ reconstruir e explicar essa decisão, ligando cada restrição a instruções co
 
 ### Contrato técnico
 
-O alvo original do Anexo A chama-se agora `gate.c`. Seu conteúdo, suas comparações
-e suas mensagens permanecem iguais. `main` exige exatamente um argumento. Se a
+O alvo da investigação é `gate.c`, que preserva o programa original do Anexo A.
+A função `main` exige exatamente um argumento. Se a
 quantidade divergir, escreve `uso: <argv[0]> CHAVE\n` em stderr, deixa stdout vazio
 e retorna 2. Com um argumento, `confere` valida uma string de seis bytes; não são
 seis caracteres Unicode. A entrada da CLI não pode conter byte NUL interno.
@@ -40,21 +40,22 @@ não satisfaz a atividade.
 
 ### Linguagens e ambiente
 
-Referência: **C + x86-64**. Aceitas: C no alvo original; Rust somente para comparação.
-Recomendadas: Rust para comparação. Linux x86-64; preservar gate.c e os alvos O0/O2.
-Materiais oficiais: C + x86-64 existente.
-Equivalência: apenas comparativa para outro alvo.
+A parte obrigatória usa **C e x86-64** em Linux. Preserve `gate.c` e os executáveis compilados
+com `-O0` e `-O2`: eles são os alvos da investigação.
+
+Os materiais fornecem o alvo em C e a análise em x86-64. Rust é uma alternativa
+recomendada para comparação, mas outro alvo não substitui a análise do original.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Conheça funções, argumentos, strings e arrays em C, aritmética inteira e operadores
 bitwise. Revise registradores, endereços e hexadecimal conforme necessário.
 Use Linux x86-64, GCC, GNU objdump e Python 3. GDB é opcional.
 O [guia local](materials/README.md) prepara ambos os alvos com comandos completos.
 
-Guarde o fonte durante a primeira análise. Ele acompanha o pacote para permitir
-compilação local; essa separação é uma disciplina da experiência, não um segredo
-ou uma proteção técnica. Evite abrir o C ou usar disassembly com fonte intercalado
+Reserve a leitura do código-fonte para o final da análise. Ele acompanha o pacote para permitir
+compilação local; adiar sua leitura permite registrar hipóteses a partir do executável.
+O código não é secreto nem está protegido. Evite abrir o C ou usar disassembly com fonte intercalado
 antes de registrar suas hipóteses.
 
 ## Materiais

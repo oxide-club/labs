@@ -15,8 +15,10 @@ difficulty: advanced
 
 ## O que vamos investigar
 
-Uma thread executa uma parte do trabalho. Um bloco agrupa threads que podem cooperar por memória compartilhada e barriers.
-Implemente soma vetorial e reduction, que transforma um vetor em uma soma escalar.
+Na GPU, cada thread executa uma parte do trabalho. Um bloco agrupa threads que
+podem cooperar usando memória compartilhada e barreiras de sincronização (barriers).
+Você vai implementar soma vetorial e uma redução (reduction), que combina os
+elementos de um vetor em uma soma escalar.
 Investigue como limites, acessos à memória global e sincronização afetam essas operações.
 
 ### Contrato técnico
@@ -27,18 +29,27 @@ A soma deve produzir `out[i] = a[i] + b[i]`. A reduction deve produzir a soma de
 Use `long long` de 64 bits e comparação exata, sem tolerância.
 As entradas contêm de 0 a 4.194.305 valores em `[-1024,1024]`.
 Todos os intermediários da reduction ficam em `[-4294968320,4294968320]`: não há overflow nesse contrato.
-Os blocos têm 64, 128, 256 ou 512 threads; casos com tail size diferente de zero são obrigatórios.
+Os blocos têm 64, 128, 256 ou 512 threads; é obrigatório testar blocos finais incompletos, com elementos restantes (tail).
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **C (CPU) e CUDA C++ (GPU)**. Aceitas: Tecnologias com compute real; por exemplo CUDA C++, HIP C++ e WGSL com Rust.
-Recomendadas: CUDA C++, HIP C++ e WGSL com Rust. Dispositivo compute real; CUDA exige Toolkit/runtime/driver/GPU compatíveis.
-Materiais oficiais: C CPU e starter CUDA C++. Compilação CUDA, probe, checks GPU e medição foram executados em 25/10/2026 na RTX 4060, com nvcc 13.4 e driver 615.78.08. Uma implementação privada passou; o starter mantém os TODOs. Veja o registro de preparação.
-Equivalência: equivalente sob contrato adaptado; CPU apenas comparativa.
+A referência usa **C na CPU e CUDA C++ na GPU**. São aceitas tecnologias que
+executem computação em um dispositivo real, como CUDA C++, HIP C++ e WGSL com Rust;
+essas também são as opções recomendadas. Para CUDA, Toolkit, runtime, driver e
+GPU devem ser compatíveis.
+
+Os materiais fornecem código C para CPU e código inicial em CUDA C++. A compilação
+CUDA, a sondagem do ambiente (probe), os checks GPU e a medição foram executados
+em 25/10/2026 na RTX 4060, com nvcc 13.4 e driver 615.78.08. Uma implementação
+privada passou nas verificações; o código inicial mantém os TODOs. Consulte o
+registro de preparação.
+
+Outras tecnologias são aceitas com adaptação do contrato. A execução em CPU serve
+para comparação e preparação; não substitui a execução em GPU.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Leia o [guia local](README.md). Revise arrays, reductions associativas, barriers e concorrência.
 Para a preparação CPU, use compilador C11, Make e Python 3.
@@ -87,5 +98,5 @@ Informe se a execução ocorreu em CPU ou GPU. Ao pedir ajuda, inclua o primeiro
 
 ## Referências e atividades relacionadas
 
-Consulte as [leituras orientadas](references.md) depois de implementar o núcleo.
+Consulte as [leituras orientadas](references.md) depois de concluir a implementação exigida.
 Relacione as observações com multiplicação matricial, localidade e sincronização.

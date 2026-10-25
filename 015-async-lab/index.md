@@ -19,7 +19,8 @@ Uma future representa uma computação que pode estar pendente. O executor chama
 `Future::poll` com um `Context`; o resultado é `Poll::Pending` ou `Poll::Ready(())`.
 O `Waker` guardado pela tarefa solicita outra oportunidade de execução.
 Notificar não significa chamar `poll` imediatamente nem concluir a tarefa.
-Construa um executor single-threaded, sem runtime externo, usando somente Rust std.
+Você vai construir um executor com uma única thread, usando apenas a biblioteca
+padrão de Rust (std), sem runtime externo.
 
 ### Contrato técnico
 
@@ -54,26 +55,30 @@ retorna `Idle` se ainda há tarefas pendentes, ou `Complete` se todas terminaram
 
 Uma notificação de tarefa viva coloca seu ID no fim da fila. Notificações repetidas
 antes de retirar esse ID para o próximo poll devem se fundir em uma entrada.
+
 Uma notificação durante `poll`, seguida de `Pending`, garante outra oportunidade.
 Se esse poll retorna `Ready`, descarte também qualquer notificação residual.
+
 Notificar uma tarefa concluída ou um executor destruído deve ser seguro e não
 executar nada. O `Waker` pode ser clonado, consumido por `wake` e acionado por outra
 thread. Só a thread que chama `step` ou `run` executa as futures; a API não precisa
 permitir mover o executor entre threads.
 
 `run` aplica a mesma ordem FIFO até `active() == 0`. Quando há tarefas pendentes e
-a fila está vazia, deve esperar uma notificação com uma primitiva blocking, sem
-busy-loop, polling periódico ou `sleep` como política de agendamento.
+a fila está vazia, deve esperar uma notificação com uma operação bloqueante, sem
+espera ocupada (busy-loop), consultas periódicas (polling) ou `sleep` como política
+de agendamento.
 Não retorne por a fila estar momentaneamente vazia nem espere que todos os clones
 de Waker sejam destruídos para terminar. Se ninguém notificar uma tarefa pendente,
 `run` pode esperar indefinidamente. Os testes têm timeout externo para esse caso.
+
 Depois de terminar, o executor aceita novos `spawn` e novas chamadas a `run`.
 
 `poll` deve retornar em tempo finito. Uma tarefa que bloqueia ou se notifica
 indefinidamente pode impedir a conclusão global; a fila FIFO evita que a tarefa
 sempre pronta ultrapasse tarefas já enfileiradas. Panics de futures podem propagar;
-recuperação do executor após panic, cancelamento explícito, I/O e timers não integram
-o núcleo. Destruir o executor descarta as futures restantes sem executá-las.
+recuperação do executor após panic, cancelamento explícito, I/O e timers não fazem parte
+dos requisitos deste laboratório. Destruir o executor descarta as futures restantes sem executá-las.
 
 Implemente também `materials/event.rs`: `event() -> (Event, Signal)` cria um evento
 de uso único, inicialmente não sinalizado. `Event: Future<Output = ()>` retorna
@@ -86,18 +91,20 @@ Sinalizar após destruir ou concluir Event é seguro. Não faça poll após `Rea
 
 Use `Wake` com `Arc` para construir Wakers seguros. Explique a separação entre
 o estado local das futures e o estado compartilhável das notificações.
-O núcleo não precisa de `unsafe` nem `RawWaker`.
+A implementação exigida não precisa de `unsafe` nem `RawWaker`.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **Rust**. Aceitas: Rust para Future/Poll/Waker; C e C++20 como comparações de outro modelo.
-Recomendadas: Rust; C++20 para comparação. Rust 2021/std; executor single-threaded próprio; sem Tokio ou runtime pronto.
-Materiais oficiais: Rust existente.
-Equivalência: apenas comparativa entre modelos; Rust é o núcleo atual.
+A parte obrigatória usa **Rust 2021 e sua biblioteca padrão**, com as interfaces `Future`,
+`Poll` e `Waker`. Implemente um executor com uma única thread, sem Tokio ou outro
+runtime pronto. Os materiais fornecem código inicial em Rust.
+
+C e C++20 podem ser usados para comparar outros modelos; C++20 é a opção
+recomendada para essa extensão. As comparações não substituem a implementação exigida em Rust.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Conheça traits, ownership, `Rc`, `Arc`, `Mutex` e o propósito de `Pin`.
 Este laboratório pressupõe Rust; não é uma introdução à linguagem.
@@ -138,7 +145,7 @@ Use [o modelo de relato](report-template.md), gerado do modelo compartilhado.
 - O trace identifica tarefa, resultado e evento; previsão e observação permanecem separadas.
 - O código usa espera blocking sem polling periódico. A revisão explica por que
   não há perda de sinal na transição entre observar a fila vazia e esperar.
-- O relato justifica coalescing, liberação ao concluir, ausência de ciclos de
+- O relato justifica agrupamento de notificações repetidas (coalescing), liberação ao concluir, ausência de ciclos de
   referências que mantenham futures vivas e limites de progresso cooperativo.
 - A explicação reconhece que testes finitos não provam ausência de todas as races.
 

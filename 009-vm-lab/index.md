@@ -16,14 +16,17 @@ difficulty: intermediate
 ## O que vamos investigar
 
 Uma máquina virtual (VM) executa instruções sobre um estado definido pelo interpretador.
-O contador de programa (PC) identifica a próxima instrução. O dispatch seleciona a ação de cada opcode.
+O contador de programa (PC) identifica a próxima instrução. O dispatch seleciona
+a ação indicada pelo código da operação (opcode).
 Investigue como uma alteração do PC produz um laço e como limites tornam essa execução controlável.
 Você deve implementar o dispatch, a validação e as transições na linguagem escolhida, sem `eval`, `exec` ou bibliotecas de VM.
 
 ### Contrato técnico
 
 Na versão Python, a API obrigatória é `run(source: str, budget: int = 1000) -> dict` em `materials/vm.py`.
-Cada chamada cria estado independente: PC 0, stack vazia, oito variáveis iguais a zero, steps 0 e trace vazio.
+Cada chamada começa com um estado independente: PC igual a 0, pilha (stack)
+vazia, oito variáveis iguais a zero, contador `steps` igual a 0 e registro de
+execução (trace) vazio. O parâmetro `budget` limita o número de instruções executadas.
 O chamador fornece `str` e budget inteiro de 1 a 10000, sem bool; outros budgets geram `ValueError`.
 
 O formato é textual, não bytecode binário. Cada linha não vazia contém um opcode maiúsculo e seus operandos, separados por espaço ASCII ou tab.
@@ -63,10 +66,10 @@ O trace não inclui operandos nem variáveis. O estado final deve permitir compa
 
 | Código | Condição |
 | --- | --- |
-| invalid_program | Fonte excede limite, está vazia, opcode/gramática/aridade inválidos, literal fora da faixa, variável ou salto inválido. |
+| invalid_program | Fonte excede limite, está vazia, opcode/gramática/aridade inválidos, literal fora do intervalo de inteiros de 32 bits, variável ou salto inválido. |
 | stack_underflow | POP, STORE ou JZ sem topo; ADD ou SUB com menos de dois valores. |
 | stack_overflow | PUSH ou LOAD com 32 valores. |
-| integer_overflow | Resultado de ADD ou SUB fora da faixa. |
+| integer_overflow | Resultado de ADD ou SUB fora do intervalo de -2147483648 a 2147483647. |
 | pc_out_of_range | Execução alcança PC=N sem HALT. |
 | step_limit | Não há budget para executar a próxima instrução. |
 
@@ -79,12 +82,15 @@ Exceções inesperadas do interpretador são defeitos de implementação, não e
 
 ### Linguagens e ambiente
 
-Referência: **Python**. Aceitas: Livre; por exemplo C, Rust, Go e Python.
-Recomendadas: Rust, Go e Python. ISA textual publicada; int32 com sinal; validação integral e dispatch próprio.
-Materiais oficiais: Python existente; Rust: `materials/starter/rust/`.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **Python**, mas você pode escolher outra
+linguagem, como C, Rust ou Go. Rust, Go e Python são opções recomendadas.
+Preserve a ISA textual publicada e os inteiros com sinal de 32 bits. Implemente
+a validação integral do programa e a seleção da operação de cada instrução (dispatch).
+
+Há código inicial em Python e em Rust (`materials/starter/rust/`). Outras linguagens
+são aceitas com adaptação do contrato, conforme o guia abaixo.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Conheça funções, listas, condicionais, loops e stacks. Use Python 3.10 ou superior, sem dependências externas.
 Leia [o guia local](README.md). Todos os comandos partem deste diretório.

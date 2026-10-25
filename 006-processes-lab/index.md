@@ -15,7 +15,10 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Um processo possui uma imagem de execução e file descriptors. `fork` cria um filho; `execvp` substitui a imagem do processo que o chama. Um pipe conecta um escritor a um leitor. Investigue como cópias de file descriptors afetam o EOF, isto é, a indicação de fim dos dados.
+Um processo possui uma imagem de execução e descritores de arquivo (file descriptors).
+A chamada `fork` cria um processo filho; `execvp` substitui a imagem do processo
+que a chama. Um pipe conecta um escritor a um leitor. Você vai investigar como
+as cópias dos descritores afetam o EOF, a indicação de fim dos dados.
 
 ### Contrato técnico
 
@@ -26,9 +29,11 @@ Implemente exatamente estas interfaces:
 ./oxrun pipe -- programa1 argumento... ::: programa2 argumento...
 ```
 
-A shell host já processou suas aspas. Preserve os elementos de `argv`, inclusive argumentos vazios e argumentos com espaços. `oxrun` não interpreta uma linguagem de comandos. No modo `pipe`, o token `:::` deve aparecer exatamente uma vez, com um comando de cada lado. Esse token não pode ser um argumento literal nesse modo. Em `run`, pode ser um argumento comum.
+O shell usado para iniciar o programa já processou as aspas da linha de comando. Preserve os elementos de `argv`, inclusive argumentos vazios e argumentos com espaços. `oxrun` não interpreta uma linguagem de comandos.
 
-Use `fork`, `execvp` e `waitpid`; no pipeline, acrescente `pipe`, `dup2` e `close`. Não use `system`, `popen` ou uma shell para executar o núcleo. Conecte stdout da esquerda a stdin da direita. Preserve stderr herdado; envie diagnósticos próprios a stderr.
+No modo `pipe`, o token `:::` deve aparecer exatamente uma vez, com um comando de cada lado. Esse token não pode ser um argumento literal nesse modo. Em `run`, pode ser um argumento comum.
+
+Use `fork`, `execvp` e `waitpid`; no pipeline, acrescente `pipe`, `dup2` e `close`. Não use `system`, `popen` ou um shell para executar os comandos da implementação exigida. Conecte stdout da esquerda a stdin da direita. Preserve stderr herdado; envie diagnósticos próprios a stderr.
 
 | Condição | Status exigido |
 | --- | --- |
@@ -39,18 +44,25 @@ Use `fork`, `execvp` e `waitpid`; no pipeline, acrescente `pipe`, `dup2` e `clos
 | Outra falha de `execvp` | 126 |
 | Uso inválido ou falha interna de preparação | 2 e diagnóstico |
 
-Valide todo o uso antes de iniciar processos. Espere todos os filhos diretos criados, mesmo quando o status solicitado já estiver disponível. Retome `waitpid` após `EINTR`. Inicie os dois lados antes de esperar seu término. Feche cópias desnecessárias para permitir EOF. Se a preparação falhar após criar um filho, feche os file descriptors, encerre os filhos diretos próprios e execute o reaping deles antes de retornar 2. Essa recuperação pode usar `SIGKILL`. Os casos obrigatórios não criam descendentes adicionais.
+Valide todo o uso antes de iniciar processos. Espere todos os filhos diretos criados e recolha seus estados de término (reaping), mesmo quando o status solicitado já estiver disponível. Retome `waitpid` após `EINTR`.
+
+Inicie os dois lados antes de esperar seu término. Feche cópias desnecessárias para permitir EOF.
+
+Se a preparação falhar após criar um filho, feche os file descriptors, encerre os filhos diretos próprios e execute o reaping deles antes de retornar 2. Essa recuperação pode usar `SIGKILL`. Os casos obrigatórios não criam descendentes adicionais.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: Livre entre implementações POSIX equivalentes; por exemplo C, Rust e Python.
-Recomendadas: Rust e Python. POSIX; referência Linux x86-64; fork, exec, pipes, descritores e reaping explícitos.
-Materiais oficiais: C11 existente.
-Equivalência: equivalente ao núcleo.
+A implementação de referência usa **C11** em Linux x86-64. Outras linguagens são
+aceitas se usarem interfaces POSIX equivalentes; Rust e Python são alternativas
+recomendadas. Criação de processos, `exec`, pipes, descritores e coleta do término
+dos filhos (reaping) devem permanecer explícitos.
+
+Os materiais fornecem código inicial em C11. Implementações em outras linguagens
+podem cumprir o mesmo contrato da parte obrigatória.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Use Linux x86-64, compilador C11, Make, Python 3 e os comandos `printf`, `wc`, `dd`, `true`, `cat` disponíveis pelo `PATH`. `strace` é recomendado para investigar espera e fechamento. Leia o [guia dos materiais](materials/README.md) e compile o starter. Ele retorna 2 e ainda não executa comandos.
 

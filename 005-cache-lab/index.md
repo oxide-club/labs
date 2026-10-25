@@ -16,8 +16,8 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Como a sequência de endereços muda os acertos de uma cache?
-Você vai construir um simulador de cache. Depois, vai comparar dois percursos da mesma matriz.
+Você vai construir um simulador para investigar como a sequência de endereços
+afeta os acertos de uma cache. Depois, vai comparar dois percursos da mesma matriz.
 A entrega inclui o código, os resultados dos experimentos e uma explicação.
 
 ### Termos usados neste laboratório
@@ -53,9 +53,8 @@ Para um endereço `a`, calcule:
 
 Se a linha estiver válida e sua tag for igual à tag calculada, conte um hit.
 Caso contrário, conte um miss.
-Em um miss, grave a nova tag na linha.
-Marque essa linha como válida.
-Se a linha já estava válida antes do miss, conte também uma eviction.
+Em um miss, grave a nova tag e marque a linha como válida. Se ela já estava
+válida antes desse acesso, conte também uma eviction.
 
 No modelo, um miss carrega o bloco inteiro.
 O simulador não precisa guardar os bytes desse bloco.
@@ -75,12 +74,15 @@ Use o indicador de validade para verificar essa condição.
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: Livre; por exemplo C, Rust, Go e Python.
-Recomendadas: Rust, Go e Python. Endereços sintéticos de 64 bits, quatro linhas de 16 bytes, mapeamento direto.
-Materiais oficiais: C11 existente; Rust: `materials/starter/rust/`.
-Equivalência: equivalente ao núcleo.
+A implementação de referência usa **C11**, mas você pode escolher outra linguagem,
+como C, Rust, Go ou Python. Rust, Go e Python são alternativas recomendadas.
+Preserve o modelo: endereços sintéticos de 64 bits, quatro linhas de 16 bytes e
+mapeamento direto.
+
+Há código inicial em C11 e em Rust (`materials/starter/rust/`). Implementações em
+outras linguagens podem cumprir o mesmo contrato da parte obrigatória.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Você precisa conhecer operadores bitwise, estruturas e leitura de arquivos em C.
 Use GCC ou Clang com suporte a C11 e ao tipo `uint64_t`.
@@ -99,8 +101,7 @@ cc -std=c11 -Wall -Wextra -Wpedantic -O2 materials/starter/cache.c -o cache
 ```
 
 O código inicial compila, mas ainda não simula a cache.
-Registre as versões das ferramentas no relato.
-Registre também as opções de compilação.
+Registre no relato as versões das ferramentas e as opções de compilação.
 Depois de implementar o simulador, execute `./cache < materials/inputs/trace-a.txt`.
 
 ## Materiais
@@ -137,9 +138,8 @@ Você vai comparar essa previsão com os resultados do simulador.
 3. Compile o simulador.
 4. Execute o trace A em um novo processo.
 5. Execute o trace B em outro processo.
-6. Registre a saída de cada execução.
-7. Registre também o código de saída de cada execução.
-8. Execute as verificações públicas.
+6. Registre a saída e o código de saída de cada execução.
+7. Execute as verificações públicas.
 
 Os comandos abaixo usam `materials/starter/cache.c` como arquivo da implementação.
 
@@ -196,8 +196,7 @@ Documente o comando que executa o gerador.
 3. Gere os quatro traces: dois percursos para cada tamanho de matriz.
 4. Confira se cada trace tem exatamente `N*N` leituras.
 5. Execute cada trace em um novo processo do simulador.
-6. Guarde os comandos usados.
-7. Guarde os traces e os contadores obtidos.
+6. Guarde os comandos, os traces e os contadores obtidos.
 
 <details>
 <summary>Conferir resultados de localidade</summary>
@@ -219,9 +218,8 @@ Mostre os índices e as tags desses endereços.
 
 Explique como a validade, a tag, a capacidade e a ordem de acesso afetam os resultados.
 Explique por que blocos diferentes podem disputar a mesma linha, mesmo que a cache tenha outras linhas livres.
-Inclua a previsão original no relato.
-Acrescente uma tabela com os resultados conferidos.
-Acrescente os resultados das verificações da implementação.
+Inclua no relato a previsão original, uma tabela com os resultados conferidos
+e os resultados das verificações da implementação.
 
 ## Critérios de conclusão
 
@@ -282,7 +280,7 @@ Avise quando sua mensagem mostrar resultados que outras pessoas ainda precisam p
 
 ## Referências e atividades relacionadas
 
-Consulte [as referências orientadas](references.md) para leituras e investigação de código real após o núcleo.
+Consulte [as referências orientadas](references.md) para leituras e investigação de código real após concluir as etapas obrigatórias.
 
 - [CS:APP — Lab Assignments](https://csapp.cs.cmu.edu/3e/labs.html): laboratórios que inspiraram os temas do clube.
 - [CS:APP — Cache Lab](https://csapp.cs.cmu.edu/3e/cachelab.pdf): outro laboratório sobre cache.

@@ -15,28 +15,48 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-O driver `cc` coordena várias ferramentas. Investigue pré-processamento, tradução para assembly, montagem, linking e execução. Um object file contém código, dados, símbolos e relocations: registros de referências que ainda precisam de ajuste. ELF descreve seções para inspeção e linking, e segmentos para carregamento. Seções e segmentos não são equivalentes.
+O comando `cc` coordena várias ferramentas para transformar código-fonte em um
+executável. Você vai investigar o pré-processamento, a tradução para assembly,
+a montagem, linking e a execução.
+
+Um object file contém código, dados, símbolos e registros de
+referências que ainda precisam de ajuste, chamados relocations. O formato ELF
+descreve seções para inspeção e linking, e segmentos para carregamento. Seções e
+segmentos têm funções diferentes.
 
 ### Contrato técnico
 
-Use os dois módulos completos `main.c` e `operations.c`. Preserve a global `global_value = 7`, o literal `"oxide"`, a função externa `add_global` e a chamada `printf` da libc. Sem argumentos, `program` deve escrever exatamente `oxide result=12\n` e retornar 0. Com `--wait`, deve escrever essa linha, descarregar stdout e aguardar um byte ou EOF em stdin; depois retorna 0. Outro uso deve retornar 2 e escrever diagnóstico em stderr. Se uma função de I/O retornar erro, o programa deve retornar 1. Sinais externos mantêm sua semântica POSIX; não se exige converter SIGPIPE em status 1.
+Use os dois módulos completos `main.c` e `operations.c`. Preserve a global `global_value = 7`, o literal `"oxide"`, a função externa `add_global` e a chamada `printf` da libc.
 
-Produza, em comandos separados, pré-processado `.i`, assembly `.s`, object files `.o` e executável. Inclua o fonte como primeira das cinco classes de artefatos. Use C11, `-O0`, símbolos de depuração, sem LTO, e compile cada módulo separadamente. Não fixe instruções, endereços, nomes da libc ou caminho do interpretador como resultados universais.
+Sem argumentos, `program` deve escrever exatamente `oxide result=12\n` e retornar 0.
 
-Inspecione símbolos com `nm`, seções/segmentos/símbolos/relocations com `readelf` e instruções/relocations com `objdump`. Registre `add_global` nos dois object files e após linking. Capture `/proc/PID/maps` enquanto o programa próprio aguarda entrada. Capture também uma execução com `strace`. Se a ferramenta ou a política impedir a coleta, registre a limitação; essa evidência continua pendente para a conclusão integral.
+Com `--wait`, deve escrever essa linha, descarregar stdout e aguardar um byte ou EOF em stdin; depois retorna 0.
 
-Provoque dois erros de linking: omita `operations.o`; depois forneça `operations.o` duas vezes. Ambos devem retornar status diferente de zero e citar o símbolo afetado. Preserve os objetos válidos e registre os diagnósticos; o texto exato depende do linker. Os scripts devem limitar a espera, encerrar e executar reaping de seus próprios processos em falhas. Nenhum PID ou endereço fixo faz parte do contrato.
+Outro uso deve retornar 2 e escrever diagnóstico em stderr. Se uma função de I/O retornar erro, o programa deve retornar 1. Sinais externos mantêm sua semântica POSIX; não se exige converter SIGPIPE em status 1.
+
+Produza, em comandos separados, o arquivo pré-processado `.i`, assembly `.s`, object files `.o` e executável. Inclua o fonte como primeira das cinco classes de artefatos.
+
+Use C11, `-O0`, símbolos de depuração, sem LTO, e compile cada módulo separadamente. Não fixe instruções, endereços, nomes da libc ou caminho do interpretador como resultados universais.
+
+Inspecione símbolos com `nm`, seções/segmentos/símbolos/relocations com `readelf` e instruções/relocations com `objdump`. Registre `add_global` nos dois object files e após linking.
+
+Capture `/proc/PID/maps` enquanto o programa próprio aguarda entrada. Capture também uma execução com `strace`. Se a ferramenta ou a política impedir a coleta, registre a limitação; essa evidência continua pendente para a conclusão integral.
+
+Provoque dois erros de linking: omita `operations.o`; depois forneça `operations.o` duas vezes. Ambos devem retornar status diferente de zero e citar o símbolo afetado. Preserve os objetos válidos e registre os diagnósticos; o texto exato depende do linker.
+
+Os scripts devem limitar a espera, encerrar e executar reaping de seus próprios processos em falhas. Nenhum PID ou endereço fixo faz parte do contrato.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: C no núcleo C/ELF; Rust e C++ em comparações.
-Recomendadas: Rust e C++. Linux/ELF e etapas de compilação C observáveis.
-Materiais oficiais: C11 existente.
-Equivalência: apenas comparativa para outras linguagens.
+A parte obrigatória usa **C11 em Linux/ELF**, com etapas de compilação observáveis. Os materiais
+fornecem os módulos em C11.
+
+Rust e C++ são recomendados para comparações. Essas extensões não substituem a
+investigação das etapas de compilação do programa C.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Use Linux com `/proc`, GCC ou Clang, GNU Make, binutils, Python 3 e `strace`. Saiba compilar C e ler hexadecimal; não é necessário escrever assembly. Leia o [guia dos materiais](materials/README.md). Não é necessário alterar ASLR ou a configuração da máquina.
 
@@ -54,7 +74,9 @@ O [README](README.md) oferece os comandos iniciais. Os [materiais](materials/REA
 
 ## Critérios de conclusão
 
-Entregue os dois módulos, comandos reproduzíveis e uma tabela com cinco classes de artefatos: fonte, pré-processado, assembly, object file e executável. Anexe excertos anotados de símbolos, relocations, seções, segmentos, maps e strace. Entregue a linha do tempo e uma tabela que distingue compilador, montador, linker, kernel e dynamic loader. Registre os dois erros de linking, a mudança de função e os checks. Checks aprovados confirmam o material auxiliar; não avaliam a explicação nem substituem trace ausente.
+Entregue os dois módulos, comandos reproduzíveis e uma tabela com cinco classes de artefatos: fonte, pré-processado, assembly, object file e executável. Anexe excertos anotados de símbolos, relocations, seções, segmentos, maps e strace. Entregue a linha do tempo e uma tabela que distingue compilador, montador, linker, kernel e dynamic loader. Registre os dois erros de linking, a mudança de função e os checks.
+
+Checks aprovados confirmam o material auxiliar; não avaliam a explicação nem substituem trace ausente.
 
 ## Extensões opcionais
 

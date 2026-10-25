@@ -15,8 +15,9 @@ difficulty: advanced
 
 ## O que vamos investigar
 
-Uma ABI define o contrato binário entre módulos: onde ficam argumentos e resultados,
-quais registradores sobrevivem a uma chamada e como alinhar a stack.
+Uma interface binária de aplicação (ABI) define como módulos compilados se
+comunicam: onde ficam os argumentos e resultados, quais registradores devem ser
+preservados em uma chamada e como alinhar a pilha (stack).
 Observe funções C com 1, 3, 6 e 8 argumentos e implemente uma função assembly que chama outra função.
 
 ### Contrato técnico
@@ -45,18 +46,20 @@ Imediatamente antes de `call`, `rsp` deve ser múltiplo de 16; na entrada do cha
 Offsets relativos à entrada deixam de valer quando a função move `rsp`: derive-os do seu frame.
 Não use a red zone para dados que precisam sobreviver a uma chamada.
 Não há requisitos sobre prólogo, escolha de instruções ou uso de frame pointer.
-Structs, vetores SIMD, varargs, Windows x64 e outras arquiteturas ficam fora do núcleo.
+Structs, vetores SIMD, varargs, Windows x64 e outras arquiteturas não fazem parte das atividades obrigatórias.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **C + GNU assembly**. Aceitas: C e assembly no núcleo; Rust como extensão FFI.
-Recomendadas: Rust para extensão FFI. Linux x86-64, System V AMD64 LP64, alinhamento e registradores preservados.
-Materiais oficiais: C + GNU assembly existente.
-Equivalência: apenas comparativa para a extensão FFI.
+A parte obrigatória usa **C e GNU assembly** em Linux x86-64, com a ABI System V AMD64 e o
+modelo LP64. Respeite o alinhamento e a preservação de registradores exigidos
+pela ABI. Os materiais fornecem código em C e GNU assembly.
+
+Rust é recomendado para uma extensão de interoperabilidade (FFI). Essa comparação
+complementa a investigação obrigatória em C e assembly, mas não a substitui.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Conheça funções e ponteiros em C, stack e leitura básica de assembly.
 Instale compilador C, GNU binutils, Python 3 e GDB. Leia [o guia local](README.md).

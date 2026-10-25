@@ -15,15 +15,17 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Por que a mesma operação O(mkn) pode levar tempos diferentes?
-Implemente C=A×B nas variantes ijk, ikj e blocking. Blocking divide o percurso em
-blocos para reutilizar dados. A ordem dos acessos afeta localidade e arredondamento.
+Você vai implementar C=A×B nas variantes ijk, ikj e blocking para investigar por
+que operações com a mesma complexidade O(mkn) podem levar tempos diferentes.
+Blocking divide o percurso em blocos para reutilizar dados. A ordem dos acessos
+afeta tanto a localidade quanto o arredondamento dos resultados.
 
 ### Contrato técnico
 
 Leia o [contrato completo](materials/README.md) antes de editar o starter.
-As matrizes são retangulares e contíguas em ordem de linhas. Dimensões: 1..4096;
-tile: 1..256; entradas finitas: [-16,16]. As funções sobrescrevem C e preservam A e B.
+As matrizes são retangulares e contíguas em ordem de linhas. Cada dimensão vai
+de 1 a 4096, e o tamanho do bloco (tile) vai de 1 a 256. Os valores de entrada
+devem ser finitos e estar em [-16,16]. As funções sobrescrevem C e preservam A e B.
 Erros retornam 1 sem alterar C. A tolerância absoluta é 1e-6 e a relativa é 1e-10.
 O contrato fixa pré-condições dos buffers, tamanhos extremos e estado após falhas.
 
@@ -31,12 +33,16 @@ O contrato fixa pré-condições dos buffers, tamanhos extremos e estado após f
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: Livre sob restrições algorítmicas; por exemplo C, Rust, C++ e Python.
-Recomendadas: Rust, C++ e Python. Arrays contíguos row-major binary64; ijk, ikj e blocking próprios; sem BLAS/NumPy no núcleo.
-Materiais oficiais: C11 existente.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **C11**. Você pode escolher outra linguagem,
+como Rust, C++ ou Python, que são alternativas recomendadas, desde que preserve
+as restrições algorítmicas. Use arrays contíguos em ordem de linhas (row-major),
+com valores binary64, e implemente as variantes ijk, ikj e blocking. Não use
+BLAS ou NumPy para realizar as operações da implementação exigida.
+
+Os materiais fornecem código inicial em C11. Outras linguagens são aceitas com
+adaptação do contrato, conforme o guia abaixo.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Conheça arrays, loops, produto matricial e cache. Use Linux, C11 e Python 3.
 Siga [os comandos locais](README.md). O starter compila, mas retorna MATRIX_TODO.
@@ -66,7 +72,7 @@ meta de desempenho. Relacione índices, bytes por double e linhas de cache.
 ### Implementar e verificar
 
 Implemente ijk, ikj e blocking em matrix.c. Execute `python3 checks/check.py`.
-Guarde saída e status. Verifique retangulares, tails, tile maior que dimensões,
+Guarde saída e status. Verifique matrizes retangulares, blocos finais incompletos (tails), tile maior que as dimensões,
 erros e chamadas repetidas que sobrescrevem C.
 
 ### Medir e interpretar
@@ -80,14 +86,14 @@ identifica cache misses nem garante vantagem em outra máquina.
 ## Critérios de conclusão
 
 Entregue três implementações, checks aprovados, previsão, CSV e relato reproduzível.
-Inclua retangulares com tails e dois regimes de capacidade justificados pelo hardware.
+Inclua matrizes retangulares com blocos finais incompletos e dois regimes de capacidade justificados pelo hardware.
 Compare mediana e dispersão sem exigir aceleração universal. Explique layout,
 reutilização, arredondamento e limitações do experimento.
 
 ## Extensões opcionais
 
 Investigue perf counters, SIMD, multithreading ou BLAS. Registre custos de packing e
-threads separadamente. Essas extensões não substituem o núcleo.
+threads separadamente. Essas extensões não substituem as etapas obrigatórias.
 
 ## Participação no clube
 
@@ -97,6 +103,6 @@ e mantenha soluções separadas do starter.
 
 ## Referências e atividades relacionadas
 
-Leia [as referências orientadas](references.md) após o núcleo.
+Leia [as referências orientadas](references.md) após concluir as etapas obrigatórias.
 O laboratório de cache introduz localidade; o desafio de precisão numérica aprofunda
 arredondamento. Conhecimentos de aprendizado de máquina não são necessários.

@@ -16,26 +16,30 @@ difficulty: intermediate
 ## O que vamos investigar
 
 Uma biblioteca compartilhada mantém código em um arquivo carregado durante a execução.
-Vamos comparar esse mecanismo com a incorporação de um archive no linking e investigar
-quando referências a funções precisam ser resolvidas.
+Você vai comparar esse mecanismo com a incorporação de código de uma biblioteca
+estática (archive) durante a ligação (linking). A investigação mostra em que
+momento as referências a funções precisam ser resolvidas.
 
 ### Contrato técnico
 
 O [contrato completo](materials/contract.md) fixa API, CLI, estados após falhas e limites.
-A biblioteca fornece soma e quadrado. Os clientes completos comparam static linking da biblioteca
-com dynamic linking; o participante implementa `dynamic.c`, que usa `dlopen` e `dlsym`.
+A biblioteca fornece funções de soma e quadrado. Dois clientes completos permitem
+comparar a ligação estática com a dinâmica. Sua tarefa é implementar `dynamic.c`,
+que carrega a biblioteca explicitamente com `dlopen` e `dlsym`.
 O archive não torna o executável inteiro estático. O contrato não exige `-static` nem libc estática.
 
 ## Antes de começar
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: C no núcleo C/ELF; Rust e C++ como extensão de interoperabilidade.
-Recomendadas: Rust e C++. Linux x86-64/ELF, dlopen/dlsym, PIC, símbolos e lifetime do handle.
-Materiais oficiais: C11 existente.
-Equivalência: apenas comparativa para extensões.
+A parte obrigatória usa **C11 em Linux x86-64/ELF**. A investigação envolve `dlopen`, `dlsym`,
+código independente de posição (PIC), símbolos e tempo de vida do handle da
+biblioteca. Os materiais fornecem código em C11.
+
+Rust e C++ são recomendados para extensões de interoperabilidade. Essas comparações
+complementam a investigação obrigatória em C/ELF, mas não a substituem.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-A restrição preserva o mecanismo observado no núcleo.
 
 Use Linux x86-64 com compilador C11, `make`, `ar`, `readelf`, `nm` e Python 3.
 Conheça headers, object files e símbolos. Execute apenas as bibliotecas locais fornecidas.
@@ -75,7 +79,7 @@ Apresente a limpeza dos handles também nos caminhos de erro; os checks não pro
 
 ## Extensões opcionais
 
-Investigue SONAME, versionamento de ABI, visibilidade, GOT e PLT após concluir o núcleo.
+Investigue SONAME, versionamento de ABI, visibilidade, GOT e PLT após concluir as etapas obrigatórias.
 Compare o efeito de `-Wl,-z,now`; registre flags e toolchain.
 
 ## Participação no clube
@@ -86,4 +90,4 @@ da fixture de falha da implementação. Inclua libc, linker e flags para permiti
 ## Referências e atividades relacionadas
 
 Consulte as [leituras orientadas](references.md). Compilação e ABI ajudam a interpretar símbolos;
-este pacote inclui todos os materiais locais necessários ao núcleo.
+este pacote inclui todos os materiais locais necessários às etapas obrigatórias.

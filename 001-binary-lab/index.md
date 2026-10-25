@@ -15,11 +15,12 @@ difficulty: intermediate
 
 ## O que vamos investigar
 
-Um campo lógico, uma palavra numérica e uma sequência de bytes têm contratos
-diferentes. Você implementará `header_pack`, `header_unpack`, `store_le32` e
+Neste laboratório, você vai representar os mesmos dados de três formas: campos
+lógicos, uma palavra numérica e uma sequência de bytes. Cada forma segue regras
+próprias. Você implementará `header_pack`, `header_unpack`, `store_le32` e
 `load_le32` em C11. O layout de `Header` na memória não define a serialização.
 
-### Contrato do núcleo
+### Requisitos da parte obrigatória
 
 | Campo | Bits da palavra | Largura | Valores aceitos |
 | --- | --- | ---: | --- |
@@ -28,12 +29,16 @@ diferentes. Você implementará `header_pack`, `header_unpack`, `store_le32` e
 | flags | 23 a 20 | 4 | 0 a 15 |
 | length | 19 a 0 | 20 | 0 a 1048575 |
 
-Todos esses valores são válidos. `length` é apenas um número; não exige payload.
-Os quatro bytes externos seguem little-endian em qualquer máquina.
+Todos os valores nos intervalos da tabela são válidos. O campo `length` é apenas um
+número: você não precisa fornecer o conteúdo de uma mensagem (payload).
+No formato externo, os quatro bytes seguem a ordem little-endian em qualquer máquina.
 
 A API está em [packet.h](materials/starter/packet.h). `header_pack` retorna `false`
-se qualquer ponteiro for nulo ou qualquer campo estiver fora da faixa. Se `out`
-for válido, a falha deve preservar seu valor anterior. `header_unpack` recebe
+se qualquer ponteiro for nulo ou um campo estiver fora do intervalo permitido
+na tabela. Por exemplo, `version` aceita valores de 0 a 7; o valor 8 deve ser
+rejeitado, pois não cabe nos três bits reservados para esse campo.
+
+Se `out` for válido, a falha deve preservar seu valor anterior. `header_unpack` recebe
 um `Header *` válido e deve decodificar qualquer palavra de 32 bits.
 `store_le32` e `load_le32` recebem uma região válida de quatro bytes.
 Os argumentos de entrada e saída de cada operação não se sobrepõem.
@@ -43,12 +48,15 @@ A conversão deve usar bytes e campos explícitos.
 
 ### Linguagens e ambiente
 
-Referência: **C11**. Aceitas: Livre; por exemplo C, Rust, Go e Python.
-Recomendadas: Rust, Go e Python. Bytes de 8 bits; palavra sem sinal de 32 bits; conversão explícita de campos e bytes.
-Materiais oficiais: C11 existente.
-Equivalência: equivalente sob contrato adaptado.
+A implementação de referência usa **C11**, mas você pode escolher outra linguagem,
+como C, Rust, Go ou Python. Rust, Go e Python são alternativas recomendadas.
+Use bytes de 8 bits e uma palavra sem sinal de 32 bits. A conversão entre campos,
+palavra e bytes deve ser explícita.
+
+Os materiais fornecem código inicial em C11. Outras linguagens são aceitas com
+adaptação do contrato, conforme o guia abaixo.
+
 Consulte [as diferenças e o contrato de participação](materials/README.md#linguagens-e-ambiente).
-Os starters são opções de preparação; sua linguagem não é obrigatória.
 
 Você deve conhecer funções, arrays, condições, inteiros sem sinal, hexadecimal e
 os operadores bitwise `&`, `|`, `^`, `<<` e `>>`. Instale GCC ou Clang e use um
@@ -69,7 +77,7 @@ só são entradas a rejeitar em `header_pack`; as outras funções têm pré-con
 
 ## Etapas da investigação
 
-1. **Prever.** Desenhe as faixas de bits de dois vetores. Sem executar código,
+1. **Prever.** Desenhe as posições de bits ocupadas por cada campo em dois vetores. Sem executar código,
    calcule suas palavras e seus bytes. Guarde o raciocínio antes de consultar a tabela.
 2. **Observar.** Consulte os [vetores conhecidos](materials/fixtures/vectors.csv).
    Compile o starter e execute os checks. Registre status, primeira falha e contagem.
@@ -88,9 +96,14 @@ só são entradas a rejeitar em `header_pack`; as outras funções têm pré-con
 Execute também o build com UndefinedBehaviorSanitizer do guia; ele deve terminar com status zero e sem `runtime error`.
 
 Entregue `packet.h`, `packet.c`, seus testes e o relato. Os checks públicos devem
-terminar com status zero e zero falhas após sua implementação. Demonstre os quatro
-vetores, decodificação, rejeições individuais de 8/32/16/1048576 nos campos
-respectivos, preservação de `0xA5A5A5A5`, nulos de `header_pack` e ida e volta.
+terminar com status zero e zero falhas após sua implementação. Demonstre:
+
+- os quatro vetores e sua decodificação;
+- a rejeição de `version=8`, `type=32`, `flags=16` e `length=1048576`, testados separadamente;
+- a preservação do valor de saída `0xA5A5A5A5` em caso de falha;
+- a rejeição de ponteiros nulos em `header_pack`;
+- a conversão de ida e volta.
+
 Compare campos individualmente; igualdade dos bytes de uma `struct` não define
 igualdade entre headers. Explique a separação entre palavra e bytes e registre
 o ambiente. A execução dos checks complementa a explicação; não prova correção geral.
@@ -100,7 +113,7 @@ o ambiente. A execução dos checks complementa a explicação; não prova corre
 Acrescente `uint32_t rotate_left32(uint32_t word, unsigned n)` e
 `unsigned count_bits32(uint32_t word)`. A rotação aceita `0 <= n < 32`, incluindo
 zero; a contagem retorna o total de bits iguais a um. A tabela completa fica no
-[guia dos materiais](materials/README.md). Essas funções não fazem parte do núcleo.
+[guia dos materiais](materials/README.md). Essas funções são opcionais.
 
 ## Participação no clube
 
@@ -111,7 +124,7 @@ devem citar o requisito do contrato que passam a verificar.
 
 ## Referências e atividades relacionadas
 
-Leia as [referências orientadas](references.md) após investigar o núcleo: C11 para
+Leia as [referências orientadas](references.md) após concluir as etapas obrigatórias: C11 para
 regras de deslocamento, Protobuf para leitura com limites e Linux para campos de
 rede. A representação binária prepara a leitura de object files, protocolos e
 metadados de alocadores. A inspiração temática vem do Data Lab de CS:APP;
