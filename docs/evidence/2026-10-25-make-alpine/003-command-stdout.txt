@@ -1,7 +1,0 @@
-Ferramentas disponíveis: cc, python3
-Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
-+ clang -std=c11 -Wall -Wextra -Wpedantic -O2 -O0 -g -fsanitize=address -fno-omit-frame-pointer materials/starter/lifetime.c -o /home/lab/work/build/lifetime
-+ clang -std=c11 -Wall -Wextra -Wpedantic -O2 -O0 -g -fsanitize=address -fno-omit-frame-pointer materials/starter/variation.c -o /home/lab/work/build/variation
-Evidências desta execução: /home/lab/work/results/20261025-193627-3tluyw3q
-+ /usr/bin/python3 materials/experiments/observe.py /home/lab/work/results/20261025-193627-3tluyw3q/observation
-Use-after-free observado; registre acesso, liberação e alocação em asan.txt.

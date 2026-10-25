@@ -1,6 +1,0 @@
-Ferramentas disponíveis: nvcc, make, python3
-Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
-+ make -C materials gpu BUILD=build CC=cc
-make[1]: Entering directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
-nvcc -O2 -std=c++14 runner.cu kernels.cu oracle.c -o build/gpu
-make[1]: Leaving directory '/tmp/oxide remaining packages/017-gpu-lab/materials'

@@ -1,8 +1,0 @@
-Ferramentas disponíveis: nvcc, make, python3
-Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
-+ make -C materials build/probe BUILD=build CC=cc
-make[1]: Entering directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
-make[1]: 'build/probe' is up to date.
-make[1]: Leaving directory '/tmp/oxide remaining packages/017-gpu-lab/materials'
-+ materials/build/probe
-GPU=NVIDIA GeForce RTX 4060 runtime=13040 driver=13040: alocação e cópias verificadas; nenhum kernel testado.

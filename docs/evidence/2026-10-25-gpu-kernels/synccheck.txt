@@ -1,3 +1,0 @@
-========= COMPUTE-SANITIZER
-GPU API: 60 cases passed, repeated outputs and unchanged inputs.
-========= ERROR SUMMARY: 0 errors

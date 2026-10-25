@@ -1,7 +1,0 @@
-Ferramentas disponíveis: cc, python3
-Disponibilidade não comprova runtime, sanitizers ou conclusão do exercício.
-Preparação do starter original; após editar, use make test para verificar a solução.
-OK: observar UAF original
-OK: compilar variação incompleta
-OK: variação continua incompleta
-Preparação verificada; não aprova a solução.
