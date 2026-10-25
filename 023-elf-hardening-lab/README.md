@@ -11,6 +11,12 @@ Não há downloads nem dependências Python externas.
 
 ## Preparar e executar
 
+A interface Make oferece `make help`, `make setup`, `make build`, `make test`,
+`make run`, `make clean` e `make verify-preparation`. O alvo padrão mostra a ajuda.
+`run` guarda as evidências em uma pasta nova de `results/`; `clean` preserva essas evidências.
+`verify-preparation` verifica o starter original; após editar, use `make test`.
+`make run` constrói, verifica e coleta os seis perfis em uma pasta nova de evidências.
+
 A partir deste diretório, use um diretório de saída novo:
 
 ```sh

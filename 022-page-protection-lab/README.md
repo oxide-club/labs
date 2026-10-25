@@ -10,6 +10,12 @@ Estimativa curricular: 8–12 horas, incluindo análise. Recalibre-a no piloto c
 
 ## Preparar e executar
 
+A interface Make oferece `make help`, `make setup`, `make build`, `make test`,
+`make run`, `make clean` e `make verify-preparation`. O alvo padrão mostra a ajuda.
+`run` guarda as evidências em uma pasta nova de `results/`; `clean` preserva essas evidências.
+`verify-preparation` verifica o starter original; após editar, use `make test`.
+`make run` executa a matriz; `make test` verifica o supervisor e a auditoria independente.
+
 A partir deste diretório, copie o pacote para uma pasta de trabalho:
 
 ```sh

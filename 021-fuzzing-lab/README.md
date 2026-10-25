@@ -10,6 +10,13 @@ Estimativa provisória: 10–16 horas. Recalibre-a no piloto coordenado pelo clu
 
 ## Preparar e executar
 
+A interface Make oferece `make help`, `make setup`, `make build`, `make test`,
+`make run`, `make clean` e `make verify-preparation`. O alvo padrão mostra a ajuda.
+`run` guarda as evidências em uma pasta nova de `results/`; `clean` preserva essas evidências.
+`verify-preparation` verifica o starter original; após editar, use `make test`.
+`make build` compila o runner com Clang, ASan e UBSan. `make test` e `make run`
+executam somente o smoke de preparação. A campanha e a regressão posterior seguem os comandos abaixo.
+
 ```sh
 clang --version
 python3 --version

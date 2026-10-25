@@ -39,11 +39,13 @@
   "017-gpu-lab/materials/lab.json": "9048fb2e5b66f482e842fc84f3fec1daf2375cde1e60eed11e9361fadf1a6dab",
   "018-attention-lab/materials/fixtures/cases.json": "8f60c10c47f66ac94032c5b41358bbe002537f5d6425da334587111039c52669",
   "018-attention-lab/materials/lab.json": "57717569d84b21babf454badf91921393d023c8b65862b072d97d39de211ca7c",
+  "019-atomics-lab/materials/lab.json": "7489e43a0e6ded80fb3520a7645df58c300b44b95dd3fadf6c7569b3f98c1382",
   "019-atomics-lab/materials/licenses/CC-BY-4.0.txt": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
   "019-atomics-lab/materials/licenses/CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
   "019-atomics-lab/materials/licenses/MIT.txt": "40bea87b55dcfe011d8a8876fadc5e4a37fdb1a49d9f62d1bb4c2a409172fbb7",
   "019-atomics-lab/materials/starter/Cargo.lock.txt": "4de0491a91763c96381796a9d99e21a2ceef76656f67c3692c23652f2473d451",
   "020-dispatch-lab/materials/fixtures/small.json": "d340ef51483fe1d0dd8266cc0b43f1e419991ba30277b7e37ced48552932d957",
+  "020-dispatch-lab/materials/lab.json": "fe8ce0f61938318fe316f94498f757d24c663ce78bab483810c85d303db9cd05",
   "020-dispatch-lab/materials/licenses/CC-BY-4.0.txt": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
   "020-dispatch-lab/materials/licenses/CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
   "020-dispatch-lab/materials/licenses/MIT.txt": "40bea87b55dcfe011d8a8876fadc5e4a37fdb1a49d9f62d1bb4c2a409172fbb7",
@@ -51,5 +53,8 @@
   "021-fuzzing-lab/materials/LICENSE.txt": "90e234212cd331c8a00ebe426195e45b8a318d6713d73be2dd8613476fc3313c",
   "021-fuzzing-lab/materials/after-campaign/reproducers.json": "a1417ab95e64706e27b1fdf218bc6e6699dcbeea06a023fb937b468b4c0a777a",
   "021-fuzzing-lab/materials/corpus.json": "d83f220b784c0fb0e4ac8b2e0d5075ea039deaa58ba82e661d347df7f141389b",
-  "022-page-protection-lab/materials/vm-assets.json": "f9da81785c21395a46404dae11a962b291c087f79f1b06299887907c129fb859"
+  "021-fuzzing-lab/materials/lab.json": "0722bb444c94058ce344ef850a7aefaa577958a25dd270358c8b772e19a01805",
+  "022-page-protection-lab/materials/lab.json": "3d1f09a7e5a7053e626b3fab765bf4e6c821af89cffa51cba27dca44e9be4bde",
+  "022-page-protection-lab/materials/vm-assets.json": "f9da81785c21395a46404dae11a962b291c087f79f1b06299887907c129fb859",
+  "023-elf-hardening-lab/materials/lab.json": "8741bdc9365e849345df6cd201cae6534edb86fa4575aed0b1b5e039aae284bd"
 }

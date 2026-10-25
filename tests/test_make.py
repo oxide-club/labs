@@ -1,5 +1,6 @@
 """Behavior of the independent participant interface."""
 import importlib.util
+import json
 import os
 from pathlib import Path
 import shutil
@@ -24,7 +25,7 @@ class MakeInterface(unittest.TestCase):
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=90)
 
     def test_all_packages_offer_help_without_building(self):
-        for number in range(1, 19):
+        for number in range(1, 24):
             with self.subTest(number=number):
                 lab = self.package(f'{number:03}')
                 result = self.make(lab)
@@ -37,6 +38,35 @@ class MakeInterface(unittest.TestCase):
         result = self.make(self.package('007'), 'setup', 'VARIANT=bogus')
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('VARIANT', result.stdout)
+
+    def test_new_packages_have_independent_preparation(self):
+        for number in range(19, 24):
+            with self.subTest(number=number):
+                lab = self.package(f'{number:03}')
+                manifest = json.loads((lab / 'materials/lab.json').read_text())
+                checks = manifest['variants']['reference']['preparation']
+                self.assertNotIn('../scripts/', json.dumps(checks))
+                first = checks[0]
+                with tempfile.TemporaryDirectory() as temp:
+                    argv = [arg.replace('{lab}', str(lab)).replace('{work}', temp)
+                            for arg in first['argv']]
+                    result = subprocess.run(argv, cwd=lab, capture_output=True, text=True, timeout=30)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertTrue((Path(temp) / 'package/Makefile').is_file())
+
+    def test_native_new_packages_build_and_clean_without_removing_evidence(self):
+        for number, artifact in (('021', 'runner'), ('022', 'pageprobe'), ('023', 'A')):
+            with self.subTest(number=number):
+                lab = self.package(number)
+                result = self.make(lab, 'build')
+                self.assertEqual(result.returncode, 0, result.stdout)
+                self.assertTrue((lab / 'build' / artifact).is_file())
+                (lab / 'results').mkdir()
+                (lab / 'results/evidence.txt').write_text('keep')
+                result = self.make(lab, 'clean')
+                self.assertEqual(result.returncode, 0, result.stdout)
+                self.assertFalse((lab / 'build' / artifact).exists())
+                self.assertEqual((lab / 'results/evidence.txt').read_text(), 'keep')
 
     def test_build_and_solution_test_have_different_results(self):
         lab = self.package('001')
