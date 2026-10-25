@@ -1,1 +1,11 @@
-{"version":1,"initialized":false,"records":{},"revisions":{}}
+{
+  "version": 1,
+  "initialized": false,
+  "records": {
+    "pr:4": {
+      "url": "https://github.com/oxide-club/labs/pull/4",
+      "pending": true
+    }
+  },
+  "revisions": {}
+}
