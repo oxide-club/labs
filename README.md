@@ -19,7 +19,7 @@ todas as toolchains. Para uma atividade existente, use
 
 ## Catálogo
 
-O catálogo mantém 16 laboratórios ativos e dois registros históricos consolidados em desafios.
+O catálogo mantém 23 laboratórios ativos e dois registros históricos consolidados em desafios.
 Os IDs 004 e 009 não são reutilizados. `supersededBy` retira esses registros das listagens
 ativas no site compatível, preservando a página, seus materiais e o destino do desafio.
 O estado `published` registra publicação anterior; esta revisão local ainda precisa ser integrada ao site.
